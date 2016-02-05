@@ -1,10 +1,13 @@
 {
-  "name": "RITO_GAMES",
+  "name": "LeagueAlytics",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "Gulpfile.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "prestart": "npm run task",
+    "start": "node server/server.js",
+    "start-dev": "npm run task",
+    "task": "gulp"
   },
   "dependencies": {
     "body-parser": "^1.14.2",

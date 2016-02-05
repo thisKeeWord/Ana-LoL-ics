@@ -1,0 +1,17 @@
+/*#map {
+  height: 512px;
+  width: 512px;
+  background-image: url("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/map/map11.png");
+}*/
+
+#map svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#map img {
+     position: absolute;
+    top: 0;
+    left: 0;   
+}
