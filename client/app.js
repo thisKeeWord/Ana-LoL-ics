@@ -7,129 +7,122 @@ var stuff = require('./../stuff.js');
 var url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 
 var Display = React.createClass({
-  // componentDidMount: function() {
-  //   var that = this;
-  //   var playerID = [];
-  //   var allowScroll = [];
-  //   var count = -1;
-  //   $.get('http://localhost:3000/demoData.html', function(data) {
-  //     var result = JSON.parse(data);
-  //     for (var j = 0; j < result.timeline.frames.length; j++) {
-  //       for (var keys in result.timeline.frames[j]) {
-  //         allowScroll.push(result.timeline.frames[j][keys]);
-  //         // console.log(result.timeline.frames.length);
-  //           // count++;
-  //       }
-  //     }
-  //     // console.log(allowScroll[0], 'frames')
 
-  //     for (var i = 0; i < result.participants.length; i++) {
-  //       // console.log(result.participants[i].championId);
-  //       var pId = result.participants[i].participantId;
-  //       var cId = result.participants[i].championId;
-
-  //       playerID.push([pId, cId]);
-  //       // console.log(playerID)
-  //       console.log('j', playerID.length)
-
-  //       $.get(url + pId + '?' + stuff.key, function(champData) {
-  //         // console.log('champData', champData.key)
-  //         $.get('http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/champion.json', function(res) {
-  //           // console.log('player ID"s', playerID);
-  //           for (var key in res["data"]) {
-  //               if (key === champData.key) {
-  //                 count++;
-  //               // console.log('yoyoyo')
-  //               // console.log(res["data"][key].image.full, 'champion images coming')
-  //               // console.log(that);
-  //               // console.log(playerID)
-
-  //                 // for (var j = 0; j < playerID.length; j++) {
-  //                   console.log('playerID', playerID)
-  //                 // for (var keys in result.timeline.frames[0].participantFrames[playerID[playerID.length - 1][0]]) {
-  //                   console.log(result.timeline.frames[0].participantFrames[playerID[count][0]], 'concerns');
-
-  //                   var ctx = React.findDOMNode(that.refs.map).getContext("2d");
-  //                   // console.log('ctx', ctx)
-  //                   var img = document.createElement('img');
-  //                   img.src = "http://ddragon.leagueoflegends.com/cdn/4.6.3/img/champion/" + res["data"][key].image.full;
-  //                   img.addEventListener('load', function() {
-  //                     // console.log(ctx, 'image drawn')
-  //                     // x += 4;
-  //                     // y += 4; 
-                      
-  //                     console.log('length result', 15 + result.timeline.frames[2].participantFrames[playerID[count][0]].position.x / 16000, 8.5* (15 + result.timeline.frames[2].participantFrames[playerID[count][0]].position.y / 16000));
-  //                     // return ctx.drawImage(img, 17.952, 18.592, 15, 15);
-  //                     return ctx.drawImage(img, 452.736 / 5, 460.832 / 5, 15, 15);
-  //                     // return ctx.drawImage(img, 20, 130, 15, 15);
-  //                   })
-  //                 // }
-  //               }
-  //             }
-  //           // }
-  //         })
-  //       })
-  //     }
-  //   })
-  //   // .then(function() { console.log(playerID); })
-    
-  // },
+  // AFTER INITIAL RENDERING
   componentDidMount: function() {
-    var cords = [
-        [14486, 14291]
-    ],
-    // Domain for the current Summoner's Rift on the in-game mini-map
-    domain = {
-            min: {x: -120, y: -120},
-            max: {x: 14870, y: 14980}
-    },
-    width = 512,
-    height = 512,
-    bg = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png",
-    xScale, yScale, svg;
+    var that = this,
+        playerID = [],
+        allowScroll = [],
+        pos = [],
+        champImg = [],
+        count = -1,
+        
+        // RIOT'S SETUP FOR FULL SIZE OF SR MAP
+        domain = {
+          min: {x: -120, y: -120},
+          max: {x: 14870, y: 14980}
+        },
 
-color = d3.scale.linear()
-    .domain([0, 3])
-    .range(["white", "steelblue"])
-    .interpolate(d3.interpolateLab);
+        // SCALING MAP DOWN
+        width = 512,
+        height = 512,
 
-xScale = d3.scale.linear()
-  .domain([domain.min.x, domain.max.x])
-  .range([0, width]);
+        // NEWEST VERSION OF SUMMONER'S RIFT
+        nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png",
 
-yScale = d3.scale.linear()
-  .domain([domain.min.y, domain.max.y])
-  .range([height, 0]);
+        // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
+        xScale, yScale, svg;
 
-svg = d3.select("#map").append("svg:svg")
-    .attr("width", width)
-    .attr("height", height);
+    // D3 METHODS AND SUCH
+    color = d3.scale.linear()
+      .domain([0, 3])
+      .range(["white", "steelblue"])
+      .interpolate(d3.interpolateLab);
 
-svg.append('image')
-    .attr('xlink:href', bg)
-    .attr('x', '0')
-    .attr('y', '0')
-    .attr('width', width)
-    .attr('height', height);
+    xScale = d3.scale.linear()
+      .domain([domain.min.x, domain.max.x])
+      .range([0, width]);
 
-svg.append('svg:g').selectAll("circle")
-    .data(cords)
-    .enter().append("svg:circle")
-        .attr('cx', function(d) { return xScale(d[0]) })
-        .attr('cy', function(d) { return yScale(d[1]) })
-        .attr('r', 5)
-        .attr('class', 'kills');
+    yScale = d3.scale.linear()
+      .domain([domain.min.y, domain.max.y])
+      .range([height, 0]);
+
+    svg = d3.select("#map").append("svg:svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    svg.append('image')
+      .attr('xlink:href', nSR)
+      .attr('x', '0')
+      .attr('y', '0')
+      .attr('width', width)
+      .attr('height', height);
+
+    // FIRST REQUEST TO FILE
+    $.get('http://localhost:3000/demoData.html', function(data) {
+      var result = JSON.parse(data);
+
+      // GOING FOR THE TIMELINE INFORMATION
+      for (var j = 0; j < result.timeline.frames.length; j++) {
+        for (var keys in result.timeline.frames[j]) {
+          allowScroll.push(result.timeline.frames[j][keys]);
+          // console.log(result.timeline.frames.length);
+            // count++;
+        }
+      }
+      // console.log(allowScroll[0], 'frames')
+
+      // NUMBER OF PARTICIPANTS FOR A GAME
+      for (var i = 0; i < result.participants.length; i++) {
+        // console.log(result.participants[i].championId);
+        var pId = result.participants[i].participantId;
+        var cId = result.participants[i].championId;
+
+        playerID.push([pId, cId]);
+        // console.log(playerID)
+        // console.log('j', playerID.length)
+
+        $.get(url + pId + '?' + stuff.key, function(champData) {
+          // console.log('champData', champData.key)
+
+          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+          $.get('http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/champion.json', function(res) {
+          // console.log('player ID"s', playerID);
+            for (var key in res["data"]) {
+              if (key === champData.key) {
+                count++;
+              // console.log('yoyoyo')
+              // console.log(res["data"][key].image.full, 'champion images coming')
+              // console.log(that);
+              // console.log(playerID)
+
+                // for (var j = 0; j < playerID.length; j++) {
+                // console.log('playerID', playerID[count][0], count)
+                pos.push([ result.timeline.frames[0].participantFrames[playerID[count][0]].position.x, result.timeline.frames[0].participantFrames[playerID[count][0]].position.y ]);
+                champImg.push(res["data"][key].image.full)
+                // console.log(champImg, 'champImg')
+              }
+            }
+
+            // RENDERING THE CHAMPION IMAGES TO CUSTOM-SIZED MAP
+            svg.append('svg:g').selectAll("image")
+              .data(pos.slice(pos.length - 1))
+              .enter().append("svg:image")
+                .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champImg.slice(champImg.length - 1))
+                .attr('x', function(d) { return xScale(d[0]) })
+                .attr('y', function(d) { return yScale(d[1]) })
+                .attr('class', 'image')
+                .style({ 'width': '24px', 'height': '24px' })
+          })
+        })
+      }
+    })
   },
 
   render: function() {
-    // var champImg = (<canvas id="map" ref="map"/>)
-
-    var champImg = (<div id="map" ref="map"/>)
-
-    // console.log(champImg)
     return (
-      <div className="stats">
-        {champImg}
+      <div id="map" ref="map">
+        
       </div>
     )
   }

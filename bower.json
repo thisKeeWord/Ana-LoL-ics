@@ -2,6 +2,7 @@
   "name": "RITO_GAMES",
   "version": "1.0.0",
   "dependencies": {
-    "jquery": "~2.2.0"
+    "jquery": "~2.2.0",
+    "d3": "~3.5.14"
   }
 }

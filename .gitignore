@@ -8,4 +8,7 @@ node_modules
 stuff.js
 
 # bundle
-bundle.js
+build/bundle.js
+
+# demo html
+demoData.html
