@@ -6,12 +6,12 @@
 
 #map svg {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 200;
+    left: 200;
 }
 
-#map img {
-     position: absolute;
-    top: 0;
-    left: 0;   
+#scroll {
+	top: 100;
+	left: 100;
+	position: absolute;
 }
