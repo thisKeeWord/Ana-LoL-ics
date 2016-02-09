@@ -229,6 +229,7 @@ var Display = React.createClass({
       //     .attr('x', '0')
       //     .attr('y', '0');
       // console.log(document.getElementById('1'))
+      d3.select("g").remove();
       console.log([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
       this.state.png.append('svg:g').selectAll("image")
         .data([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
