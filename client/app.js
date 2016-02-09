@@ -32,105 +32,82 @@ var Display = React.createClass({
     // $.get(url + '?dataById=true&' + stuff.key, function(res) {
 
       // FIRST REQUEST TO FILE
-      $.get('http://localhost:3000/demoData.html', function(data) {
-        var info = JSON.parse(data);
-        // console.log('result', result)
+    $.get('http://localhost:3000/demoData.html', function(data) {
+      var info = JSON.parse(data);
+      // console.log('result', result)
 
-        // GOING FOR THE TIMELINE INFORMATION
-        for (var j = 0; j < info.timeline.frames.length; j++) {
-          // for (var keys in info.timeline.frames[j]) {
-          that.state.allowScroll.push([info.timeline.frames[j]]);
-            // console.log(info.timeline.frames[j]);
-              // count++;
-          // }
-        }
-        // console.log(that.state.allowScroll[15][0].participantFrames[11].position.x);
-        // console.log('frames', allowScroll[2][0])
-        var stepScroll = 300 / that.state.allowScroll.length;
-        
+      // GOING FOR THE TIMELINE INFORMATION
+      for (var j = 0; j < info.timeline.frames.length; j++) {
+        that.state.allowScroll.push([info.timeline.frames[j]]);
+      }
+      // console.log(that.state.allowScroll[15][0].participantFrames[11].position.x);
+      // console.log('frames', allowScroll[2][0])
 
-        // NUMBER OF PARTICIPANTS FOR A GAME
-        async.each(info.participants, function(i, next) {
-          // console.log(info.participants[i].championId);
-          // console.log(i.participantId, 'i')
-          var pId = i.participantId;
-          var cId = i.championId;
+      // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+      var stepScroll = 300 / that.state.allowScroll.length;
+      
 
-          that.state.playerID.push([pId, cId]);
-          // console.log(playerID, "playerID");
-          // console.log('j', playerID.length)
-          // console.log('what???', url + cId + '?' + stuff.key);
-          $.get(url + cId + '?' + stuff.key, function(champData) {
-            // console.log('champData', champData.key)
-            var stuffs = champData.key;
-            // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-            
-            // console.log('player ID"s', playerID);
-              // for (var key in res["data"]) {
-              //   if (key === champData.key) {
-            count++;
-            that.state.champImg[cId] = champData.key;
-            // console.log('champImg wt key', champImg)
-          // console.log('yoyoyo')
-          // console.log(res["data"][key].image.full, 'champion images coming')
-          // console.log(that);
-          // console.log(playerID)
+      // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
+      async.each(info.participants, function(i, next) {
+        // console.log(info.participants[i].championId);
+        // console.log(i.participantId, 'i')
+        var pId = i.participantId;
+        var cId = i.championId;
 
-            // for (var j = 0; j < playerID.length; j++) {
-            // console.log('playerID', playerID[count][0], count)
-            // console.log('i', i)
-            // for 
-            that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
-            console.log('state.pos', that.state.pos)
-            // console.log(res.data[champData.key].image.full, 'champ')
-            // champImg.push(res["data"][key].image.full)
-            // console.log(champImg, 'champImg')
-         
+        that.state.playerID.push([pId, cId]);
+        // console.log(playerID, "playerID");
+        // console.log('j', playerID.length)
+        // console.log('what???', url + cId + '?' + stuff.key);
 
-            // RENDERING THE CHAMPION IMAGES TO CUSTOM-SIZED MAP
-            // console.log('ordering', pos.slice(pos.length - 1)[0][2])
-            // console.log('champData.key', stuffs)
-            // console.log(champData[playerID[total][1].key], 'async probs')
-            // for (var k = 0; k < playerID.length; k++) {
-              // console.log('keys', Object.keys(champImg))
+        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+        $.get(url + cId + '?' + stuff.key, function(champData) {
+          // console.log('champData', champData.key)
+          var stuffs = champData.key;
+          count++;
+          that.state.champImg[cId] = champData.key;
+          // console.log('champImg wt key', champImg)
+        // console.log(res["data"][key].image.full, 'champion images coming')
+        // console.log(playerID)
 
-            if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
-              console.log(that.state.champImg, 'almost!!!')
-              var rand;
-              // console.log('ID', champImg[playerID[total][1]])
-              // console.log(pos.slice(pos.length - 1))
-              that.setState({ 
-                pos: that.state.pos,
-                champImg: that.state.champImg,
-                playerID: that.state.playerID,
-                allowScroll: that.state.allowScroll,
-                result: info,
-                scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length} step='1' defaultValue='0' onChange={that.onChange}></input>)
+          that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
+          // console.log('state.pos', that.state.pos)
+          // console.log(res.data[champData.key].image.full, 'champ')
+          // console.log(champImg, 'champImg')
+       
 
-              }, 
-                that.move()
-              );
-             // total++
-            
-          // }
-            }
-          })
+          // RENDERING THE CHAMPION IMAGES TO CUSTOM-SIZED MAP
+          if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
+            console.log(that.state.champImg, 'almost!!!')
+            var rand;
+            // console.log('ID', champImg[playerID[total][1]])
+            // console.log(pos.slice(pos.length - 1))
+            that.setState({ 
+              pos: that.state.pos,
+              champImg: that.state.champImg,
+              playerID: that.state.playerID,
+              allowScroll: that.state.allowScroll,
+              result: info,
+              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length} step='1' defaultValue='0' onChange={that.onChange}></input>)
+
+            }, 
+              that.move()
+            );
+          }
         })
-          // another anon func call once async is done
-          // }
       })
-    // })
+    })
   },
 
   move: function() {
-    var self = this;
-    // RIOT'S SETUP FOR FULL SIZE OF SR MAP
-    var domain = {
+    var self = this,
+
+        // RIOT'S SETUP FOR FULL SIZE OF SR MAP
+        domain = {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
         },
 
-    // SCALING MAP DOWN
+        // SCALING MAP DOWN
         width = 512,
         height = 512,
 
@@ -159,9 +136,8 @@ var Display = React.createClass({
           .attr("height", height)
           .attr('x', '0')
           .attr('y', '0');
-        // $("svg").css({top: 100, left: 100, position:'absolute'});
 
-
+        // APPEND BACKGROUND IMAGE TO SVG
         svg.append('image')
           .attr('xlink:href', nSR)
           .attr('x', '0')
@@ -171,10 +147,10 @@ var Display = React.createClass({
           .attr('id', 'rift');
 
 
-
+    // GET THE 10 IMAGES FROM URL
     for (var z = 0; z < Object.keys(self.state.champImg).length; z++) {
       var checking = self.state.playerID[z][1];
-      console.log(self.state.champImg, 'y u do dis')
+      // console.log(self.state.champImg, 'y u do dis')
       // console.log('total', champImg)
       // console.log('imgURL', checking)
       // console.log(champImg[checking], 'asymc?')
@@ -189,48 +165,46 @@ var Display = React.createClass({
           .attr('id', z)
                  
     }
+    // SET STATE FOR SVG TO USE LATER
     this.setState({
       png: svg
     })
   },
 
   addChampImg: function(e) {
-    // console.log(e.target.value)
+    // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
     var domain = 
         {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
-        };
+        },
 
     // SCALING MAP DOWN
-    var width = 512,
-        height = 512;
-    var xScale = d3.scale.linear()
-          .domain([domain.min.x, domain.max.x])
-          .range([0, width]);
+        width = 512,
+        height = 512,
 
-    var yScale = d3.scale.linear()
+        xScale = d3.scale.linear()
+          .domain([domain.min.x, domain.max.x])
+          .range([0, width]),
+
+        yScale = d3.scale.linear()
           .domain([domain.min.y, domain.max.y])
-          .range([height, 0]);
-    var self = this;
-    // console.log('this 193', this)
-    console.log(self.state.playerID, 'scroll part')
+          .range([height, 0]),
+
+        self = this;
+
+    // console.log(self.state.playerID, 'scroll part')
     for (var w = 0; w < self.state.playerID.length; w++) {
       // console.log(self.state.champImg[self.state.playerID])
-      console.log('this 193', self.state.champImg[self.state.playerID[w][1]])
+      // console.log('this 193', self.state.champImg[self.state.playerID[w][1]])
       var checking = self.state.playerID[w];
-      console.log('total', self.state.allowScroll[e][0].participantFrames[w+1].position)
-      // console.log('imgURL', checking)
-      // console.log(champImg[checking], 'asymc?')
-      // console.
-      // var svg = d3.select("#map").append("svg:svg")
-      //     .attr("width", 512)
-      //     .attr("height", 512)
-      //     .attr('x', '0')
-      //     .attr('y', '0');
-      // console.log(document.getElementById('1'))
+      // console.log('total', self.state.allowScroll[e][0].participantFrames[w+1].position)
+
+      // REMOVE PREVIOUS ICONS
       d3.select("g").remove();
-      console.log([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
+      // console.log([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
+
+      // USE SVG FROM STATE TO APPEND NEW ICONS
       this.state.png.append('svg:g').selectAll("image")
         .data([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
         .enter().append("svg:image")
@@ -244,7 +218,7 @@ var Display = React.createClass({
 
   onChange: function(e) {
     e.preventDefault();
-    console.log(e.target.value, 'value')
+    // console.log(e);
     this.addChampImg(e.target.value)
   },
 
@@ -253,7 +227,9 @@ var Display = React.createClass({
       <div id="hello">
         {this.state.scrollBar}
 
-        <div id="map" ref="map" >  </div>
+        <div id="map" ref="map" >
+
+        </div>
         
       </div>
     )
