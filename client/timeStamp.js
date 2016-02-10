@@ -1,18 +1,15 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
 
-var TimeStamp = React.createClass({
-  swap: function() {
-    // CONVERTING MILLISECONDS TO HH:MM:SS:MS
-    var convert = this.props.conversion;
+class TimeStamp extends React.Component {
+  // CONVERTING MILLISECONDS TO HH:MM:SS:MS
+  swap() {
+    let convert = this.props.conversion;
 
     if (this.props.timeline.length) {
-      for (var i in  this.props.timeline[this.props.conversion]) {
-        var convert = this.props.timeline[this.props.conversion][i].timestamp
-      }
+    	convert = this.props.timeline[this.props.conversion][0].timestamp;
     }
   
-    var milliseconds = parseInt(convert % 1000),
+    let milliseconds = parseInt(convert % 1000),
         seconds = parseInt((convert / 1000) % 60),
         minutes = parseInt((convert / (1000 * 60)) % 60),
         hours = parseInt((convert / (1000 * 60 * 60)) % 24);
@@ -22,15 +19,16 @@ var TimeStamp = React.createClass({
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
     return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-  },
+  }
 
-  render: function() {
+  render() {
+  	let callSwap = this.swap();
     return (
       <div id="time">
-        {this.swap()}
+        {callSwap}
       </div>
     )
   }
-});
+};
 
 module.exports = TimeStamp;

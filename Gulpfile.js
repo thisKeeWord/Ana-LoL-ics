@@ -4,14 +4,15 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var nodemon = require('gulp-nodemon');
+var babelify = require('babelify');
 
 gulp.task('browserify', scripts)
     .task('serve', serve);
 
 function scripts() {
   var bundler = browserify({
-    entries: ['./client'],
-    transform: [reactify], // We want to convert JSX to normal javascript
+    entries: ['./client/app.js'],
+    transform: babelify.configure({ presets: ['react', 'es2015'] }),
     debug: true,
     cache: {},
     packageCache: {},
@@ -42,7 +43,7 @@ function scripts() {
 
 function serve() {
   nodemon({
-    script: 'server/server.js'
+    script: './server/server.js'
     // ignore: ['client/']
   });
 }
