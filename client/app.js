@@ -4,8 +4,10 @@ var request = require('request');
 var champion = require('champion');
 var $ = require('jquery');
 var async = require('async');
+var TimeStamp = require('./timeStamp');
 var stuff = require('./../stuff.js');
 var url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
+
 
 var Display = React.createClass({
   getInitialState: function() {
@@ -16,12 +18,13 @@ var Display = React.createClass({
       champImg: {},
       allowScroll: [],
       result: {},
-      png: [] 
+      png: [],
+      num: 0
     })
   },
 
   // AFTER INITIAL RENDERING
-  componentDidMount: function() {
+  componentWillMount: function() {
 
     var that = this,
         count = -1,
@@ -34,14 +37,15 @@ var Display = React.createClass({
       // FIRST REQUEST TO FILE
     $.get('http://localhost:3000/demoData.html', function(data) {
       var info = JSON.parse(data);
-      // console.log('result', result)
+      console.log('result', info.timeline.frames.length)
 
       // GOING FOR THE TIMELINE INFORMATION
       for (var j = 0; j < info.timeline.frames.length; j++) {
         that.state.allowScroll.push([info.timeline.frames[j]]);
       }
+
       // console.log(that.state.allowScroll[15][0].participantFrames[11].position.x);
-      // console.log('frames', allowScroll[2][0])
+      console.log('frames', that.state.allowScroll)
 
       // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
       var stepScroll = 300 / that.state.allowScroll.length;
@@ -87,7 +91,7 @@ var Display = React.createClass({
               playerID: that.state.playerID,
               allowScroll: that.state.allowScroll,
               result: info,
-              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length} step='1' defaultValue='0' onChange={that.onChange}></input>)
+              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange}></input>)
 
             }, 
               that.move()
@@ -161,13 +165,12 @@ var Display = React.createClass({
           .attr('x', function(d) { return xScale(d[0]) })
           .attr('y', function(d) { return yScale(d[1]) })
           .attr('class', 'image')
-          .style({ 'width': '24px', 'height': '24px' })
-          .attr('id', z)
+          .style({ 'width': '24px', 'height': '24px' });
                  
     }
     // SET STATE FOR SVG TO USE LATER
     this.setState({
-      png: svg
+      png: svg,
     })
   },
 
@@ -201,18 +204,40 @@ var Display = React.createClass({
       // console.log('total', self.state.allowScroll[e][0].participantFrames[w+1].position)
 
       // REMOVE PREVIOUS ICONS
-      d3.select("g").remove();
-      // console.log([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
-
+      
+      console.log(self.state.allowScroll[e][0].participantFrames[w+1], e)
+      
       // USE SVG FROM STATE TO APPEND NEW ICONS
-      this.state.png.append('svg:g').selectAll("image")
-        .data([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
-        .enter().append("svg:image")
-          .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + self.state.champImg[self.state.playerID[w][1]] + '.png')
-          .attr('x', function(d) { return xScale(d[0]) })
-          .attr('y', function(d) { return yScale(d[1]) })
-          .attr('class', 'image')
-          .style({ 'width': '24px', 'height': '24px' });
+      // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
+      // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
+      if (self.state.allowScroll[e][0].participantFrames[w+1].position) {
+        d3.select("g").remove();
+        this.state.png.append('svg:g').selectAll("image")
+          .data([[ self.state.allowScroll[e][0].participantFrames[w+1].position.x, self.state.allowScroll[e][0].participantFrames[w+1].position.y ]])
+          .enter().append("svg:image")
+            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + self.state.champImg[self.state.playerID[w][1]] + '.png')
+            .attr('x', function(d) { return xScale(d[0]) })
+            .attr('y', function(d) { return yScale(d[1]) })
+            .attr('class', 'image')
+            .style({ 'width': '24px', 'height': '24px' })
+      }
+
+      // USER MAY GO STRAIGHT TO LAST FRAME
+      if (!self.state.allowScroll[e][0].participantFrames[w+1].position && self.state.allowScroll[e-1][0].participantFrames[w+1].position) {
+       d3.select("g").remove();
+        this.state.png.append('svg:g').selectAll("image")
+          .data([[ self.state.allowScroll[e-1][0].participantFrames[w+1].position.x, self.state.allowScroll[e-1][0].participantFrames[w+1].position.y ]])
+          .enter().append("svg:image")
+            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + self.state.champImg[self.state.playerID[w][1]] + '.png')
+            .attr('x', function(d) { return xScale(d[0]) })
+            .attr('y', function(d) { return yScale(d[1]) })
+            .attr('class', 'image')
+            .style({ 'width': '24px', 'height': '24px' }) 
+      }
+
+      this.setState({
+        num: e
+      })
     }
   },
 
@@ -223,10 +248,11 @@ var Display = React.createClass({
   },
 
   render: function() {
+    console.log(this.state.num)
     return (
       <div id="hello">
         {this.state.scrollBar}
-
+        <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num}  />
         <div id="map" ref="map" >
 
         </div>

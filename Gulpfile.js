@@ -10,7 +10,7 @@ gulp.task('browserify', scripts)
 
 function scripts() {
   var bundler = browserify({
-    entries: ['./client/app.js'],
+    entries: ['./client'],
     transform: [reactify], // We want to convert JSX to normal javascript
     debug: true,
     cache: {},
