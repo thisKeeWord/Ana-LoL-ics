@@ -2,6 +2,7 @@ import React from 'react';
 import async from 'async';
 
 class NumData extends React.Component {
+	// LOGS CHAMPION KILLS PER FRAME
 	log() {
 		let interaction = [];
 		if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events) {
@@ -19,6 +20,7 @@ class NumData extends React.Component {
 	render() {
 		let stat = this.log();
 
+		// DOESN'T EXIST INITIALLY
 		if (!stat) {
 			return (
 				<div id="bangRight">
