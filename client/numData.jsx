@@ -29,7 +29,7 @@ class NumData extends React.Component {
 			)
 		}
 
-		var slayerSlain = stat.map(k => {
+		let slayerSlain = stat.map(k => {
 			console.log(k);
 			return (
 				<div id={k}>
