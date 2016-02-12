@@ -52,17 +52,21 @@ class Display extends React.Component {
         let pId = i.participantId;
         let cId = i.championId;
 
+        // PARTICIPANT-ID AND CHAMPION-ID
         that.state.playerID.push([pId, cId]);
+        console.log(that.state.playerID)
 
         // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
         $.get(url + cId + '?' + stuff.key, champData => {
-          
+          console.log(champData, 'champData');
           let stuffs = champData.key;
           count++;
+
+          // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
           that.state.champImg[cId] = champData.key;
           that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
 
-          // RENDERING THE CHAMPION IMAGES TO CUSTOM-SIZED MAP
+          // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
           if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
             that.setState({ 
               pos: that.state.pos,
@@ -131,12 +135,13 @@ class Display extends React.Component {
     for (let z = 0; z < Object.keys(this.state.champImg).length; z++) {
       let checking = this.state.playerID[z][1];
 
+      // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').selectAll("image")
         .data([this.state.pos[z]])
         .enter().append("svg:image")
           .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[checking] + '.png')
-          .attr('x', function(d) { return xScale(d[0]) })
-          .attr('y', function(d) { return yScale(d[1]) })
+          .attr('x', d => { return xScale(d[0]) })
+          .attr('y', d => { return yScale(d[1]) })
           .attr('class', 'image')
           .style({ 'width': '24px', 'height': '24px' });
                  
@@ -155,7 +160,7 @@ class Display extends React.Component {
           max: {x: 14870, y: 14980}
         },
 
-    // SCALING MAP DOWN
+        // SCALING MAP DOWN
         width = 512,
         height = 512,
 
@@ -213,7 +218,7 @@ class Display extends React.Component {
 
   render() {
     return (
-      <div id="hello">
+      <div id="parent">
         {this.state.scrollBar}
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <NumData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />

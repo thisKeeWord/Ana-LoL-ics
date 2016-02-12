@@ -13,7 +13,4 @@ app.get('/', function(req, res) {
 });
 
 
-// app.post('/', history.results);
-
-
 app.listen(3000);
