@@ -5,7 +5,8 @@ import champion from 'champion';
 import $ from 'jquery';
 import async from 'async';
 import TimeStamp from './timeStamp.jsx';
-import NumData from './numData.jsx';
+import EventDisplay from './eventDisplay.jsx';
+import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 
@@ -220,8 +221,11 @@ class Display extends React.Component {
     return (
       <div id="parent">
         {this.state.scrollBar}
+
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
-        <NumData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+        <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+        <SelectData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} />
+
         <div id="map" ref="map" />
       </div>
     )

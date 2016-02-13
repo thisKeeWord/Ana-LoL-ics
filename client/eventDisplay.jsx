@@ -1,7 +1,7 @@
 import React from 'react';
 import async from 'async';
 
-class NumData extends React.Component {
+class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
 		let interaction = [];
@@ -48,4 +48,4 @@ class NumData extends React.Component {
 	}
 }
 
-module.exports = NumData;
+module.exports = EventDisplay;
