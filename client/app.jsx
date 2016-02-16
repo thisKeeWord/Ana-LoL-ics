@@ -5,7 +5,8 @@ import champion from 'champion';
 import $ from 'jquery';
 import async from 'async';
 import TimeStamp from './timeStamp.jsx';
-import NumData from './numData.jsx';
+import EventDisplay from './eventDisplay.jsx';
+// import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 
@@ -54,11 +55,11 @@ class Display extends React.Component {
 
         // PARTICIPANT-ID AND CHAMPION-ID
         that.state.playerID.push([pId, cId]);
-        console.log(that.state.playerID)
+        // console.log(that.state.playerID)
 
         // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
         $.get(url + cId + '?' + stuff.key, champData => {
-          console.log(champData, 'champData');
+          // console.log(champData, 'champData');
           let stuffs = champData.key;
           count++;
 
@@ -77,6 +78,8 @@ class Display extends React.Component {
               scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.addChampImg.bind(that)}></input>)
             }, 
               that.move()
+              // ,
+              // that.appendBar()
             );
           }
         })
@@ -86,6 +89,7 @@ class Display extends React.Component {
 
   move() {
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
+    let that = this;
     let domain = {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
@@ -149,11 +153,14 @@ class Display extends React.Component {
     // SET STATE FOR SVG TO USE LATER
     this.setState({
       png: svg,
-    })
+    },
+      that.appendBar
+    )
   }
 
   addChampImg(e) {
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
+    let that = this;
     let domain = 
         {
           min: {x: -120, y: -120},
@@ -174,6 +181,7 @@ class Display extends React.Component {
 
     for (let w = 0; w < this.state.playerID.length; w++) {
       let checking = this.state.playerID[w];
+      // d3.select("g").remove();
 
       // REMOVE PREVIOUS ICONS      
       // USE SVG FROM STATE TO APPEND NEW ICONS
@@ -185,44 +193,185 @@ class Display extends React.Component {
           .data([[ this.state.allowScroll[e.target.value][0].participantFrames[w+1].position.x, this.state.allowScroll[e.target.value][0].participantFrames[w+1].position.y ]])
           .enter().append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[this.state.playerID[w][1]] + '.png')
-            .attr('x', function(d) { return xScale(d[0]) })
-            .attr('y', function(d) { return yScale(d[1]) })
+            .attr('x', d => { return xScale(d[0]) })
+            .attr('y', d => { return yScale(d[1]) })
             .attr('class', 'image')
             .style({ 'width': '24px', 'height': '24px' })
       }
 
       // USER MAY GO STRAIGHT TO LAST FRAME
-      if (!this.state.allowScroll[e.target.value][0].participantFrames[w+1].position && this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position) {
+       if (!this.state.allowScroll[e.target.value][0].participantFrames[w+1].position && this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position) {
        d3.select("g").remove();
         this.state.png.append('svg:g').selectAll("image")
           .data([[ this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position.x, this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position.y ]])
           .enter().append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[this.state.playerID[w][1]] + '.png')
-            .attr('x', function(d) { return xScale(d[0]) })
-            .attr('y', function(d) { return yScale(d[1]) })
+            .attr('x', d => { return xScale(d[0]) })
+            .attr('y', d => { return yScale(d[1]) })
             .attr('class', 'image')
             .style({ 'width': '24px', 'height': '24px' }) 
       }
       this.setState({
         num: e.target.value
-      })
+      },
+        that.redo(e)
+      )
     }
   }
 
-  // onChange(e) {
-  //   e.preventDefault();
-  
-  
-  //   addChampImg(e.target.value)
+  // WARDING EVENT
+  // diff() {
+  //   let eventSpecific = [];
+  //   let count = 0;
+  //   // console.log(that)
+  //   if (this.state.timeline.length && this.state.timeline[this.state.num][0].events) {
+  //     let searchEvents = this.state.timeline;
+  //     console.log('hello')
+  //     for (let i = 0; i < this.state.num; i++) {
+  //       if (searchEvents[i][0].events) {
+  //         for (let j = 0; j < searchEvents[i][0].events.length; j++) {
+  //           if (searchEvents[i][0].events[j].eventType === 'WARD_PLACED' && searchEvents[i][0].events[j].creatorId === 9) {
+  //             count++;
+  //           }
+  //         }
+  //       }
+  //     }
+  //     console.log(count)
+  //     return [count];
+  //   }   
   // }
 
+  // BAR GRAPH TO PASS AS state
+  appendBar() {
+    
+    // console.log('somesing wong')
+    let w = 500, h = 100;
+    // d3.select("barSVG").remove();
+    let svg = d3.select("#YO")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h)
+
+    svg.selectAll("rect")
+      .data([0])
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => {
+        return i * (w);
+      })
+      .attr("y", d => {
+        return h - 3 * d;  //Height minus data value
+      })
+      .attr("width",  w)
+      .attr("height", d => {
+        return d * 5;
+      })
+      .attr("fill", d => {
+        return "rgb(0, 0, " + (d * 10) + ")";
+      });
+
+    svg.selectAll("text")
+      .data([0])
+      .enter()
+      .append("text")
+      .text(d => {
+        return d;
+      })
+      .attr("x", (d, i) => {
+        return i * w;
+      })
+      .attr("y", d => {
+        return h - (d * 4) + 14;
+      })
+      .attr("text-anchor", "middle")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "11px")
+      .attr("fill", "white");
+    this.setState({
+      selData: svg
+    })
+    
+  }
+
+  // NEW BAR
+  redo(e) {
+    let eventSpecific = [];
+    let count = 0;
+    let w = 500, h = 100;
+    // console.log(this.state.allowScroll)
+    // debugger;
+    // if (this.state.addScroll.length && this.state.addScroll[e.target.value][0].events) {
+      let searchEvents = this.state.allowScroll;
+      // console.log('hello')
+      // console.log(e.target.value)
+      // console.log(this.state.addScroll)
+      for (let i = 0; i < e.target.value; i++) {
+        if (searchEvents[i][0].events) {
+          for (let j = 0; j < searchEvents[i][0].events.length; j++) {
+            if (searchEvents[i][0].events[j].eventType === 'WARD_PLACED' && searchEvents[i][0].events[j].creatorId === 9) {
+              count++;
+            }
+          }
+        }
+      }
+      count = [count];
+    // }
+    d3.select("rect").remove();
+    d3.select("text").remove();
+
+    this.state.selData.selectAll("rect")
+      .data(count)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => {
+        return i * w;
+      })
+      .attr("y", d => {
+        return h - 3 * d;  //Height minus data value
+      })
+      .attr("width",  w)
+      .attr("height", d => {
+        return d * 5;
+      })
+      .attr("fill", d => {
+        return "rgb(0, 0, " + (d * 10) + ")";
+      });
+
+    this.state.selData.selectAll("text")
+      .data(count)
+      .enter()
+      .append("text")
+      .text(d => {
+        return d;
+      })
+      .attr("x", (d, i) => {
+        return i * w + 5;
+      })
+      .attr("y", d => {
+        return h - (d * 4) + 14;
+      })
+      .attr("text-anchor", "middle")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "11px")
+      .attr("fill", "black");
+
+  }
+
+
   render() {
+    // <SelectData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} passStat={this.addStatChoice} appendBar={this.appendBar} />
+
     return (
       <div id="parent">
         {this.state.scrollBar}
+
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
-        <NumData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+        <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+        
         <div id="map" ref="map" />
+
+        <div id="YO" />
+
       </div>
     )
   }
