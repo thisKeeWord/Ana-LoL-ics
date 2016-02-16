@@ -30,7 +30,7 @@ class EventDisplay extends React.Component {
 		}
 
 		let slayerSlain = stat.map(k => {
-			console.log(k);
+			// console.log(k);
 			return (
 				<div id={k}>
 					<img src={k[0]} height="50px" width="50px" />
