@@ -4,6 +4,7 @@ import async from 'async';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
+		// console.log(this)
 		let interaction = [];
 		if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events) {
 			let searchEvents = this.props.timeline[this.props.spot][0].events;

@@ -6,7 +6,7 @@ import $ from 'jquery';
 import async from 'async';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
-// import SelectData from './selectData.jsx';
+import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 
@@ -23,7 +23,8 @@ class Display extends React.Component {
       allowScroll: [],
       result: {},
       png: [],
-      num: 0
+      num: 0,
+      selData: ''
     }
   }
 
@@ -55,11 +56,11 @@ class Display extends React.Component {
 
         // PARTICIPANT-ID AND CHAMPION-ID
         that.state.playerID.push([pId, cId]);
-        // console.log(that.state.playerID)
+        console.log(that.state.playerID)
 
         // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
         $.get(url + cId + '?' + stuff.key, champData => {
-          // console.log(champData, 'champData');
+          console.log(champData, 'champData');
           let stuffs = champData.key;
           count++;
 
@@ -78,8 +79,6 @@ class Display extends React.Component {
               scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.addChampImg.bind(that)}></input>)
             }, 
               that.move()
-              // ,
-              // that.appendBar()
             );
           }
         })
@@ -89,7 +88,6 @@ class Display extends React.Component {
 
   move() {
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
-    let that = this;
     let domain = {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
@@ -151,16 +149,70 @@ class Display extends React.Component {
                  
     }
     // SET STATE FOR SVG TO USE LATER
+    console.log(this)
     this.setState({
       png: svg,
-    },
-      that.appendBar
-    )
+    })
+  }
+
+  addStatChoice(data) {
+    // d3.select("svg").remove();
+    console.log(this, 'line 159')
+    let w = 500, h = 100;
+    let svg = d3.select("#YO")
+                .append("svg:svg")
+                .attr("width", w)
+                .attr("height", h)
+                .attr("id", "allStat");
+
+    // svg.append("svg:g").selectAll("rect")
+    //   .data(data)
+    //   .enter()
+    //   .append("rect")
+    //   .attr("x", (d, i) => {
+    //     return i * (w / data.length);
+    //   })
+    //   .attr("y", d => {
+    //     return h - d;  //Height minus data value
+    //   })
+    //   .attr("width",  w / data.length)
+    //   .attr("height", d => {
+    //     return d * 5;
+    //   })
+    //   .attr("fill", d => {
+    //     return "rgb(0, 0, " + (d * 10) + ")";
+    //   })
+    //   .attr("id", "addNumStat");
+
+    // svg.append("svg:g").selectAll("text")
+    //   .data(data)
+    //   .enter()
+    //   .append("text")
+    //   .text(d => {
+    //     return d;
+    //   })
+    //   .attr("x", (d, i) => {
+    //     return i * (w / data.length) + 5;
+    //   })
+    //   .attr("y", d => {
+    //     return h - (d * 4) + 14;
+    //   })
+    //   .attr("text-anchor", "middle")
+    //   .attr("font-family", "sans-serif")
+    //   .attr("font-size", "11px")
+    //   .attr("fill", "white")
+    //   .attr("id", "addTextStat");
+    // this.state.increment += 1;
+    //   console.log(this.state)
+    this.state.selData = svg;
+
+    console.log(this)
+    // console.log(this.state.selData)
+    // return svg;
   }
 
   addChampImg(e) {
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
-    let that = this;
     let domain = 
         {
           min: {x: -120, y: -120},
@@ -213,165 +265,27 @@ class Display extends React.Component {
       }
       this.setState({
         num: e.target.value
-      },
-        that.redo(e)
-      )
+      })
     }
   }
 
-  // WARDING EVENT
-  // diff() {
-  //   let eventSpecific = [];
-  //   let count = 0;
-  //   // console.log(that)
-  //   if (this.state.timeline.length && this.state.timeline[this.state.num][0].events) {
-  //     let searchEvents = this.state.timeline;
-  //     console.log('hello')
-  //     for (let i = 0; i < this.state.num; i++) {
-  //       if (searchEvents[i][0].events) {
-  //         for (let j = 0; j < searchEvents[i][0].events.length; j++) {
-  //           if (searchEvents[i][0].events[j].eventType === 'WARD_PLACED' && searchEvents[i][0].events[j].creatorId === 9) {
-  //             count++;
-  //           }
-  //         }
-  //       }
-  //     }
-  //     console.log(count)
-  //     return [count];
-  //   }   
+  // onChange(e) {
+  //   e.preventDefault();
+  
+  
+  //   addChampImg(e.target.value)
   // }
 
-  // BAR GRAPH TO PASS AS state
-  appendBar() {
-    
-    // console.log('somesing wong')
-    let w = 500, h = 100;
-    // d3.select("barSVG").remove();
-    let svg = d3.select("#YO")
-                .append("svg")
-                .attr("width", w)
-                .attr("height", h)
-
-    svg.selectAll("rect")
-      .data([0])
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => {
-        return i * (w);
-      })
-      .attr("y", d => {
-        return h - 3 * d;  //Height minus data value
-      })
-      .attr("width",  w)
-      .attr("height", d => {
-        return d * 5;
-      })
-      .attr("fill", d => {
-        return "rgb(0, 0, " + (d * 10) + ")";
-      });
-
-    svg.selectAll("text")
-      .data([0])
-      .enter()
-      .append("text")
-      .text(d => {
-        return d;
-      })
-      .attr("x", (d, i) => {
-        return i * w;
-      })
-      .attr("y", d => {
-        return h - (d * 4) + 14;
-      })
-      .attr("text-anchor", "middle")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "11px")
-      .attr("fill", "white");
-    this.setState({
-      selData: svg
-    })
-    
-  }
-
-  // NEW BAR
-  redo(e) {
-    let eventSpecific = [];
-    let count = 0;
-    let w = 500, h = 100;
-    // console.log(this.state.allowScroll)
-    // debugger;
-    // if (this.state.addScroll.length && this.state.addScroll[e.target.value][0].events) {
-      let searchEvents = this.state.allowScroll;
-      // console.log('hello')
-      // console.log(e.target.value)
-      // console.log(this.state.addScroll)
-      for (let i = 0; i < e.target.value; i++) {
-        if (searchEvents[i][0].events) {
-          for (let j = 0; j < searchEvents[i][0].events.length; j++) {
-            if (searchEvents[i][0].events[j].eventType === 'WARD_PLACED' && searchEvents[i][0].events[j].creatorId === 9) {
-              count++;
-            }
-          }
-        }
-      }
-      count = [count];
-    // }
-    d3.select("rect").remove();
-    d3.select("text").remove();
-
-    this.state.selData.selectAll("rect")
-      .data(count)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => {
-        return i * w;
-      })
-      .attr("y", d => {
-        return h - 3 * d;  //Height minus data value
-      })
-      .attr("width",  w)
-      .attr("height", d => {
-        return d * 5;
-      })
-      .attr("fill", d => {
-        return "rgb(0, 0, " + (d * 10) + ")";
-      });
-
-    this.state.selData.selectAll("text")
-      .data(count)
-      .enter()
-      .append("text")
-      .text(d => {
-        return d;
-      })
-      .attr("x", (d, i) => {
-        return i * w + 5;
-      })
-      .attr("y", d => {
-        return h - (d * 4) + 14;
-      })
-      .attr("text-anchor", "middle")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "11px")
-      .attr("fill", "black");
-
-  }
-
-
   render() {
-    // <SelectData timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} passStat={this.addStatChoice} appendBar={this.appendBar} />
-
     return (
       <div id="parent">
         {this.state.scrollBar}
 
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
-        
+        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} increment={this.state.increment - 1} />
+
         <div id="map" ref="map" />
-
-        <div id="YO" />
-
       </div>
     )
   }
