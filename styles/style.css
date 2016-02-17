@@ -11,8 +11,8 @@
 }
 
 #scroll {
-	top: 100;
-	left: 100;
+	top: 150;
+	left: 150;
 	position: absolute;
 }*/
 
@@ -22,7 +22,7 @@
   position: absolute;
 }
 
-#YO {
-  top: 600;
+#YO, #YOUTROLL {
+  top: 500;
   position: absolute;
 }
