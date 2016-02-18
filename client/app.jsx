@@ -9,22 +9,7 @@ import EventDisplay from './eventDisplay.jsx';
 import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
-    // let that = this;
-    // console.log(this.props.timeline, 'selectData');
-    // console.log(this.props.spot, 'selectData');
-    // console.log(this.props.playerInfo, 'selectData');
     
-    // <select defaultValue='stats' onChange={that.handle.bind(that)} id="yo" >
-    //       <option value='WARDS_PLACED'>wards</option>
-    //       <option value='stats'>Are</option>
-    //       <option value='A'>A</option>
-    //       <option value='Fruit'>Fruit</option>
-    //     </select>
-    // console.log(this.props.passStat)
-    // if (!d3.select("#YO")[0].length) {
-    //   let bar = this.appendBar(whichData);
-
-    // }
 
 class Display extends React.Component {
   constructor() {
@@ -39,7 +24,8 @@ class Display extends React.Component {
       result: {},
       png: [],
       num: 0,
-      selData: ''
+      selData: '',
+      eventSelected: ''
     }
   }
 
@@ -170,18 +156,6 @@ class Display extends React.Component {
     })
   }
 
-  addStatChoice(data) {
-    let w = 500, 
-        h = 100,
-        svg = d3.select("#YO")
-                .append("svg:svg")
-                .attr("width", w)
-                .attr("height", h)
-                .attr("id", "allStat");
-
-    this.state.selData = svg;
-  }
-
   addChampImg(spot) {
     console.log(this.state)
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
@@ -245,16 +219,46 @@ class Display extends React.Component {
     this.addChampImg(e.target.value);
   }
 
+  addStatChoice(data) {
+    let w = 500, 
+        h = 100,
+        svg = d3.select("#YO")
+                .append("svg:svg")
+                .attr("width", w)
+                .attr("height", h)
+                .attr("id", "allStat");
+
+    this.state.selData = svg;
+  }
+
+  whichEventPick(eventPicked) {
+    eventPicked.preventDefault();
+    console.log('checking 289', eventPicked.target.value)
+    this.state.eventSelected = eventPicked.target.value
+    console.log(this.state)
+  }
+
   render() {
+
+    var that = this;
+    console.log(that)
     return (
       <div id="parent">
         {this.state.scrollBar}
 
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
-        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} increment={this.state.increment - 1} />
+        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} />
+
+        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="please?" >
+          <option value="WARD_PLACED">wards placed</option>
+          <option value="WARD_KILL">wards killed</option>
+          <option value='A'>A</option>
+          <option value='Fruit'>Fruit</option>
+        </select>
 
         <div id="map" ref="map" />
+
       </div>
     )
   }

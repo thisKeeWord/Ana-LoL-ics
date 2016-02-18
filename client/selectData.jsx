@@ -6,7 +6,7 @@ class SelectData extends React.Component {
   diff() {
     let eventSpecific = [];
     let wardCount = [];
-    
+    console.log(this.props.eventSelected)
     if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events) {
       let count = 0;
       let searchEvents = this.props.timeline;
@@ -14,7 +14,9 @@ class SelectData extends React.Component {
       for (let i = 0; i <= this.props.spot; i++) {
         if (searchEvents[i][0].events) {
           for (let j = 0; j < searchEvents[i][0].events.length; j++) {
-            if (searchEvents[i][0].events[j].eventType === 'WARD_PLACED' && searchEvents[i][0].events[j].creatorId === 9) {
+            if (searchEvents[i][0].events[j].eventType === this.props.eventSelected && (searchEvents[i][0].events[j].creatorId === 9 || searchEvents[i][0].events[j].killerId === 9)) {
+              // console.log('hello?', this.props.eventSelected);
+              // debugger;
               count++;
             }
           }
