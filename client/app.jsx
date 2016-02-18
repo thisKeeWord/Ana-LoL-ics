@@ -241,6 +241,7 @@ class Display extends React.Component {
   render() {
 
     var that = this;
+    console.log(that)
     return (
       <div id="parent">
         {this.state.scrollBar}
@@ -249,7 +250,7 @@ class Display extends React.Component {
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
         <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} />
 
-        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="yo" >
+        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="please?" >
           <option value="WARD_PLACED">wards placed</option>
           <option value="WARD_KILL">wards killed</option>
           <option value='A'>A</option>
