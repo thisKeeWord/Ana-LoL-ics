@@ -9,7 +9,22 @@ import EventDisplay from './eventDisplay.jsx';
 import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
+    // let that = this;
+    // console.log(this.props.timeline, 'selectData');
+    // console.log(this.props.spot, 'selectData');
+    // console.log(this.props.playerInfo, 'selectData');
+    
+    // <select defaultValue='stats' onChange={that.handle.bind(that)} id="yo" >
+    //       <option value='WARDS_PLACED'>wards</option>
+    //       <option value='stats'>Are</option>
+    //       <option value='A'>A</option>
+    //       <option value='Fruit'>Fruit</option>
+    //     </select>
+    // console.log(this.props.passStat)
+    // if (!d3.select("#YO")[0].length) {
+    //   let bar = this.appendBar(whichData);
 
+    // }
 
 class Display extends React.Component {
   constructor() {
