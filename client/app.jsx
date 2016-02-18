@@ -9,7 +9,22 @@ import EventDisplay from './eventDisplay.jsx';
 import SelectData from './selectData.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
+    // let that = this;
+    // console.log(this.props.timeline, 'selectData');
+    // console.log(this.props.spot, 'selectData');
+    // console.log(this.props.playerInfo, 'selectData');
+    
+    // <select defaultValue='stats' onChange={that.handle.bind(that)} id="yo" >
+    //       <option value='WARDS_PLACED'>wards</option>
+    //       <option value='stats'>Are</option>
+    //       <option value='A'>A</option>
+    //       <option value='Fruit'>Fruit</option>
+    //     </select>
+    // console.log(this.props.passStat)
+    // if (!d3.select("#YO")[0].length) {
+    //   let bar = this.appendBar(whichData);
 
+    // }
 
 class Display extends React.Component {
   constructor() {
@@ -76,9 +91,10 @@ class Display extends React.Component {
               playerID: that.state.playerID,
               allowScroll: that.state.allowScroll,
               result: info,
-              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.addChampImg.bind(that)}></input>)
+              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
             }, 
-              that.move()
+              that.move(),
+              that.addChampImg(0)
             );
           }
         })
@@ -87,6 +103,7 @@ class Display extends React.Component {
   }
 
   move() {
+    var that = this;
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
     let domain = {
           min: {x: -120, y: -120},
@@ -132,13 +149,12 @@ class Display extends React.Component {
           .attr('height', height)
           .attr('id', 'rift');
 
-
     // GET THE 10 IMAGES FROM URL
     for (let z = 0; z < Object.keys(this.state.champImg).length; z++) {
       let checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
-      svg.append('svg:g').selectAll("image")
+      svg.append('svg:g').attr("id", "champIcon" + z).selectAll("image")
         .data([this.state.pos[z]])
         .enter().append("svg:image")
           .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[checking] + '.png')
@@ -149,69 +165,25 @@ class Display extends React.Component {
                  
     }
     // SET STATE FOR SVG TO USE LATER
-    console.log(this)
     this.setState({
       png: svg,
     })
   }
 
   addStatChoice(data) {
-    // d3.select("svg").remove();
-    console.log(this, 'line 159')
-    let w = 500, h = 100;
-    let svg = d3.select("#YO")
+    let w = 500, 
+        h = 100,
+        svg = d3.select("#YO")
                 .append("svg:svg")
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allStat");
 
-    // svg.append("svg:g").selectAll("rect")
-    //   .data(data)
-    //   .enter()
-    //   .append("rect")
-    //   .attr("x", (d, i) => {
-    //     return i * (w / data.length);
-    //   })
-    //   .attr("y", d => {
-    //     return h - d;  //Height minus data value
-    //   })
-    //   .attr("width",  w / data.length)
-    //   .attr("height", d => {
-    //     return d * 5;
-    //   })
-    //   .attr("fill", d => {
-    //     return "rgb(0, 0, " + (d * 10) + ")";
-    //   })
-    //   .attr("id", "addNumStat");
-
-    // svg.append("svg:g").selectAll("text")
-    //   .data(data)
-    //   .enter()
-    //   .append("text")
-    //   .text(d => {
-    //     return d;
-    //   })
-    //   .attr("x", (d, i) => {
-    //     return i * (w / data.length) + 5;
-    //   })
-    //   .attr("y", d => {
-    //     return h - (d * 4) + 14;
-    //   })
-    //   .attr("text-anchor", "middle")
-    //   .attr("font-family", "sans-serif")
-    //   .attr("font-size", "11px")
-    //   .attr("fill", "white")
-    //   .attr("id", "addTextStat");
-    // this.state.increment += 1;
-    //   console.log(this.state)
     this.state.selData = svg;
-
-    console.log(this)
-    // console.log(this.state.selData)
-    // return svg;
   }
 
-  addChampImg(e) {
+  addChampImg(spot) {
+    console.log(this.state)
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
     let domain = 
         {
@@ -233,16 +205,15 @@ class Display extends React.Component {
 
     for (let w = 0; w < this.state.playerID.length; w++) {
       let checking = this.state.playerID[w];
-      // d3.select("g").remove();
 
       // REMOVE PREVIOUS ICONS      
       // USE SVG FROM STATE TO APPEND NEW ICONS
       // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
       // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
-      if (this.state.allowScroll[e.target.value][0].participantFrames[w+1].position) {
-        d3.select("g").remove();
-        this.state.png.append('svg:g').selectAll("image")
-          .data([[ this.state.allowScroll[e.target.value][0].participantFrames[w+1].position.x, this.state.allowScroll[e.target.value][0].participantFrames[w+1].position.y ]])
+      if (this.state.allowScroll[spot][0].participantFrames[w+1].position) {
+        d3.select("#champIcon" + w).remove();
+        this.state.png.append('svg:g').attr("id", "champIcon" + w).selectAll("image")
+          .data([[ this.state.allowScroll[spot][0].participantFrames[w+1].position.x, this.state.allowScroll[spot][0].participantFrames[w+1].position.y ]])
           .enter().append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[this.state.playerID[w][1]] + '.png')
             .attr('x', d => { return xScale(d[0]) })
@@ -252,10 +223,10 @@ class Display extends React.Component {
       }
 
       // USER MAY GO STRAIGHT TO LAST FRAME
-       if (!this.state.allowScroll[e.target.value][0].participantFrames[w+1].position && this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position) {
-       d3.select("g").remove();
-        this.state.png.append('svg:g').selectAll("image")
-          .data([[ this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position.x, this.state.allowScroll[e.target.value-1][0].participantFrames[w+1].position.y ]])
+       if (!this.state.allowScroll[spot][0].participantFrames[w+1].position && this.state.allowScroll[spot-1][0].participantFrames[w+1].position) {
+       d3.select("#champIcon" + w).remove();
+        this.state.png.append('svg:g').attr("id", "champIcon" + w).selectAll("image")
+          .data([[ this.state.allowScroll[spot-1][0].participantFrames[w+1].position.x, this.state.allowScroll[spot-1][0].participantFrames[w+1].position.y ]])
           .enter().append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[this.state.playerID[w][1]] + '.png')
             .attr('x', d => { return xScale(d[0]) })
@@ -264,17 +235,15 @@ class Display extends React.Component {
             .style({ 'width': '24px', 'height': '24px' }) 
       }
       this.setState({
-        num: e.target.value
+        num: spot
       })
     }
   }
 
-  // onChange(e) {
-  //   e.preventDefault();
-  
-  
-  //   addChampImg(e.target.value)
-  // }
+  onChange(e) {
+    e.preventDefault();
+    this.addChampImg(e.target.value);
+  }
 
   render() {
     return (
