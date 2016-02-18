@@ -92,6 +92,12 @@ class SelectData extends React.Component {
 
   redo(whichData) {
     let w = 500, h = 100;
+    let x = d3.scale.linear()
+                .domain([0, 1])
+                .range([0, w]);
+      let y = d3.scale.linear()
+                .domain([0, 600])
+                .rangeRound([0, h]);
     // console.log(d3.select("addStat" + this.props.increment))
     // console.log(this.props)
     // var that = this;
@@ -110,8 +116,8 @@ class SelectData extends React.Component {
 
     // if (d3.select("statInfo") || d3.select("statInfo").text === '') {
       if (document.getElementById("statInfo") && document.getElementById("infoStat")) {
-      $("svg#statInfo").first().remove();
-      $("svg#infoStat").first().remove();
+      $("#statInfo").first().remove();
+      $("#infoStat").first().remove();
 
     }
     // if (d3.select("use" + this.props.increment + 1).text === '') {
@@ -125,27 +131,32 @@ class SelectData extends React.Component {
       // console.log('helloworld')
       let specificLength = whichData[this.props.spot].length;
       let specificData = whichData[this.props.spot];
-      this.props.selData.append("svg")
+
+      
+      this.props.selData.append("g")
         .attr("id", "statInfo")
         .selectAll("rect")
         .data(specificData)
         .enter()
         .append("rect")
         .attr("x", (d, i) => {
-          return i * (w / specificLength);
+          return x(i);
         })
-        .attr("y", d => {
-          return h - d;  //Height minus data value
+        .attr("y", d => { 
+          return h * 5; 
         })
         .attr("width",  w / specificLength)
         .attr("height", d => {
           return d * 5;
         })
+        .attr("y", d => { 
+          return h - d * 5;
+        })
         .attr("fill", d => {
-          return "rgb(0, 0, " + (d * 10) + ")";
+          return "rgb(0, 0, " + ((h-d) * 10) + ")";
         });
 
-      this.props.selData.append("svg")
+      this.props.selData.append("g")
         .attr("id", "infoStat")
         .selectAll("text")
         .data(specificData)
@@ -155,10 +166,11 @@ class SelectData extends React.Component {
           return d;
         })
         .attr("x", (d, i) => {
-          return i * (w / specificLength) + 5;
+          // return i * (w / specificLength) + 5;
+          return w/2
         })
         .attr("y", d => {
-          return h - (d * 4) + 14;
+          return h - (d * 5) + 20;
         })
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
