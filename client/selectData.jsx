@@ -6,35 +6,47 @@ class SelectData extends React.Component {
   diff() {
     let eventSpecific = [];
     let wardCount = [];
-    console.log(this.props.eventSelected)
     if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events) {
-      let count = 0;
       let searchEvents = this.props.timeline;
 
-      for (let i = 0; i <= this.props.spot; i++) {
-        if (searchEvents[i][0].events) {
-          for (let j = 0; j < searchEvents[i][0].events.length; j++) {
-            if (searchEvents[i][0].events[j].eventType === this.props.eventSelected && (searchEvents[i][0].events[j].creatorId === 9 || searchEvents[i][0].events[j].killerId === 9)) {
-              // console.log('hello?', this.props.eventSelected);
-              // debugger;
-              count++;
+      for (let i = 0; i < this.props.playerInfo.length; i++) {
+        let count = 0;
+        for (let j = 0; j <= this.props.spot; j++) {
+          if (searchEvents[j][0].events) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+              if (searchEvents[j][0].events[k].eventType === this.props.eventSelected && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
+                count++;
+              }
             }
           }
         }
-        wardCount.push([count])
+        wardCount.push(count)
       }
+      wardCount = [wardCount];
+        console.log(wardCount)
+
       return wardCount;
     } 
   }
 
   redo(whichData) {
-    let w = 500, h = 100,
+    // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
+    let getName = [];
+    for (let name = 0; name < this.props.playerInfo.length; name++) {
+      getName.push(this.props.champName[this.props.playerInfo[name][1]])
+    }
+
+    // BAR INFO AND DATA
+    let w = 500, h = 400,
         x = d3.scale.linear()
               .domain([0, 1])
               .range([0, w]),
         y = d3.scale.linear()
               .domain([0, 600])
-              .rangeRound([0, h]);
+              .rangeRound([0, h]),
+        xAxis = d3.svg.axis()
+                  .scale(x)
+                  .orient("bottom");
 
     if (!document.getElementById("allStat")) {
       this.props.passStat(whichData);
@@ -49,53 +61,77 @@ class SelectData extends React.Component {
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
     if(this.props.selData) {
-      let specificLength = whichData[this.props.spot].length;
-      let specificData = whichData[this.props.spot];
-
       this.props.selData.append("g")
         .attr("id", "statInfo")
         .selectAll("rect")
-        .data(specificData)
+        .data(whichData[0])
         .enter()
         .append("rect")
-        .attr("x", (d, i) => {
-          return x(i);
-        })
-        .attr("y", d => { 
-          return h * 5; 
-        })
-        .attr("width",  w / specificLength)
-        .attr("height", d => {
-          return d * 5;
-        })
-        .attr("y", d => { 
-          return h - d * 5; // FLIP THE BAR TO LOAD UPWARD
-        })
-        .attr("fill", d => {
-          return "rgb(0, 0, " + ((h-d) * 10) + ")";
-        });
+          .attr("x", (d, i) => {
+            return x(i) / 10;
+          })
+          .attr("y", (d, i) => { 
+            return h * 5 - 20; 
+          })
+          .attr("width",  w / whichData[0].length - 2)
+          .attr("height", (d, i) => {
+            console.log(i, 'value of i')
+            console.log(d)
+            return d * 5;
+          })
+          .attr("y", (d, i) => { 
+            return h - d * 5 - 20; // FLIP THE BAR TO LOAD UPWARD
+          })
+          .attr("fill", d => {
+            return "rgb(0, 0, 200)";
+          })
+          .attr("id", "shape");
 
       // APPEND TEXT INSIDE BAR
       this.props.selData.append("g")
         .attr("id", "infoStat")
         .selectAll("text")
-        .data(specificData)
+        .data(whichData[0])
         .enter()
         .append("text")
-        .text(d => {
-          return d;
-        })
-        .attr("x", (d, i) => {
-          // return i * (w / specificLength) + 5;
-          return w/2;
-        })
-        .attr("y", d => {
-          return h - (d * 5) + 20;
-        })
-        .attr("text-anchor", "middle")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .attr("fill", "white");
+          .text((d, i) => {
+            return d;
+          })
+          .attr("x", (d, i) => {
+            return x(i) / 10 + 24;
+            // return i/2;
+          })
+          .attr("y", (d, i) => {
+            return h - (d * 5) - 22;
+          })
+          .attr("text-anchor", "middle")
+          .attr("font-family", "sans-serif")
+          .attr("font-size", "11px")
+          .attr("fill", "black")
+          .attr("id", "text");
+
+      this.props.selData.append("g")
+        .attr("id", "xLabel")
+        .selectAll("xLabel")
+        .data(getName)
+        .enter()
+        .append("text")
+          .text((d, i) => {
+            return d;
+          })
+          .attr("x", (d, i) => {
+            return x(i) / 10 + 23;
+          })
+          .attr("y", (d, i) => {
+            return h - 3;
+          })
+          .attr("text-anchor", "middle")
+          .attr("font-family", "sans-serif")
+          .attr("font-size", "11px")
+          .attr("fill", "black")
+          .attr("id", "text");
+        
+          
     }
   }
 
