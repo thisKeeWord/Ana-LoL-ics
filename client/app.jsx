@@ -57,11 +57,11 @@ class Display extends React.Component {
 
         // PARTICIPANT-ID AND CHAMPION-ID
         that.state.playerID.push([pId, cId]);
-        console.log(that.state.playerID)
+        // console.log(that.state.playerID)
 
         // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
         $.get(url + cId + '?' + stuff.key, champData => {
-          console.log(champData, 'champData');
+          // console.log(champData, 'champData');
           let stuffs = champData.key;
           count++;
 
@@ -157,7 +157,7 @@ class Display extends React.Component {
   }
 
   addChampImg(spot) {
-    console.log(this.state)
+    // console.log(this.state)
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
     let domain = 
         {
@@ -221,7 +221,7 @@ class Display extends React.Component {
 
   addStatChoice(data) {
     let w = 500, 
-        h = 100,
+        h = 400,
         svg = d3.select("#YO")
                 .append("svg:svg")
                 .attr("width", w)
@@ -233,22 +233,18 @@ class Display extends React.Component {
 
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    console.log('checking 289', eventPicked.target.value)
-    this.state.eventSelected = eventPicked.target.value
-    console.log(this.state)
+    // console.log('checking 289', eventPicked.target.value)
+    this.setState({
+      eventSelected: eventPicked.target.value
+    })
   }
 
   render() {
-
     var that = this;
-    console.log(that)
+    // console.log(that)
     return (
       <div id="parent">
         {this.state.scrollBar}
-
-        <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
-        <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
-        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} />
 
         <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="please?" >
           <option value="WARD_PLACED">wards placed</option>
@@ -256,6 +252,12 @@ class Display extends React.Component {
           <option value='A'>A</option>
           <option value='Fruit'>Fruit</option>
         </select>
+
+        <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
+        <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
+
+        
 
         <div id="map" ref="map" />
 
