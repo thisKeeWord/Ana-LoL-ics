@@ -6,7 +6,8 @@ import $ from 'jquery';
 import async from 'async';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
-import SelectData from './selectData.jsx';
+import Chart from './chart.jsx';
+import ChampBuild from './champBuild.jsx'
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
     
@@ -217,6 +218,7 @@ class Display extends React.Component {
   onChange(e) {
     e.preventDefault();
     this.addChampImg(e.target.value);
+    console.log(e.target.value)
   }
 
   addStatChoice(data) {
@@ -255,9 +257,8 @@ class Display extends React.Component {
 
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
-        <SelectData timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
-
-        
+        <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
+        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} />
 
         <div id="map" ref="map" />
 
