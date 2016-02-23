@@ -11,7 +11,7 @@ class EventDisplay extends React.Component {
 
 			for (let i = 0; i < searchEvents.length; i++) {
 				if (searchEvents[i].eventType === "CHAMPION_KILL") {
-					interaction.push([ "http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + this.props.champImg[this.props.playerInfo[searchEvents[i].killerId - 1][1]] + ".png", "http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] + ".png" ]);
+					interaction.push([ this.props.champImg[this.props.playerInfo[searchEvents[i].killerId - 1][1]], this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] ]);
 				}
 			}
 			return interaction;
@@ -30,19 +30,29 @@ class EventDisplay extends React.Component {
 			)
 		}
 
-		let slayerSlain = stat.map(k => {
-			// console.log(k);
-			return (
-				<div id={k}>
-					<img src={k[0]} height="50px" width="50px" />
-						has slain
-					<img src={k[1]} height="50px" width="50px" />
-				</div>
-			)
-		})
+		// let slayerSlain = stat.map(k => {
+		// 	// console.log(k);
+		// 	return (
+		// 		<div id={k}>
+		// 			<img src={k[0]} height="50px" width="50px" />
+		// 				has slain
+		// 			<img src={k[1]} height="50px" width="50px" />
+		// 		</div>
+		// 	)
+		// })
 		return (
 			<div id="bangRight">
-				{slayerSlain}
+				{ stat.map(champFight => {
+			// console.log(k);
+						return (
+							<div>
+								<img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + champFight[0] + ".png"} height={50} width={50} />
+									has slain
+								<img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + champFight[1] + ".png"} height={50} width={50} />
+							</div>
+						)
+					})
+				}
 			</div>
 		)	
 		

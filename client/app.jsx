@@ -36,54 +36,57 @@ class Display extends React.Component {
         count = -1,
         total = 0;
 
-    // $.get(url + '?dataById=true&' + stuff.key, function(res) {
+    // REQUEST TO GRAB ALL ITEMS
+    $.get("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", data => {
 
-    // FIRST REQUEST TO FILE
-    $.get('http://localhost:3000/demoData.html', data => {
-      let info = JSON.parse(data);  
-      
-      // GOING FOR THE TIMELINE INFORMATION
-      for (let j = 0; j < info.timeline.frames.length; j++) {
-        that.state.allowScroll.push([info.timeline.frames[j]]);
-      }  
+      // FIRST REQUEST TO FILE
+      $.get('http://localhost:3000/demoData.html', newData => {
+        let info = JSON.parse(newData);  
+        
+        // GOING FOR THE TIMELINE INFORMATION
+        for (let j = 0; j < info.timeline.frames.length; j++) {
+          that.state.allowScroll.push([info.timeline.frames[j]]);
+        }  
 
-      // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
-      let stepScroll = 300 / that.state.allowScroll.length;
+        // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+        let stepScroll = 300 / that.state.allowScroll.length;
 
-      // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
-      async.each(info.participants, (i, next) => {
+        // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
+        async.each(info.participants, (i, next) => {
 
-        let pId = i.participantId;
-        let cId = i.championId;
+          let pId = i.participantId;
+          let cId = i.championId;
 
-        // PARTICIPANT-ID AND CHAMPION-ID
-        that.state.playerID.push([pId, cId]);
-        // console.log(that.state.playerID)
+          // PARTICIPANT-ID AND CHAMPION-ID
+          that.state.playerID.push([pId, cId]);
+          // console.log(that.state.playerID)
 
-        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-        $.get(url + cId + '?' + stuff.key, champData => {
-          // console.log(champData, 'champData');
-          let stuffs = champData.key;
-          count++;
+          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+          $.get(url + cId + '?' + stuff.key, champData => {
+            // console.log(champData, 'champData');
+            let stuffs = champData.key;
+            count++;
 
-          // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
-          that.state.champImg[cId] = champData.key;
-          that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
+            // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
+            that.state.champImg[cId] = champData.key;
+            that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
 
-          // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
-          if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
-            that.setState({ 
-              pos: that.state.pos,
-              champImg: that.state.champImg,
-              playerID: that.state.playerID,
-              allowScroll: that.state.allowScroll,
-              result: info,
-              scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
-            }, 
-              that.move(),
-              that.addChampImg(0)
-            );
-          }
+            // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
+            if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
+              that.setState({ 
+                pos: that.state.pos,
+                champImg: that.state.champImg,
+                playerID: that.state.playerID,
+                allowScroll: that.state.allowScroll,
+                result: info,
+                itemStorage: data.data,
+                scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
+              }, 
+                that.move(),
+                that.addChampImg(0)
+              );
+            }
+          })
         })
       })
     })
@@ -158,7 +161,6 @@ class Display extends React.Component {
   }
 
   addChampImg(spot) {
-    // console.log(this.state)
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
     let domain = 
         {
@@ -218,9 +220,9 @@ class Display extends React.Component {
   onChange(e) {
     e.preventDefault();
     this.addChampImg(e.target.value);
-    console.log(e.target.value)
   }
 
+  // BACKGROUND FOR THE BAR GRAPH
   addStatChoice(data) {
     let w = 500, 
         h = 400,
@@ -233,9 +235,9 @@ class Display extends React.Component {
     this.state.selData = svg;
   }
 
+  // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    // console.log('checking 289', eventPicked.target.value)
     this.setState({
       eventSelected: eventPicked.target.value
     })
@@ -243,7 +245,6 @@ class Display extends React.Component {
 
   render() {
     var that = this;
-    // console.log(that)
     return (
       <div id="parent">
         {this.state.scrollBar}
@@ -258,7 +259,7 @@ class Display extends React.Component {
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
         <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
-        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} />
+        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} />
 
         <div id="map" ref="map" />
 

@@ -23,6 +23,13 @@
 }
 
 #YO svg {
-  top: 600;
+  top: 500;
   position: absolute;
+}
+
+#kudos {
+  top: 500;
+  left: 600;
+  position: absolute;
+  /*display: inline-block;*/
 }
