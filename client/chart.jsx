@@ -3,24 +3,17 @@ import $ from 'jquery';
 
 class Chart extends React.Component {
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(nextProps, this.props.eventSelected)
-  //   if (nextProps.eventSelected !== this.props.eventSelected) {
-  //     $("#infoStat").first().remove();
-  //   }
-  // }
-
   diff() {
+    // FIND SELECTION --> WARD PLACEMENT OR DELETIONS
     let eventSpecific = [];
     if (this.props.timeline.length) {
       let searchEvents = this.props.timeline;
 
       for (let i = 0; i < this.props.playerInfo.length; i++) {
         let count = 0;
-        if (this.props.timeline[this.props.spot][0].events) {
+        if (searchEvents[this.props.spot][0].events) {
           for (let j = 0; j <= this.props.spot; j++) {
             if (searchEvents[j][0].events) {
-
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                 if (searchEvents[j][0].events[k].eventType === this.props.eventSelected && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
                   count++;
@@ -29,10 +22,7 @@ class Chart extends React.Component {
             }
           }
         }
-        eventSpecific.push(count);
-      // eventSpecific = [eventSpecific];
-      // console.log(eventSpecific, this.props.spot)
-      
+        eventSpecific.push(count);    
       }
       return [eventSpecific];
     } 
@@ -66,7 +56,6 @@ class Chart extends React.Component {
       // debugger;
       $("#statInfo").first().remove();
       $("#infoStat").first().remove();
-      // $("#whichChamp").remove();
     }
 
     // APPEND NEW BAR AND TEXT
@@ -90,8 +79,6 @@ class Chart extends React.Component {
           })
           .attr("width",  w / whichData[0].length - 2)
           .attr("height", (d, i) => {
-            // console.log(i, 'value of i')
-            // console.log(d)
             return d * 5;
           })
           .attr("y", (d, i) => { 
@@ -125,6 +112,7 @@ class Chart extends React.Component {
           .attr("fill", "black")
           .attr("id", "amount");
 
+      // ADD LABELS TO X-AXIS
       this.props.selData.append("g")
         .attr("id", "infoStat")
         .selectAll("text")
@@ -145,9 +133,7 @@ class Chart extends React.Component {
           .attr("font-family", "sans-serif")
           .attr("font-size", "11px")
           .attr("fill", "black")
-          .attr("id", "whichChamp");
-        
-          
+          .attr("id", "whichChamp");    
     }
   }
 
