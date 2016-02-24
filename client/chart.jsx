@@ -53,7 +53,6 @@ class Chart extends React.Component {
     
     // CHECK IF TEXT AND BAR EXISTS, THEN REMOVE
     if (document.getElementById("statInfo") && document.getElementById("infoStat")) {
-      // debugger;
       $("#statInfo").first().remove();
       $("#infoStat").first().remove();
     }
@@ -61,7 +60,6 @@ class Chart extends React.Component {
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
     if(this.props.selData) {
-      // console.log(this.props.spot)
       if (document.getElementById("infoStat")) {
         $("#infoStat").first().remove();
       }
@@ -101,7 +99,6 @@ class Chart extends React.Component {
           })
           .attr("x", (d, i) => {
             return x(i) / 10 + 24;
-            // return i/2;
           })
           .attr("y", (d, i) => {
             return h - (d * 5) - 22;
@@ -124,7 +121,6 @@ class Chart extends React.Component {
           })
           .attr("x", (d, i) => {
             return x(i) / 10 + 24;
-            // return i/2;
           })
           .attr("y", (d, i) => {
             return h - 10;

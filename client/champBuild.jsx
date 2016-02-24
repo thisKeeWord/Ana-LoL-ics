@@ -64,48 +64,49 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
-    // let bunchOItems = [];
-    if (!document.getElementById("allItems")) {
-      this.props.addItemVisuals(showItems);
-    }
-
-    // // NESTING FOR LOOPS TO PUSH IMAGES TO NEW ARRAY FROM NESTED ARRAYS
-    // for (let y = 0; y < showItems.length; y++) {
-    //   bunchOItems.push(this.props.champName[this.props.playerInfo[y][1]]);
-    //   for (let z = 0; z < showItems[y].length; z++) {
-    //     bunchOItems.push(showItems[y][z]);
-    //   }
-    // }
-    // for (let y = 0; y < showItems.length; y++) {
-    //   showItems[y].push(this.props.champName[this.props.playerInfo[y][1]])
-    // }
     if(this.props.addItems) {
-      // $(".itemIcon").first().remove();
-      let yAttr = 0;
-      if (document.getElementsByClassName("champBuilds")) {
-        $(".champBuilds").first().remove();
+
+      // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
+      if (document.getElementById("allItems")) {
+        $(".champBuilds").remove();
+        $(".champIcons").remove();
       }
-      showItems.forEach(i => {
-        this.props.addItems.selectAll("#itemIcon" + yAttr)
+
+      // EACH PLAYER'S BUILDS
+      for (let w = 0; w < this.props.playerInfo.length; w++) {
+
+        // WID=WIDTH HARDCODED FOR NOW
+        let wid = 466;
+        let build = this.props.playerInfo[w];
+
+        this.props.addItems.append('svg:g')
+          .attr("class", "champIcons")
+          .selectAll("image")
+          .data([[]])
+          .enter()
+            .append("svg:image")
+            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.props.champName[build[1]] + '.png')
+            .attr('y', w * 24)
+            .style({ 'width': '24px', 'height': '24px' });
+      
+        this.props.addItems
           .append('svg:g')
           .attr('class', 'champBuilds')
           .selectAll("image")
-          .data(i[0])
+          .data(showItems[w][0])
           .enter()
             .append("svg:image")
             .attr('xlink:href', d => {
-              // return d.forEach(res => {
-              //   console.log(d, res)
+              if (d) {
                 return ("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/item/" + d + ".png");
-              })
+              }
             })
-            .attr('x', () => { return yAttr * 24 })
-            // .attr('y', d => { return yScale(d[1]) })
+            .attr("x", (d, i) => {
+              return 24 * (i+1)
+            })
+            .attr("y", 24 * w)
             .style({ 'width': '24px', 'height': '24px' });
-
-        yAttr++;
-
-         
+      }   
     }
   }
     
@@ -118,29 +119,6 @@ class ChampBuild extends React.Component {
         <div id="items" />
       )
     }
-    // showItems = [].concat.apply([], showItems);
-    // return (
-    //   <div id="kudos">
-    //     { showItems.map(i => {
-    //        return (
-    //           <img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/item/" + i + ".png"} height={10} width={10} />
-    //         )
-    //       })
-    //     }
-    //   </div>
-    // )
-    // bunchOItems.map(i =>  {
-    //         if (typeof i === 'number') {
-    //           return (
-    //             <div id="itemsPerChamp">
-    //               <img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + this.props.champName[i] + ".png" } height={25} width={25} />
-    //             </div>
-    //           )
-    //         }
-    //         return i;
-    //       })
-
-    
 
     let items = this.appendItems(showItems)
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG

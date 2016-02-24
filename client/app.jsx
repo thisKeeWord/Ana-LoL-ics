@@ -40,7 +40,7 @@ class Display extends React.Component {
     // REQUEST TO GRAB ALL ITEMS
     request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
       if (err) return console.error(err);
-      console.log(JSON.parse(data.body))
+      
       // FIRST REQUEST TO FILE
       request('http://localhost:3000/demoData.html', (error, newData) => {
         if (error) return console.error(error);
@@ -62,11 +62,9 @@ class Display extends React.Component {
 
           // PARTICIPANT-ID AND CHAMPION-ID
           that.state.playerID.push([pId, cId]);
-          // console.log(that.state.playerID)
 
           // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
           $.get(url + cId + '?' + stuff.key, champData => {
-            // console.log(champData, 'champData');
             let stuffs = champData.key;
             count++;
 
@@ -86,7 +84,8 @@ class Display extends React.Component {
                 scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
               }, 
                 that.move(),
-                that.addChampImg(0)
+                that.addChampImg(0),
+                that.addItemVisuals(0)
               );
             }
           })
@@ -238,6 +237,7 @@ class Display extends React.Component {
     this.state.selData = svg;
   }
 
+  // CHAMP BUILDS
   addItemVisuals(items) {
     let w = 250,
         h = 600,
@@ -246,21 +246,7 @@ class Display extends React.Component {
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allItems");
-    for (let w = 0; w < this.state.playerID.length; w++) {
-      let build = this.state.playerID[w];
-      svg.append('svg:g')
-        // .attr("class", "items")
-        .attr("id", "itemIcon" + w)
-        .selectAll("image")
-        .data([[]])
-        .enter()
-          .append("svg:image")
-          .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[build[1]] + '.png')
-          .attr('y', w * 24)
-          .style({ 'width': '24px', 'height': '24px' });
-    }
     this.state.addItems = svg;
-    console.log(this.state.addItems)
   }
 
   // USER SELECTION ON DROPDOWN MENU
