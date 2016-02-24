@@ -4,7 +4,6 @@ import async from 'async';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		// console.log(this)
 		let interaction = [];
 		if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events) {
 			let searchEvents = this.props.timeline[this.props.spot][0].events;
@@ -30,20 +29,9 @@ class EventDisplay extends React.Component {
 			)
 		}
 
-		// let slayerSlain = stat.map(k => {
-		// 	// console.log(k);
-		// 	return (
-		// 		<div id={k}>
-		// 			<img src={k[0]} height="50px" width="50px" />
-		// 				has slain
-		// 			<img src={k[1]} height="50px" width="50px" />
-		// 		</div>
-		// 	)
-		// })
 		return (
 			<div id="bangRight">
 				{ stat.map(champFight => {
-			// console.log(k);
 						return (
 							<div>
 								<img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + champFight[0] + ".png"} height={50} width={50} />
