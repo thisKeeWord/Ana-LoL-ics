@@ -26,7 +26,8 @@ class Display extends React.Component {
       png: [],
       num: 0,
       selData: '',
-      eventSelected: ''
+      eventSelected: '',
+      addItems: ''
     }
   }
 
@@ -37,11 +38,13 @@ class Display extends React.Component {
         total = 0;
 
     // REQUEST TO GRAB ALL ITEMS
-    $.get("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", data => {
-
+    request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
+      if (err) return console.error(err);
+      console.log(JSON.parse(data.body))
       // FIRST REQUEST TO FILE
-      $.get('http://localhost:3000/demoData.html', newData => {
-        let info = JSON.parse(newData);  
+      request('http://localhost:3000/demoData.html', (error, newData) => {
+        if (error) return console.error(error);
+        let info = JSON.parse(newData.body);  
         
         // GOING FOR THE TIMELINE INFORMATION
         for (let j = 0; j < info.timeline.frames.length; j++) {
@@ -79,7 +82,7 @@ class Display extends React.Component {
                 playerID: that.state.playerID,
                 allowScroll: that.state.allowScroll,
                 result: info,
-                itemStorage: data.data,
+                itemStorage: JSON.parse(data.body).data,
                 scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
               }, 
                 that.move(),
@@ -235,6 +238,31 @@ class Display extends React.Component {
     this.state.selData = svg;
   }
 
+  addItemVisuals(items) {
+    let w = 250,
+        h = 600,
+        svg = d3.select("#kudos")
+                .append("svg:svg")
+                .attr("width", w)
+                .attr("height", h)
+                .attr("id", "allItems");
+    for (let w = 0; w < this.state.playerID.length; w++) {
+      let build = this.state.playerID[w];
+      svg.append('svg:g')
+        // .attr("class", "items")
+        .attr("id", "itemIcon" + w)
+        .selectAll("image")
+        .data([[]])
+        .enter()
+          .append("svg:image")
+          .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[build[1]] + '.png')
+          .attr('y', w * 24)
+          .style({ 'width': '24px', 'height': '24px' });
+    }
+    this.state.addItems = svg;
+    console.log(this.state.addItems)
+  }
+
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
@@ -249,7 +277,7 @@ class Display extends React.Component {
       <div id="parent">
         {this.state.scrollBar}
 
-        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="please?" >
+        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="selections" >
           <option value="WARD_PLACED">wards placed</option>
           <option value="WARD_KILL">wards killed</option>
           <option value='A'>A</option>
@@ -259,7 +287,7 @@ class Display extends React.Component {
         <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
         <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
         <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
-        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} />
+        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} addItemVisuals={this.addItemVisuals.bind(this)} />
 
         <div id="map" ref="map" />
 
