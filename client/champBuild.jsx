@@ -57,11 +57,59 @@ class ChampBuild extends React.Component {
             }
           }
         }
-      eachPlayersItems.push(itemStore)
+      eachPlayersItems.push([itemStore])
       })
       return eachPlayersItems;
     }
   }
+
+  appendItems(showItems) {
+    // let bunchOItems = [];
+    if (!document.getElementById("allItems")) {
+      this.props.addItemVisuals(showItems);
+    }
+
+    // // NESTING FOR LOOPS TO PUSH IMAGES TO NEW ARRAY FROM NESTED ARRAYS
+    // for (let y = 0; y < showItems.length; y++) {
+    //   bunchOItems.push(this.props.champName[this.props.playerInfo[y][1]]);
+    //   for (let z = 0; z < showItems[y].length; z++) {
+    //     bunchOItems.push(showItems[y][z]);
+    //   }
+    // }
+    // for (let y = 0; y < showItems.length; y++) {
+    //   showItems[y].push(this.props.champName[this.props.playerInfo[y][1]])
+    // }
+    if(this.props.addItems) {
+      // $(".itemIcon").first().remove();
+      let yAttr = 0;
+      if (document.getElementsByClassName("champBuilds")) {
+        $(".champBuilds").first().remove();
+      }
+      showItems.forEach(i => {
+        this.props.addItems.selectAll("#itemIcon" + yAttr)
+          .append('svg:g')
+          .attr('class', 'champBuilds')
+          .selectAll("image")
+          .data(i[0])
+          .enter()
+            .append("svg:image")
+            .attr('xlink:href', d => {
+              // return d.forEach(res => {
+              //   console.log(d, res)
+                return ("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/item/" + d + ".png");
+              })
+            })
+            .attr('x', () => { return yAttr * 24 })
+            // .attr('y', d => { return yScale(d[1]) })
+            .style({ 'width': '24px', 'height': '24px' });
+
+        yAttr++;
+
+         
+    }
+  }
+    
+   
 
   render() {
     let showItems = this.itemization();
@@ -81,30 +129,24 @@ class ChampBuild extends React.Component {
     //     }
     //   </div>
     // )
+    // bunchOItems.map(i =>  {
+    //         if (typeof i === 'number') {
+    //           return (
+    //             <div id="itemsPerChamp">
+    //               <img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + this.props.champName[i] + ".png" } height={25} width={25} />
+    //             </div>
+    //           )
+    //         }
+    //         return i;
+    //       })
 
-    // NEXTING FOR LOOPS TO PUSH IMAGES TO NEW ARRAY FROM NESTED ARRAYS
-    let bunchOItems = [];
-    for (let y = 0; y < showItems.length; y++) {
-      bunchOItems.push(this.props.playerInfo[y][1]);
-      for (let z = 0; z < showItems[y].length; z++) {
-        bunchOItems.push(<img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/item/" + showItems[y][z] + ".png"} height={25} width={25} />)
-      }
-    }
+    
 
+    let items = this.appendItems(showItems)
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG
     return (
       <div id="kudos">
-        { bunchOItems.map(i =>  {
-            if (typeof i === 'number') {
-              return (
-                <div id="itemsPerChamp">
-                  <img src={"http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/" + this.props.champName[i] + ".png" } height={25} width={25} />
-                </div>
-              )
-            }
-            return i;
-          })
-        }
+        {items}
       </div>
     )
   }
