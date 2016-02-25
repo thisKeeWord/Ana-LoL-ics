@@ -49,7 +49,7 @@ class Display extends React.Component {
 
     // REQUEST TO GRAB ALL ITEMS
     $.get("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", data => {
-      let res = data;
+      let res = JSON.parse(data);
       console.log(res)
       // if (err) return console.error(err);
       
@@ -57,7 +57,7 @@ class Display extends React.Component {
       $.get('http://localhost:3000/demoData.html', newData => {
         // if (error) return console.error(error);
         let info = JSON.parse(newData);
-        console.log(newData) 
+        console.log(info) 
         
         // GOING FOR THE TIMELINE INFORMATION
         for (let j = 0; j < info.timeline.frames.length; j++) {
