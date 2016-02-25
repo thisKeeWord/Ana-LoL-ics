@@ -46,10 +46,6 @@ class Chart extends React.Component {
         xAxis = d3.svg.axis()
                   .scale(x)
                   .orient("bottom");
-
-    // if (!document.getElementById("allStat")) {
-    //   this.props.passStat(whichData);
-    // }
     
     // CHECK IF TEXT AND BAR EXISTS, THEN REMOVE
     if (document.getElementById("statInfo") && document.getElementById("infoStat")) {
@@ -59,7 +55,6 @@ class Chart extends React.Component {
 
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
-    console.log(this.props.spot, this.props.selData)
     if(this.props.selData) {
       if (document.getElementById("infoStat")) {
         $("#infoStat").first().remove();
