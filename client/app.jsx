@@ -36,7 +36,6 @@ class Display extends React.Component {
   // the setup of the intial data!!!
   // AFTER INITIAL RENDERING
   handleSubmit(e) {
-    console.log(e)
     e.preventDefault();
     
     if (localStorage) {
@@ -80,30 +79,25 @@ class Display extends React.Component {
             // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
             that.state.champImg[cId] = champData.key;
             that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
-          
 
             // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
             if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
-              that.setState({ 
-                pos: that.state.pos,
-                champImg: that.state.champImg,
-                playerID: that.state.playerID,
-                allowScroll: that.state.allowScroll,
-                result: info,
-                itemStorage: JSON.parse(data.body).data,
-                scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
-                toggle: true
-              },
+              
+                // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+                this.state.pos = that.state.pos,
+                this.state.champImg = that.state.champImg,
+                this.state.playerID = that.state.playerID,
+                this.state.allowScroll = that.state.allowScroll,
+                this.state.result = info,
+                this.state.itemStorage = JSON.parse(data.body).data,
+                this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
+                this.state.toggle = true;
 
-                // CALLBACK FOR SETSTATE
-                function() {  
-                  that.addStatChoice(),
-                  that.move(),
-                  
-                  that.addItemVisuals()
-                  
-                }
-              );
+                // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+                that.move();
+                that.addStatChoice();
+                that.move();
+                that.addItemVisuals();
             }
           })
         })
@@ -129,26 +123,18 @@ class Display extends React.Component {
         height = 512,
 
         // NEWEST VERSION OF SUMMONER'S RIFT
-        nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png",
+        nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
         // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
-        xScale, yScale, svg;
-
-        // D3 METHODS AND SUCH
-        // color = d3.scale.linear()
-        //   .domain([0, 3])
-        //   .range(["white", "steelblue"])
-        //   .interpolate(d3.interpolateLab);
-
-        xScale = d3.scale.linear()
+        let xScale = d3.scale.linear()
           .domain([domain.min.x, domain.max.x])
           .range([0, width]);
 
-        yScale = d3.scale.linear()
+        let yScale = d3.scale.linear()
           .domain([domain.min.y, domain.max.y])
           .range([height, 0]);
 
-        svg = d3.select("#map").append("svg:svg")
+        let svg = d3.select("#map").append("svg:svg")
           .attr("id", "backdrop")
           .attr("width", width)
           .attr("height", height)
@@ -180,7 +166,9 @@ class Display extends React.Component {
                  
     }
     // SET STATE FOR SVG TO USE LATER
-    this.state.png = svg;
+    this.setState({
+      png: svg
+    })
   }
 
   onChange(e) {
@@ -192,6 +180,7 @@ class Display extends React.Component {
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
+    // debugger
     let w = 500, 
         h = 400,
         svg = d3.select("#YO")
@@ -199,7 +188,9 @@ class Display extends React.Component {
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allStat");
-    this.state.selData = svg;
+    this.setState({
+      selData: svg
+    })
   }
 
   // CHAMP BUILDS
@@ -211,7 +202,9 @@ class Display extends React.Component {
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allItems");
-    this.state.addItems = svg;
+    this.setState({
+      addItems: svg
+    })
   }
 
   // USER SELECTION ON DROPDOWN MENU
@@ -235,8 +228,6 @@ class Display extends React.Component {
 
 
     if (this.state.toggle === true) {
-      // passStat={this.addStatChoice.bind(this)}
-        // addItemVisuals={this.addItemVisuals.bind(this)}
       return (
         <div id="parent">
           {this.state.scrollBar}
