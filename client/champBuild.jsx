@@ -64,6 +64,9 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
+    // if (!document.getElementById("allItems")) {
+    //   this.props.addItemVisuals(0);
+    // }
     if(this.props.addItems) {
 
       // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
