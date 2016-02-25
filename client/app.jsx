@@ -27,24 +27,37 @@ class Display extends React.Component {
       num: 0,
       selData: '',
       eventSelected: '',
-      addItems: ''
+      addItems: '',
+      toggle: false
     }
   }
 
   // AFTER INITIAL RENDERING
-  componentWillMount() {
+  handleSubmit(e) {
+    console.log(this)
+    e.preventDefault();
+    
+    console.log(this)
+    if (localStorage) {
+      console.log(localStorage)
+      // storage.
+    }
     let that = this,
         count = -1,
         total = 0;
+    let champData = 0;
 
     // REQUEST TO GRAB ALL ITEMS
-    request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
-      if (err) return console.error(err);
+    $.get("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", data => {
+      let res = data;
+      console.log(res)
+      // if (err) return console.error(err);
       
       // FIRST REQUEST TO FILE
-      request('http://localhost:3000/demoData.html', (error, newData) => {
-        if (error) return console.error(error);
-        let info = JSON.parse(newData.body);  
+      $.get('http://localhost:3000/demoData.html', newData => {
+        // if (error) return console.error(error);
+        let info = JSON.parse(newData);
+        console.log(newData) 
         
         // GOING FOR THE TIMELINE INFORMATION
         for (let j = 0; j < info.timeline.frames.length; j++) {
@@ -67,34 +80,49 @@ class Display extends React.Component {
           $.get(url + cId + '?' + stuff.key, champData => {
             let stuffs = champData.key;
             count++;
-
+            champData = champData
             // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
             that.state.champImg[cId] = champData.key;
             that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
+            // let collectAll = {
 
-            // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
-            if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
-              that.setState({ 
-                pos: that.state.pos,
-                champImg: that.state.champImg,
-                playerID: that.state.playerID,
-                allowScroll: that.state.allowScroll,
-                result: info,
-                itemStorage: JSON.parse(data.body).data,
-                scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>)
-              }, 
-                that.move(),
-                that.addChampImg(0),
-                that.addItemVisuals(0)
-              );
-            }
+            // };
           })
+          
         })
       })
+      .done(function(that, info, res) {
+        
+
+    // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
+    // if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
+        that.setState({ 
+          pos: that.state.pos,
+          champImg: that.state.champImg,
+          playerID: that.state.playerID,
+          allowScroll: that.state.allowScroll,
+          result: info,
+          itemStorage: res,
+          scrollBar: (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
+          toggle: true
+        }, 
+          function() {
+            that.move();
+            // that.addChampImg(0),
+            // that.addItemVisuals(0)
+          }, function() {
+            that.addItemVisuals(0);
+          }
+        );
+
+    // }
+      })
     })
+    
   }
 
   move() {
+    console.log('hello map??', this)
     var that = this;
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
     let domain = {
@@ -158,7 +186,9 @@ class Display extends React.Component {
     }
     // SET STATE FOR SVG TO USE LATER
     this.setState({
-      png: svg,
+      png: svg
+    }, function() {
+        that.addChampImg(0);
     })
   }
 
@@ -246,7 +276,9 @@ class Display extends React.Component {
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allItems");
-    this.state.addItems = svg;
+    this.setState({
+      addItems: svg
+    })
   }
 
   // USER SELECTION ON DROPDOWN MENU
@@ -259,26 +291,46 @@ class Display extends React.Component {
 
   render() {
     var that = this;
-    return (
-      <div id="parent">
-        {this.state.scrollBar}
+    if (this.state.toggle === false) {
+      return (
+        <div id="form">
+          <form id="formSubmit" onSubmit={that.handleSubmit.bind(that)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username"required />
+          </form>
+        </div>
+      )
+    }
 
-        <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="selections" >
-          <option value="WARD_PLACED">wards placed</option>
-          <option value="WARD_KILL">wards killed</option>
-          <option value='A'>A</option>
-          <option value='Fruit'>Fruit</option>
-        </select>
+    if (this.state.toggle === true) {
+      return (
 
-        <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
-        <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
-        <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
-        <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} addItemVisuals={this.addItemVisuals.bind(this)} />
+        <div id="parent">
 
-        <div id="map" ref="map" />
+          <div id="form">
+            <form id="formSubmit" onSubmit={that.handleSubmit.bind(that)}>
+              <input type="text" name="userName" ref="userName" placeholder="enter username"required />
+            </form>
+          </div>
 
-      </div>
-    )
+          {this.state.scrollBar}
+
+          <select defaultValue='A' onLoad={that.whichEventPick.bind(that)} onChange={that.whichEventPick.bind(that)} id="selections" >
+            <option value="WARD_PLACED">wards placed</option>
+            <option value="WARD_KILL">wards killed</option>
+            <option value='A'>A</option>
+            <option value='Fruit'>Fruit</option>
+          </select>
+
+          <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
+          <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+          <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} passStat={this.addStatChoice.bind(this)} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
+          <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} addItemVisuals={this.addItemVisuals.bind(this)} />
+
+          <div id="map" ref="map" />
+
+        </div>
+      )
+    }
   }
 }
 
