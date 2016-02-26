@@ -15,6 +15,7 @@ let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 
 class Display extends React.Component {
   constructor() {
+    debugger;
     super();
 
     this.state = {
@@ -29,7 +30,9 @@ class Display extends React.Component {
       selData: '',
       eventSelected: '',
       addItems: '',
-      toggle: false
+      // toggle: false
+      formGood: true
+
     }
   }
 
@@ -216,18 +219,18 @@ class Display extends React.Component {
   }
 
   render() {
-    if (this.state.toggle === false) {
-      return (
-        <div id="form">
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username"required />
-          </form>
-        </div>
-      )
-    }
+    // if (this.state.toggle === false) {
+    //   return (
+    //     <div id="form">
+    //       <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+    //         <input type="text" name="userName" ref="userName" placeholder="enter username"required />
+    //       </form>
+    //     </div>
+    //   )
+    // }
 
 
-    if (this.state.toggle === true) {
+    // if (this.state.toggle === true) {
       return (
         <div id="parent">
           {this.state.scrollBar}
@@ -249,8 +252,8 @@ class Display extends React.Component {
 
         </div>
       )
-    }
+    // }
   }
 }
 
-ReactDOM.render(<Display />, document.getElementById('content'))
+module.exports=Display;
