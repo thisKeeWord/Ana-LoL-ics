@@ -29,7 +29,8 @@ class Display extends React.Component {
       selData: '',
       eventSelected: '',
       addItems: '',
-      toggle: false
+      // toggle: false
+      
     }
   }
 
@@ -216,18 +217,18 @@ class Display extends React.Component {
   }
 
   render() {
-    if (this.state.toggle === false) {
-      return (
-        <div id="form">
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username"required />
-          </form>
-        </div>
-      )
-    }
+    // if (this.state.toggle === false) {
+    //   return (
+    //     <div id="form">
+    //       <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+    //         <input type="text" name="userName" ref="userName" placeholder="enter username"required />
+    //       </form>
+    //     </div>
+    //   )
+    // }
 
 
-    if (this.state.toggle === true) {
+    // if (this.state.toggle === true) {
       return (
         <div id="parent">
           {this.state.scrollBar}
@@ -249,8 +250,8 @@ class Display extends React.Component {
 
         </div>
       )
-    }
+    // }
   }
 }
 
-ReactDOM.render(<Display />, document.getElementById('content'))
+module.exports=Display;
