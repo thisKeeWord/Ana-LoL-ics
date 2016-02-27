@@ -72,7 +72,7 @@ class Display extends React.Component {
           that.state.playerID.push([pId, cId]);
 
           // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-          $.get(url + cId + '?' + stuff.key, champData => {
+          $.get(url + cId + '?' + stuff.stuff, champData => {
             let stuffs = champData.key;
             count++;
 
