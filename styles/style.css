@@ -1,35 +1,66 @@
 /*#map {
+  display: block;
   height: 512px;
   width: 512px;
   background-image: url("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/map/map11.png");
 }*/
+#matchHistory {
+  /*display: block;*/
+  max-width: 250px;
+  margin-left: 550;
+  /*height: 300px;*/
+  /*position: absolute;*/
+}
 
-/*#map svg {
+#map {
+  display: block;
   position: absolute;
-  top: 200;
-  left: 200;
+  /*top: 200;*/
+  /*left: 300;*/
+}
+#time {
+  display: block;
+  max-width: 75px;
+  position: absolute;
+  top: 900;
+  /*left: 800;*/
 }
 
 #scroll {
-	top: 150;
-	left: 150;
+  display: block;
+	/*top: 150;*/
+	left: 100;
 	position: absolute;
-}*/
+}
 
-#bangRight {
-  top: 50;
+#eventDisplay {
+  display: block;
+  top: 350;
   left: 600;
   position: absolute;
 }
 
-#YO svg {
-  top: 500;
+#chart svg {
+  display: block;
+  top: 850;
+  left: 0;
   position: absolute;
 }
 
-#kudos {
-  top: 500;
-  left: 600;
+#builds {
+  display: block;
+  top: 750;
+  left: 550;
   position: absolute;
   /*display: inline-block;*/
 }
+
+/*input {
+  display: block;
+  background-size: 30px;
+  font-size: 20px;
+  text-overflow: wrap;
+  width: 80px;
+  background-position: left;
+  white-space: normal;
+}*/

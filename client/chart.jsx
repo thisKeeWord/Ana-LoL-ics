@@ -41,7 +41,7 @@ class Chart extends React.Component {
               .domain([0, 1])
               .range([0, w]),
         y = d3.scale.linear()
-              .domain([0, 600])
+              .domain([0, 240])
               .rangeRound([0, h]),
         xAxis = d3.svg.axis()
                   .scale(x)
@@ -133,14 +133,14 @@ class Chart extends React.Component {
     let whichData = this.diff();
     if (!whichData) {
       return (
-        <div id="YOUTROLL">
+        <div id="chart">
         </div>
       )
     }
 
     let bar = this.redo(whichData);
     return (
-    	<div id="YO">
+    	<div id="chart">
         {bar}
     	</div>
     )

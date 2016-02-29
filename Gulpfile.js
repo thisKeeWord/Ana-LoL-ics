@@ -11,7 +11,7 @@ gulp.task('browserify', scripts)
 
 function scripts() {
   var bundler = browserify({
-    entries: ['./client/app.jsx'],
+    entries: ['./client/headApp.jsx'],
     transform: babelify.configure({ presets: ['react', 'es2015'] }),
     debug: true,
     cache: {},
