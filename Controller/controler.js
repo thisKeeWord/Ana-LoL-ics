@@ -41,19 +41,14 @@ function matchList(req, res) {
 			var gamesList = JSON.parse(response.body);
 			for (var i = 0; i < gamesList.games.length; i++) {
 				var perGameSpec = [];
-				for (var key in gamesList.games[i]) {
-					if (key === "gameId") {
-						perGameSpec.push(gamesList.games[i][key])
-					}
-					if (key === "championId") {
-						perGameSpec.push(gamesList.games[i][key])
-					}
-					if (key === "createDate") {
-						var date = new Date(gamesList.games[i][key])
-						perGameSpec.push(date.toString());
-					}
+				if (gamesList.games[i]["mapId"] === 11) {
+					perGameSpec.push(gamesList.games[i]["gameId"])
+					perGameSpec.push(gamesList.games[i]["championId"])
+					var date = new Date(gamesList.games[i]["createDate"])
+					perGameSpec.push(date.toString());
 				}
-				matchHistory.push(perGameSpec)
+				matchHistory.push(perGameSpec);
+				
 			}
 			// console.log(matchHistory)
 			matchHistory.forEach(function(i) {
@@ -65,6 +60,11 @@ function matchList(req, res) {
 					i[1] = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + good.key + '.png';
 					count++;
 					if (count === 10) {
+						matchHistory = matchHistory.filter(function(summonersRift) {
+					// console.log(summonersRift.length)
+							return summonersRift.length > 2;
+						})
+						console.log(matchHistory)
 						return res.status(200).send(matchHistory);
 					}
 				}) 

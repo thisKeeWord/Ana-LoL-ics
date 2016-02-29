@@ -1,10 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'request';
-import stuff from './../stuff.js';
-import Display from './app.jsx';
+import champion from 'champion';
 import $ from 'jquery';
+import async from 'async';
+import TimeStamp from './timeStamp.jsx';
+import EventDisplay from './eventDisplay.jsx';
+import Chart from './chart.jsx';
+import ChampBuild from './champBuild.jsx';
+import ChampImage from './champImage.jsx';
+import stuff from './../stuff.js';
+let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 let summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
+let matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
+
 
 
 class HeadApp extends React.Component {
@@ -22,7 +31,8 @@ class HeadApp extends React.Component {
       selData: '',
       eventSelected: '',
       addItems: '',
-      toggle: false
+      toggle: false,
+      secondToggle: false
     }
   }
 
@@ -52,34 +62,84 @@ class HeadApp extends React.Component {
         localStorage[newCleanName.username.userName] = res;
       });
     }
-    //     for (let key in userId) {
-          // localStorage[newCleanName] = res;
-    //     }
-    //     that.setState({
-    //       userId: localStorage[newCleanName],
-    //       toggle: true
-    //     })
-    //   // })
-    // }
-      // })
-    // }
     if (localStorage && localStorage[newCleanName.username.userName]) {
       console.log('sup')
       newCleanName.url = { url: '/found' };
       console.log(Number(localStorage[newCleanName.username.userName]))
       newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
       this.post(newCleanName).done(res => {
-        console.log('yosupdawg')
         console.log(res)
-        // for (let count = 0; count < res.length; count++) {
-        //   localStorage[]
-        // }
         that.setState({
           res: res,
           toggle: true
         })
       })
     }
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    let that = this,
+        count = -1,
+        total = 0;
+    let matchId = e.target.id;
+    request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
+      if (err) return console.error(err);
+      
+      // FIRST REQUEST TO FILE
+      request(matchUrl + matchId + "?includeTimeline=true&" + stuff.stuff1, (error, newData) => {
+        if (error) return console.error(error);
+        let info = JSON.parse(newData.body);  
+        
+        // GOING FOR THE TIMELINE INFORMATION
+        for (let j = 0; j < info.timeline.frames.length; j++) {
+          that.state.allowScroll.push([info.timeline.frames[j]]);
+        }  
+
+        // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+        let stepScroll = 300 / that.state.allowScroll.length;
+
+        // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
+        async.each(info.participants, (i, next) => {
+
+          let pId = i.participantId;
+          let cId = i.championId;
+
+          // PARTICIPANT-ID AND CHAMPION-ID
+          that.state.playerID.push([pId, cId]);
+
+          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+          $.get(url + cId + '?' + stuff.stuff1, champData => {
+            let stuffs = champData.key;
+            count++;
+
+            // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
+            that.state.champImg[cId] = champData.key;
+            that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
+
+            // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
+            if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
+              
+                // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+                this.state.pos = that.state.pos,
+                this.state.champImg = that.state.champImg,
+                this.state.playerID = that.state.playerID,
+                this.state.allowScroll = that.state.allowScroll,
+                this.state.result = info,
+                this.state.itemStorage = JSON.parse(data.body).data,
+                this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
+                this.state.secondToggle = true;
+
+                // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+                that.move();
+                that.addStatChoice();
+                that.move();
+                that.addItemVisuals();
+            }
+          })
+        })
+      })
+    })
   }
 
   move() {
@@ -145,15 +205,17 @@ class HeadApp extends React.Component {
     // this.setState({
     //   png: svg
     // })
-    this.state.png = svg;
+    this.setState({
+      png: svg
+    })
   }
 
   onChange(e) {
     e.preventDefault();
-    // this.setState({
-    //   num: e.target.value
-    // })
-    this.state.num = e.target.value;
+    this.setState({
+      num: e.target.value
+    })
+    // this.state.num = e.target.value;
   }
 
   // BACKGROUND FOR THE BAR GRAPH
@@ -161,7 +223,7 @@ class HeadApp extends React.Component {
     // debugger
     let w = 500, 
         h = 400,
-        svg = d3.select("#YO")
+        svg = d3.select("#chart")
                 .append("svg:svg")
                 .attr("width", w)
                 .attr("height", h)
@@ -169,22 +231,24 @@ class HeadApp extends React.Component {
     // this.setState({
     //   selData: svg
     // })
-    this.state.selData = svg;
+    this.setState({
+      selData: svg
+    })
   }
 
   // CHAMP BUILDS
   addItemVisuals() {
     let w = 250,
         h = 600,
-        svg = d3.select("#kudos")
+        svg = d3.select("#builds")
                 .append("svg:svg")
                 .attr("width", w)
                 .attr("height", h)
                 .attr("id", "allItems");
-    // this.setState({
-    //   addItems: svg
-    // })
-    this.state.addItems = svg;
+    this.setState({
+      addItems: svg
+    })
+    // this.state.addItems = svg;
   }
 
   // USER SELECTION ON DROPDOWN MENU
@@ -193,20 +257,21 @@ class HeadApp extends React.Component {
     // this.setState({
     //   eventSelected: eventPicked.target.value
     // })
-    this.state.eventSelected = eventPicked.target.value;
-
+    this.setState({
+      eventSelected: eventPicked.target.value
+    })
   }
 
-  update(allInfoPos, allInfoChampImg, allInfoPlayerID, allInfoScroll, info, res) {
-    this.state.pos = allInfoPos;
-    this.state.champImg = allInfoChampImg;
-    this.state.playerID = allInfoPlayerID;
-    this.state.allowScroll = allInfoScroll;
-    this.state.result = info;
-    this.state.itemStorage = res;
-    this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={this.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={this.onChange.bind(this)}></input>);
-    // this.state.toggle = true;
-  }
+  // update(allInfoPos, allInfoChampImg, allInfoPlayerID, allInfoScroll, info, res) {
+  //   this.state.pos = allInfoPos;
+  //   this.state.champImg = allInfoChampImg;
+  //   this.state.playerID = allInfoPlayerID;
+  //   this.state.allowScroll = allInfoScroll;
+  //   this.state.result = info;
+  //   this.state.itemStorage = res;
+  //   this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={this.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={this.onChange.bind(this)}></input>);
+  //   // this.state.toggle = true;
+  // }
 
   render() {
     if (this.state.toggle === false) {
@@ -218,21 +283,62 @@ class HeadApp extends React.Component {
         </div>
       )
     }
+    if (this.state.secondToggle === true && this.state.toggle === true) {
+      return (
+        <div id="matchResults">
+          { this.state.res.map(matchList => {
+            console.log(matchList[0]);
+              // debugger;
+
+              return (
+                <div id="matchHistory">
+                  <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
+                    style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
+                  </input>
+                  
+                </div>
+              )
+            })
+            
+          }
+
+          {this.state.scrollBar}
+
+          <select defaultValue='A' onLoad={this.whichEventPick.bind(this)} onChange={this.whichEventPick.bind(this)} id="selections" >
+            <option value="WARD_PLACED">wards placed</option>
+            <option value="WARD_KILL">wards killed</option>
+            <option value='A'>A</option>
+            <option value='Fruit'>Fruit</option>
+          </select>
+
+          <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
+          <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} />
+          <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
+          <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems}  />
+          <ChampImage timeline={this.state.allowScroll} playerInfo={this.state.playerID} png={this.state.png} champImg={this.state.champImg} spot={this.state.num} />
+
+          <div id="map" ref="map" />
+        </div>
+      )
+    }
     if (this.state.toggle === true) {
-      
+      console.log(this.state.res)
       return (
         <div id="listOMatches">
           { this.state.res.map(matchList => {
-              return (
-                <div>
-                  <button id="selectMatch" value={matchList[0]}>
-                    <img src={matchList[1]} width={28} height={28} />
-                    {matchList[2]}
-                  </button>
-                </div>
+            console.log(matchList[0]);
+              // debugger;
 
+              return (
+                <div id="matchHistory">
+                  <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
+                    style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
+                  </input>
+                  
+                </div>
               )
             })
+            
           }
         </div>
       )
