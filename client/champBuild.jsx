@@ -46,9 +46,13 @@ class ChampBuild extends React.Component {
                   let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                   itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
                   let retrieveItem = k;
-                  while (searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
-                    if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
-                      itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
+                  // console.log(searchEvents[j][0].events[k].eventType, k)
+                  while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                  // console.log(searchEvents[j][0].events[k], k)
+                    if (itemStorage[checkItemEvent].from) {
+                      if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
+                        itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
+                      }
                     }
                   retrieveItem--;
                   } 
@@ -119,14 +123,14 @@ class ChampBuild extends React.Component {
     let showItems = this.itemization();
     if (!showItems) {
       return (
-        <div id="items" />
+        <div id="builds" />
       )
     }
 
     let items = this.appendItems(showItems)
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG
     return (
-      <div id="kudos">
+      <div id="builds">
         {items}
       </div>
     )

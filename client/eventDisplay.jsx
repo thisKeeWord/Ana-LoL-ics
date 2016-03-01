@@ -23,14 +23,14 @@ class EventDisplay extends React.Component {
 		// DOESN'T EXIST INITIALLY
 		if (!stat) {
 			return (
-				<div id="bangRight">
+				<div id="eventDisplay">
 					
 				</div>
 			)
 		}
 
 		return (
-			<div id="bangRight">
+			<div id="eventDisplay">
 				{ stat.map(champFight => {
 						return (
 							<div>

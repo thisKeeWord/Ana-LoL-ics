@@ -32,9 +32,9 @@ class ChampImage extends React.Component {
         // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
         // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
         if (this.props.timeline[this.props.spot][0].participantFrames[w+1].position) {
-          d3.select("#champIcon" + w).remove();
-          console.log(this.props.png)
-          this.props.png.append('svg:g').attr("id", "champIcon" + w).selectAll("image")
+          d3.select("#champIcon").remove();
+          // console.log(this.props.png)
+          this.props.png.append('svg:g').attr("id", "champIcon").selectAll("image")
             .data([[ this.props.timeline[this.props.spot][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot][0].participantFrames[w+1].position.y ]])
             .enter().append("svg:image")
               .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
@@ -46,8 +46,8 @@ class ChampImage extends React.Component {
 
         // USER MAY GO STRAIGHT TO LAST FRAME
          if (!this.props.timeline[this.props.spot][0].participantFrames[w+1].position && this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position) {
-         d3.select("#champIcon" + w).remove();
-          this.props.png.append('svg:g').attr("id", "champIcon" + w).selectAll("image")
+         d3.select("#champIcon").remove();
+          this.props.png.append('svg:g').attr("id", "champIcon").selectAll("image")
             .data([[ this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.y ]])
             .enter().append("svg:image")
               .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
