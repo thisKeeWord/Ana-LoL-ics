@@ -20,6 +20,7 @@ class HeadApp extends React.Component {
   constructor() {
     super();
     this.state = {
+      totalRenders: 0,
       scrollBar: '',
       playerID: [],
       pos: [],
@@ -38,7 +39,6 @@ class HeadApp extends React.Component {
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
-    console.log(data.username.userName);
     return $.ajax({
       type: 'POST',
       url: data.url.url,
@@ -63,12 +63,9 @@ class HeadApp extends React.Component {
       });
     }
     if (localStorage && localStorage[newCleanName.username.userName]) {
-      console.log('sup')
       newCleanName.url = { url: '/found' };
-      console.log(Number(localStorage[newCleanName.username.userName]))
       newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
       this.post(newCleanName).done(res => {
-        console.log(res)
         that.setState({
           res: res,
           toggle: true
@@ -79,71 +76,118 @@ class HeadApp extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
+    // if (document.getElementById("scroll") && document.getElementById("selections") && document.getElementById("map") && document.getElementById("champImages") && document.getElementById("builds") && document.getElementById("chart") && document.getElementById("eventDisplay") && document.getElementById("time")) {
+      // d3.select("#scroll").remove();
+      // d3.select("#selections").remove();
+      // d3.select("#map").remove();
+      // d3.select("#time").remove();
+      // // d3.select("#backdrop").remove();
+      // d3.select("#chart").remove();
+      // d3.select("#champImages").remove();
+      // d3.select("#builds").remove();
+      // this.state.scrollBar = '';
+      // this.state.playerID = [];
+      // this.state.pos = [];
+      // this.state.champImg = {};
+      // this.state.allowScroll = [];
+      // this.state.result = {};
+      // this.state.png = [];
+      // this.state.num = 0;
+      // this.state.selData = '';
+      // this.state.eventSelected = '';
+      // this.state.addItems = '';
+    // }
+
+    console.log('a')
+
+    // this.state.secondToggle = false;
     let that = this,
         count = -1,
         total = 0;
-    let matchId = e.target.id;
-    request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
-      if (err) return console.error(err);
-      
-      // FIRST REQUEST TO FILE
-      request(matchUrl + matchId + "?includeTimeline=true&" + stuff.stuff1, (error, newData) => {
-        if (error) return console.error(error);
-        let info = JSON.parse(newData.body);  
+    let matchId = e.target.id,
+        gameTimeline = [],
+        idOfPlayer = [],
+        imgOfChamp = [],
+        positionOfPlayer = [];
+
+
+    // if (!document.getElementById("scroll") || !document.getElementById("selections") || !document.getElementById("map") || !document.getElementById("champImages") || !document.getElementById("builds") || !document.getElementById("chart") || !document.getElementById("eventDisplay") || !document.getElementById("time")) {
+      request("http://ddragon.leagueoflegends.com/cdn/6.2.1/data/en_US/item.json", (err, data) => {
+        if (err) return console.error(err);
+        console.log('b')
         
-        // GOING FOR THE TIMELINE INFORMATION
-        for (let j = 0; j < info.timeline.frames.length; j++) {
-          that.state.allowScroll.push([info.timeline.frames[j]]);
-        }  
+        // FIRST REQUEST TO FILE
+        request(matchUrl + matchId + "?includeTimeline=true&" + stuff.stuff1, (error, newData) => {
+          if (error) return console.error(error);
+          let info = JSON.parse(newData.body); 
+          console.log('c') 
+          
+          // GOING FOR THE TIMELINE INFORMATION
+          for (let j = 0; j < info.timeline.frames.length; j++) {
+            gameTimeline.push([info.timeline.frames[j]]);
+          }  
 
-        // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
-        let stepScroll = 300 / that.state.allowScroll.length;
+          // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+          let stepScroll = 300 / gameTimeline.length;
 
-        // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
-        async.each(info.participants, (i, next) => {
+          // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
+          async.each(info.participants, (i, next) => {
+            console.log('d')
+            let pId = i.participantId;
+            let cId = i.championId;
+            console.log(cId, i.championId)
 
-          let pId = i.participantId;
-          let cId = i.championId;
 
-          // PARTICIPANT-ID AND CHAMPION-ID
-          that.state.playerID.push([pId, cId]);
+            // PARTICIPANT-ID AND CHAMPION-ID
+            idOfPlayer.push([pId, cId]);
 
-          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-          $.get(url + cId + '?' + stuff.stuff1, champData => {
-            let stuffs = champData.key;
-            count++;
+            // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+            $.get(url + cId + '?' + stuff.stuff1, champData => {
+              let stuffs = champData.key;
+              count++;
+              console.log('e')
 
-            // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
-            that.state.champImg[cId] = champData.key;
-            that.state.pos.push([ info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.x, info.timeline.frames[0].participantFrames[that.state.playerID[count][0]].position.y ]);
+              // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
+              imgOfChamp[cId] = champData.key;
+              positionOfPlayer.push([ info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.x, info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
 
-            // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
-            if (champData[that.state.playerID[total][1].key] !== null && Object.keys(that.state.champImg).length === 10) {
-              
-                // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
-                this.state.pos = that.state.pos,
-                this.state.champImg = that.state.champImg,
-                this.state.playerID = that.state.playerID,
-                this.state.allowScroll = that.state.allowScroll,
-                this.state.result = info,
-                this.state.itemStorage = JSON.parse(data.body).data,
-                this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={that.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
-                this.state.secondToggle = true;
 
-                // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
-                that.move();
-                that.addStatChoice();
-                that.move();
-                that.addItemVisuals();
-            }
+               console.log(Object.keys(imgOfChamp), 'pre-post g')
+
+              // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
+              if ( Object.keys(imgOfChamp).length === 10) {
+                          console.log('g')
+
+              console.log(champData[idOfPlayer[total][1].key], 'post-g')
+                  // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+                  this.state.pos = positionOfPlayer,
+                  this.state.champImg = imgOfChamp,
+                  this.state.playerID = idOfPlayer,
+                  this.state.allowScroll = gameTimeline,
+                  this.state.result = info,
+                  this.state.itemStorage = JSON.parse(data.body).data,
+                  this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={gameTimeline.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>),
+                  this.state.secondToggle = true;
+                  this.state.totalRenders++;
+
+                  console.log("plz")
+
+                  // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+                  that.move();
+                  that.addStatChoice();
+                  that.move();
+                  that.addItemVisuals();
+              }
+            })
           })
         })
       })
-    })
+    // }
   }
 
   move() {
     // SEEMS 10 MAPS ARE RENDERED --> WILL EDIT THIS WEEKEND
+    console.log('f')
     if (document.getElementById("backdrop")) {
       $("#backdrop").first().remove();
     }
@@ -187,24 +231,23 @@ class HeadApp extends React.Component {
           .attr('id', 'rift');
 
     // GET THE 10 IMAGES FROM URL
+    // if (document.getElementById("backdrop")) {
+
+    // }
     for (let z = 0; z < Object.keys(this.state.champImg).length; z++) {
       let checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
-      svg.append('svg:g').attr("id", "champIcon" + z).selectAll("image")
+      svg.append('svg:g').attr("id", "champIcon").selectAll("image")
         .data([this.state.pos[z]])
         .enter().append("svg:image")
           .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.state.champImg[checking] + '.png')
           .attr('x', d => { return xScale(d[0]) })
           .attr('y', d => { return yScale(d[1]) })
           .attr('class', 'image')
-          .style({ 'width': '24px', 'height': '24px' });
-                 
+          .style({ 'width': '24px', 'height': '24px' });         
     }
     // SET STATE FOR SVG TO USE LATER
-    // this.setState({
-    //   png: svg
-    // })
     this.setState({
       png: svg
     })
@@ -215,91 +258,74 @@ class HeadApp extends React.Component {
     this.setState({
       num: e.target.value
     })
-    // this.state.num = e.target.value;
   }
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
-    // debugger
-    let w = 500, 
-        h = 400,
-        svg = d3.select("#chart")
-                .append("svg:svg")
-                .attr("width", w)
-                .attr("height", h)
-                .attr("id", "allStat");
-    // this.setState({
-    //   selData: svg
-    // })
-    this.setState({
-      selData: svg
-    })
+    if (this.state.totalRenders === 1) {
+      let w = 500, 
+          h = 400,
+          svg = d3.select("#chart")
+                  .append("svg:svg")
+                  .attr("width", w)
+                  .attr("height", h)
+                  .attr("id", "allStat");
+      this.setState({
+        selData: svg
+      })
+    }
   }
 
   // CHAMP BUILDS
   addItemVisuals() {
-    let w = 250,
-        h = 600,
-        svg = d3.select("#builds")
-                .append("svg:svg")
-                .attr("width", w)
-                .attr("height", h)
-                .attr("id", "allItems");
-    this.setState({
-      addItems: svg
-    })
-    // this.state.addItems = svg;
+    if (this.state.totalRenders === 1) {
+      let w = 250,
+          h = 600,
+          svg = d3.select("#builds")
+                  .append("svg:svg")
+                  .attr("width", w)
+                  .attr("height", h)
+                  .attr("id", "allItems");
+      this.setState({
+        addItems: svg
+      })
+    }
   }
 
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    // this.setState({
-    //   eventSelected: eventPicked.target.value
-    // })
     this.setState({
       eventSelected: eventPicked.target.value
     })
   }
 
-  // update(allInfoPos, allInfoChampImg, allInfoPlayerID, allInfoScroll, info, res) {
-  //   this.state.pos = allInfoPos;
-  //   this.state.champImg = allInfoChampImg;
-  //   this.state.playerID = allInfoPlayerID;
-  //   this.state.allowScroll = allInfoScroll;
-  //   this.state.result = info;
-  //   this.state.itemStorage = res;
-  //   this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={this.state.allowScroll.length - 1} step='1' defaultValue='0' onChange={this.onChange.bind(this)}></input>);
-  //   // this.state.toggle = true;
-  // }
-
   render() {
+    // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
         <div id="form">
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username"required />
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
         </div>
       )
     }
+
+    // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
+      console.log(this.state.allowScroll)
       return (
         <div id="matchResults">
           { this.state.res.map(matchList => {
-            console.log(matchList[0]);
-              // debugger;
-
               return (
                 <div id="matchHistory">
                   <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
                     style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
-                  </input>
-                  
+                  </input>  
                 </div>
               )
             })
-            
           }
 
           {this.state.scrollBar}
@@ -321,20 +347,17 @@ class HeadApp extends React.Component {
         </div>
       )
     }
+
+    // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
-      console.log(this.state.res)
       return (
         <div id="listOMatches">
           { this.state.res.map(matchList => {
-            console.log(matchList[0]);
-              // debugger;
-
               return (
                 <div id="matchHistory">
                   <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
                     style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
                   </input>
-                  
                 </div>
               )
             })
@@ -347,6 +370,3 @@ class HeadApp extends React.Component {
 }
 
 ReactDOM.render(<HeadApp />, document.getElementById('content'))
-// return (
-      //   <Display userId={this.state.userId} update={this.update.bind(this)} whichEventPick={this.whichEventPick.bind(this)} addItemVisuals={this.addItemVisuals.bind(this)} addStatChoice={this.addStatChoice.bind(this)} onNeedChange={this.onChange.bind(this)} move={this.move.bind(this)} allInfo={this.state} />
-      // )
