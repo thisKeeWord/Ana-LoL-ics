@@ -11,15 +11,30 @@ class Chart extends React.Component {
 
       for (let i = 0; i < this.props.playerInfo.length; i++) {
         let count = 0;
-        if (searchEvents[this.props.spot][0].events) {
-          for (let j = 0; j <= this.props.spot; j++) {
-            if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === this.props.eventSelected && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
-                  count++;
+        if (this.props.eventSelected === 'WARD_PLACED' || this.props.eventSelected === 'WARD_KILL') {
+          if (searchEvents[this.props.spot][0].events) {
+            for (let j = 0; j <= this.props.spot; j++) {
+              if (searchEvents[j][0].events) {
+                for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                  if (searchEvents[j][0].events[k].eventType === this.props.eventSelected && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
+                    count++;
+                  }
                 }
               }
             }
+          }
+        }
+        if (this.props.eventSelected === 'minionsKilled') {
+          if (searchEvents[this.props.spot][0].participantFrames) {
+            count = searchEvents[this.props.spot][0].participantFrames[i+1].minionsKilled + searchEvents[this.props.spot][0].participantFrames[i+1].jungleMinionsKilled
+            console.log(count);
+          }
+        }
+        if (this.props.eventSelected === 'totalGold') {
+          if (searchEvents[this.props.spot][0].participantFrames) {
+
+            count = searchEvents[this.props.spot][0].participantFrames[i+1].totalGold;
+            console.log(count)
           }
         }
         eventSpecific.push(count);    
