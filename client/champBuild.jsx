@@ -92,7 +92,7 @@ class ChampBuild extends React.Component {
           .data([[]])
           .enter()
             .append("svg:image")
-            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + this.props.champName[build[1]] + '.png')
+            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch +'/img/champion/' + this.props.champName[build[1]] + '.png')
             .attr('y', w * 24)
             .style({ 'width': '24px', 'height': '24px' });
       
@@ -105,7 +105,7 @@ class ChampBuild extends React.Component {
             .append("svg:image")
             .attr('xlink:href', d => {
               if (d) {
-                return ("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/item/" + d + ".png");
+                return ("http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/item/" + d + ".png");
               }
             })
             .attr("x", (d, i) => {

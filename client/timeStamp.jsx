@@ -5,7 +5,7 @@ class TimeStamp extends React.Component {
   swap() {
     let convert = this.props.conversion;
 
-    if (this.props.timeline.length) {
+    if (this.props.timeline.length && this.props.conversion.length) {
     	convert = this.props.timeline[this.props.conversion][0].timestamp;
     }
   
