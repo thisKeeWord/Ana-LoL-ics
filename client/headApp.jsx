@@ -16,7 +16,6 @@ let matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
 let version = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 
-
 class HeadApp extends React.Component {
   constructor() {
     super();
@@ -49,6 +48,14 @@ class HeadApp extends React.Component {
     })
   }
 
+  postForGame(perGameData) {
+    return $.ajax({
+      type: 'POST',
+      url: '/getGameData',
+      data: perGameData
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     let that = this;
@@ -78,117 +85,32 @@ class HeadApp extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-   
-    let that = this,
-        count = -1,
-        total = 0,
-        matchId = e.target.id,
-        compareVersions = 0,
-        patchDesired = 0,
-        gameTimeline = [],
-        idOfPlayer = [],
-        imgOfChamp = [],
-        positionOfPlayer = [];
+    let sendGameId  = e.target.id,
+        that = this;
+    this.postForGame(sendGameId).done(function(gotGameData) {
 
+      // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+      that.state.patch = gotGameData[0];
+      that.state.pos = gotGameData[1];
+      that.state.champImg = gotGameData[2];
+      that.state.playerID = gotGameData[3];
+      that.state.allowScroll = gotGameData[4];
+      that.state.result = gotGameData[5];
+      that.state.itemStorage = gotGameData[6];
+      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+      that.state.secondToggle = true;
+      that.state.totalRenders++;
 
-
-    // if (!document.getElementById("scroll") || !document.getElementById("selections") || !document.getElementById("map") || !document.getElementById("champImages") || !document.getElementById("builds") || !document.getElementById("chart") || !document.getElementById("eventDisplay") || !document.getElementById("time")) {
-    request(matchUrl + matchId + "?includeTimeline=true&" + stuff.stuff1, (error, newData) => {
-      if (error) return console.error(error);
-      // console.log('b')
-      let info = JSON.parse(newData.body); 
-
-      request(version, (error, checkingVersion) => {
-        let versionChecks = JSON.parse(checkingVersion.body);
-        let patchVersion = 0;
-        if (error) return console.error(error);
-        while(patchVersion < versionChecks.length) {
-          let splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
-          let gamePatch = info.matchVersion.split('.').slice(0, 2);
-          // console.log(splitCheck)
-          // console.log(gamePatch)
-          if (splitCheck.join('') === gamePatch.join('')) {
-            patchDesired = versionChecks[patchVersion];
-            // console.log(patchDesired)
-            break;
-          }
-          patchVersion++;
-        }
-
-
-        // FIRST REQUEST TO FILE
-        request("http://ddragon.leagueoflegends.com/cdn/" + patchDesired + "/data/en_US/item.json", (err, data) => {
-          if (error) return console.error(error);
-          // console.log(JSON.parse(data.body).data)
-          // console.log('c') 
-          
-          // GOING FOR THE TIMELINE INFORMATION
-          for (let j = 0; j < info.timeline.frames.length; j++) {
-            gameTimeline.push([info.timeline.frames[j]]);
-          }  
-
-          // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
-          let stepScroll = 300 / gameTimeline.length;
-
-          // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
-          async.each(info.participants, (i, next) => {
-            // console.log('d')
-            let pId = i.participantId;
-            let cId = i.championId;
-            // console.log(cId, i.championId)
-
-
-            // PARTICIPANT-ID AND CHAMPION-ID
-            idOfPlayer.push([pId, cId]);
-
-            // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-            $.get(url + cId + '?' + stuff.stuff1, champData => {
-              let stuffs = champData.key;
-              count++;
-              // console.log('e')
-
-              // HAD TO DO THIS WAY SINCE IMAGES RETURN AT RANDOM
-              imgOfChamp[cId] = champData.key;
-              positionOfPlayer.push([ info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.x, info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-
-
-               // console.log(Object.keys(imgOfChamp), 'pre-post g')
-
-              // WAIT FOR ALL THE IMAGES TO RETURN AND GET PUSHED TO CHAMPIMG ARRAY
-              if ( Object.keys(imgOfChamp).length === 10) {
-                          // console.log('g')
-
-              // console.log(champData[idOfPlayer[total][1].key], 'post-g')
-                  // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
-                  this.state.patch = patchDesired;
-                  this.state.pos = positionOfPlayer;
-                  this.state.champImg = imgOfChamp;
-                  this.state.playerID = idOfPlayer;
-                  this.state.allowScroll = gameTimeline;
-                  this.state.result = info;
-                  this.state.itemStorage = JSON.parse(data.body).data;
-                  this.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={gameTimeline.length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
-                  this.state.secondToggle = true;
-                  this.state.totalRenders++;
-
-                  // console.log("plz")
-
-                  // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
-                  that.move();
-                  that.addStatChoice();
-                  that.move();
-                  that.addItemVisuals();
-              }
-            })
-          })
-        })
-      })
+      // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+      that.move();
+      that.addStatChoice();
+      that.move();
+      that.addItemVisuals();
     })
   }
 
   move() {
     // SEEMS 10 MAPS ARE RENDERED --> WILL EDIT THIS WEEKEND
-    // console.log('f')
     if (document.getElementById("backdrop")) {
       $("#backdrop").first().remove();
     }
@@ -232,11 +154,9 @@ class HeadApp extends React.Component {
           .attr('id', 'rift');
 
     // GET THE 10 IMAGES FROM URL
-    // if (document.getElementById("backdrop")) {
-
-    // }
-    for (let z = 0; z < Object.keys(this.state.champImg).length; z++) {
+    for (let z = 0; z < this.state.playerID.length; z++) {
       let checking = this.state.playerID[z][1];
+      console.log(this.state)
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').attr("id", "champIcon").selectAll("image")
@@ -248,6 +168,7 @@ class HeadApp extends React.Component {
           .attr('class', 'image')
           .style({ 'width': '24px', 'height': '24px' });         
     }
+
     // SET STATE FOR SVG TO USE LATER
     this.setState({
       png: svg
@@ -315,7 +236,6 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
-      // console.log(this.state.allowScroll)
       return (
         <div id="matchResults">
           { this.state.res.map(matchList => {

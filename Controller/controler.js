@@ -1,13 +1,19 @@
 var request = require('request');
+var async = require('async');
 var stuff = require('./../stuff.js');
 var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
 var matchHistoryList = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/";
 var champImageUrl = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/";
+var url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/";
+var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
+var matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
+var version = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 
 var controler = {
   userInformation: userInformation,
-  matchList: matchList
+  matchList: matchList,
+  getData: getData
 }
 
 function userInformation(req, res, next) {
@@ -15,12 +21,9 @@ function userInformation(req, res, next) {
 		if (error) return console.error("we cannot find the summoner or " + error);
 		if (resp.statusCode === 200) {
 			var userId = JSON.parse(resp.body);
-			// console.log(userId)
 			for (var keys in userId) {
 				var result = userId[keys]["id"];
-				// console.log(result, 're-result')
 			}
-			// console.log('result', result)
 			req.summonerId = result;
 		}
 		next();
@@ -28,12 +31,10 @@ function userInformation(req, res, next) {
 }
 
 function matchList(req, res) {
-	// console.log(req.body.userName, 'req..username');
 	var count = 0;
 	if (!req.summonerId) {
 		req.summonerId = req.body.userName;
 	}
-	// console.log(req.summonerId);
 	var matchHistory = [];
 	request(matchHistoryList + req.summonerId + "/recent?" + stuff.stuff1, (error, response) => {
 		if (error) return console.error(error);
@@ -50,21 +51,16 @@ function matchList(req, res) {
 				matchHistory.push(perGameSpec);
 				
 			}
-			// console.log(matchHistory)
+
 			matchHistory.forEach(function(i) {
-				// console.log(i[1])
-				
 				request(champImageUrl + i[1] + "?" + stuff.stuff1, function(error, good) {
-					// console.log(good)
 					good = JSON.parse(good.body)
 					i[1] = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + good.key + '.png';
 					count++;
 					if (count === 10) {
 						matchHistory = matchHistory.filter(function(summonersRift) {
-					// console.log(summonersRift.length)
 							return summonersRift.length > 2;
 						})
-						console.log(matchHistory)
 						return res.status(200).send(matchHistory);
 					}
 				}) 
@@ -73,5 +69,79 @@ function matchList(req, res) {
 	})
 }
 
+function getData(req, res) {
+	var that = this,
+      count = -1,
+      total = 0,
+      compareVersions = 0,
+      patchDesired = 0,
+      gameTimeline = [],
+      idOfPlayer = [],
+      imgOfChamp = [],
+      positionOfPlayer = [],
+      matchDataArray = [];
+
+  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + stuff.stuff1, function(error, newData) {
+    if (error) return console.error(error);
+    var info = JSON.parse(newData.body); 
+
+    request(version, function(error, checkingVersion) {
+      var versionChecks = JSON.parse(checkingVersion.body);
+      var patchVersion = 0;
+      if (error) return console.error(error);
+      while(patchVersion < versionChecks.length) {
+        var splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
+        var gamePatch = info["matchVersion"].split('.').slice(0, 2);
+
+        if (splitCheck.join('') === gamePatch.join('')) {
+          patchDesired = versionChecks[patchVersion];
+          break;
+        }
+        patchVersion++;
+      }
+
+
+      // FIRST REQUEST TO FILE
+      request("http://ddragon.leagueoflegends.com/cdn/" + patchDesired + "/data/en_US/item.json", function(err, data) {
+        if (error) return console.error(error);
+        var resData = JSON.parse(data.body).data;
+        
+        // GOING FOR THE TIMELINE INFORMATION
+        for (var j = 0; j < info.timeline.frames.length; j++) {
+          gameTimeline.push([info.timeline.frames[j]]);
+        }  
+
+        // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+        var stepScroll = 300 / gameTimeline.length;
+
+        // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
+        info.participants.forEach(function(i) {
+          var pId = i.participantId;
+          var cId = i.championId;
+
+          // PARTICIPANT-ID AND CHAMPION-ID
+          idOfPlayer.push([pId, cId]);
+
+          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+          request(url + cId + '?' + stuff.stuff1, function(error, champData) {
+          	champData = JSON.parse(champData.body);
+
+          	if (error) return console.error(error);
+            var stuffs = champData.key;
+            count++;
+
+            imgOfChamp[cId] = champData.key;
+            positionOfPlayer.push([ info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.x, info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
+
+            if (Object.keys(imgOfChamp).length === 10) {
+            	matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
+            	return res.status(200).send(matchDataArray);
+            }
+          })
+        })
+      })
+    })
+  })
+}
 
 module.exports = controler;
