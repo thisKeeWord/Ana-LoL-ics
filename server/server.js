@@ -18,4 +18,6 @@ app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/found', controller.matchList);
 
+app.post('/getGameData', controller.getData);
+
 app.listen(3000);
