@@ -34,7 +34,8 @@ class HeadApp extends React.Component {
       addItems: '',
       toggle: false,
       patch: 0,
-      secondToggle: false
+      secondToggle: false,
+      maxForStat: 0
     }
   }
 
@@ -156,7 +157,7 @@ class HeadApp extends React.Component {
     // GET THE 10 IMAGES FROM URL
     for (let z = 0; z < this.state.playerID.length; z++) {
       let checking = this.state.playerID[z][1];
-      console.log(this.state)
+      // console.log(this.state)
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').attr("id", "champIcon").selectAll("image")
@@ -217,8 +218,42 @@ class HeadApp extends React.Component {
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
+    let eventSpecific = [];
+    let searchEvents = this.state.allowScroll;
+    for (let i = 0; i < this.state.playerID.length; i++) {
+      let count = 0;
+      if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
+        if (searchEvents[i][0].events) {
+          for (let j = 0; j < searchEvents.length; j++) {
+            if (searchEvents[j][0].events) {
+              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
+                  count++;
+                }
+              }
+            }
+          }
+        }
+      }
+      if (eventPicked.target.value === 'minionsKilled') {
+        if (searchEvents[searchEvents.length - 1][0].participantFrames) {
+          count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents[searchEvents.length - 1][0].participantFrames[i+1].jungleMinionsKilled
+          // console.log(count);
+        }
+      }
+      if (eventPicked.target.value === 'totalGold') {
+        if (searchEvents[searchEvents.length - 1][0].participantFrames) {
+
+          count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].totalGold;
+          // console.log(count)
+        }
+      }
+      eventSpecific.push(count);
+      console.log(eventSpecific);
+    }
     this.setState({
-      eventSelected: eventPicked.target.value
+      eventSelected: eventPicked.target.value,
+      maxForStat: Math.max(...eventSpecific)
     })
   }
 
@@ -236,6 +271,7 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
+      // console.log(this.state.allowScroll)
       return (
         <div id="matchResults">
           { this.state.res.map(matchList => {
@@ -261,7 +297,7 @@ class HeadApp extends React.Component {
 
           <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
           <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} patch={this.state.patch} />
-          <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} />
+          <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} maxForStat={this.state.maxForStat} />
           <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} patch={this.state.patch} />
           <ChampImage timeline={this.state.allowScroll} playerInfo={this.state.playerID} png={this.state.png} champImg={this.state.champImg} spot={this.state.num} patch={this.state.patch} />
 
