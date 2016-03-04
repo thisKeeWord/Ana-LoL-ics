@@ -56,8 +56,8 @@ class Chart extends React.Component {
               .domain([0, 1])
               .range([0, w]),
         y = d3.scale.linear()
-              // .domain([0, 1])
-              .rangeRound([0, h]),
+              .domain([0, 1])
+              .rangeRound([0, 400]),
         xAxis = d3.svg.axis()
                   .scale(x)
                   .orient("bottom");
@@ -84,14 +84,16 @@ class Chart extends React.Component {
             return x(i) / 10;
           })
           .attr("y", (d, i) => { 
-            return h - 20; 
+            console.log(h-20)
+            return 400; 
           })
           .attr("width",  w / whichData[0].length - 2)
           .attr("height", (d, i) => {
-            return y(d);
+            return (d / this.props.maxForStat) * 400;
           })
-          .attr("y", (d, i) => { 
-            return h - d - 20; // FLIP THE BAR TO LOAD UPWARD
+          .attr("y", (d, i) => {
+            console.log(this.props.maxForStat)
+            return 400 - (d / this.props.maxForStat) * 400 - 20; // FLIP THE BAR TO LOAD UPWARD
           })
           .attr("fill", d => {
             return "rgb(0, 0, 200)";
@@ -112,7 +114,7 @@ class Chart extends React.Component {
             return x(i) / 10 + 24;
           })
           .attr("y", (d, i) => {
-            return h - d - 24;
+            return 400 - (d / this.props.maxForStat) * 400 - 22;
           })
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
