@@ -27,14 +27,14 @@ class Chart extends React.Component {
         if (this.props.eventSelected === 'minionsKilled') {
           if (searchEvents[this.props.spot][0].participantFrames) {
             count = searchEvents[this.props.spot][0].participantFrames[i+1].minionsKilled + searchEvents[this.props.spot][0].participantFrames[i+1].jungleMinionsKilled
-            console.log(count);
+            // console.log(count);
           }
         }
         if (this.props.eventSelected === 'totalGold') {
           if (searchEvents[this.props.spot][0].participantFrames) {
 
             count = searchEvents[this.props.spot][0].participantFrames[i+1].totalGold;
-            console.log(count)
+            // console.log(count)
           }
         }
         eventSpecific.push(count);    
@@ -51,12 +51,12 @@ class Chart extends React.Component {
     }
 
     // BAR INFO AND DATA
-    let w = 500, h = 400,
+    let w = 500, h = this.props.maxForStat, labelHeight = 400,
         x = d3.scale.linear()
               .domain([0, 1])
               .range([0, w]),
         y = d3.scale.linear()
-              .domain([0, 240])
+              // .domain([0, 1])
               .rangeRound([0, h]),
         xAxis = d3.svg.axis()
                   .scale(x)
@@ -67,7 +67,7 @@ class Chart extends React.Component {
       $("#statInfo").first().remove();
       $("#infoStat").first().remove();
     }
-
+    console.log(this.props.maxForStat)
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
     if(this.props.selData) {
@@ -84,14 +84,14 @@ class Chart extends React.Component {
             return x(i) / 10;
           })
           .attr("y", (d, i) => { 
-            return h * 5 - 20; 
+            return h - 20; 
           })
           .attr("width",  w / whichData[0].length - 2)
           .attr("height", (d, i) => {
-            return d * 5;
+            return y(d);
           })
           .attr("y", (d, i) => { 
-            return h - d * 5 - 20; // FLIP THE BAR TO LOAD UPWARD
+            return h - d - 20; // FLIP THE BAR TO LOAD UPWARD
           })
           .attr("fill", d => {
             return "rgb(0, 0, 200)";
@@ -112,7 +112,7 @@ class Chart extends React.Component {
             return x(i) / 10 + 24;
           })
           .attr("y", (d, i) => {
-            return h - (d * 5) - 22;
+            return h - d - 24;
           })
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
@@ -134,7 +134,7 @@ class Chart extends React.Component {
             return x(i) / 10 + 24;
           })
           .attr("y", (d, i) => {
-            return h - 10;
+            return labelHeight - 10;
           })
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
