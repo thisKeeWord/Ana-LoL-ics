@@ -68,16 +68,23 @@ class HeadApp extends React.Component {
     };
     if (localStorage && !localStorage[newCleanName.username.userName]) {
       newCleanName.url = { url: '/' };
-      this.post(newCleanName).done(res => {
-        localStorage[newCleanName.username.userName] = res;
-      });
+      this.post(newCleanName).done(gotTheInfo => {
+        localStorage[newCleanName.username.userName] = gotTheInfo[0];
+        this.post(newCleanName).done(gotTheInfo => {
+          console.log(1)
+          that.setState({
+            res: gotTheInfo[1],
+            toggle: true
+          })
+        })
+      })
     }
     if (localStorage && localStorage[newCleanName.username.userName]) {
       newCleanName.url = { url: '/found' };
       newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
-      this.post(newCleanName).done(res => {
+      this.post(newCleanName).done(gotTheInfo => {
         that.setState({
-          res: res,
+          res: gotTheInfo[1],
           toggle: true
         })
       })

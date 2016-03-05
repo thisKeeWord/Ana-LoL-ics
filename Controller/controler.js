@@ -1,5 +1,6 @@
 var request = require('request');
 var async = require('async');
+var throttle = require('throttle-function');
 var stuff = require('./../stuff.js');
 var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
 var matchHistoryList = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/";
@@ -17,13 +18,13 @@ var controler = {
 }
 
 function userInformation(req, res, next) {
-  request(summonerUrl + req.body.username + "?" + stuff.stuff1, (error, resp) => {
+	// console.log(req.body)
+  request(summonerUrl + req.body.userName + "?" + stuff.stuff1, (error, resp) => {
 		if (error) return console.error("we cannot find the summoner or " + error);
 		if (resp.statusCode === 200) {
 			var userId = JSON.parse(resp.body);
-			for (var keys in userId) {
-				var result = userId[keys]["id"];
-			}
+			var result = userId[req.body.userName]["id"];
+			console.log(result)
 			req.summonerId = result;
 		}
 		next();
@@ -35,6 +36,7 @@ function matchList(req, res) {
 	if (!req.summonerId) {
 		req.summonerId = req.body.userName;
 	}
+	console.log(req.summonerId)
 	var matchHistory = [];
 	request(matchHistoryList + req.summonerId + "/recent?" + stuff.stuff1, (error, response) => {
 		if (error) return console.error(error);
@@ -61,7 +63,7 @@ function matchList(req, res) {
 						matchHistory = matchHistory.filter(function(summonersRift) {
 							return summonersRift.length > 2;
 						})
-						return res.status(200).send(matchHistory);
+						return res.status(200).send([ req.summonerId, matchHistory ]);
 					}
 				}) 
 			})
