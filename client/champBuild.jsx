@@ -46,9 +46,7 @@ class ChampBuild extends React.Component {
                   let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                   itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
                   let retrieveItem = k;
-                  // console.log(searchEvents[j][0].events[k].eventType, k)
                   while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
-                  // console.log(searchEvents[j][0].events[k], k)
                     if (itemStorage[checkItemEvent].from) {
                       if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
                         itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
@@ -68,9 +66,6 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
-    // if (!document.getElementById("allItems")) {
-    //   this.props.addItemVisuals(0);
-    // }
     if(this.props.addItems) {
 
       // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
@@ -94,7 +89,7 @@ class ChampBuild extends React.Component {
             .append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch +'/img/champion/' + this.props.champName[build[1]] + '.png')
             .attr('y', w * 24)
-            .style({ 'width': '24px', 'height': '24px' });
+            .style({ 'width': '24px', 'height': '24px', 'marginBottom': '3px'});
       
         this.props.addItems
           .append('svg:g')
