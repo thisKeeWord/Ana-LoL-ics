@@ -10,7 +10,6 @@ class EventDisplay extends React.Component {
 
 			for (let i = 0; i < searchEvents.length; i++) {
 				if (searchEvents[i].eventType === "CHAMPION_KILL") {
-					// console.log(this.props.champImg[this.props.playerInfo[searchEvents[i].killerId - 1])
 					if (searchEvents[i].killerId === 0) {
 						interaction.push([ this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] ])
 					}

@@ -33,7 +33,6 @@ class ChampImage extends React.Component {
         // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
         if (this.props.timeline[this.props.spot][0].participantFrames[w+1].position) {
           d3.select("#champIcon").remove();
-          // console.log(this.props.png)
           this.props.png.append('svg:g').attr("id", "champIcon").selectAll("image")
             .data([[ this.props.timeline[this.props.spot][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot][0].participantFrames[w+1].position.y ]])
             .enter().append("svg:image")

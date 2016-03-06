@@ -9,6 +9,9 @@ import EventDisplay from './eventDisplay.jsx';
 import Chart from './chart.jsx';
 import ChampBuild from './champBuild.jsx';
 import ChampImage from './champImage.jsx';
+import GamesOnSR from './summRift.jsx';
+import DropDownMenu from './menu.jsx';
+import GameMap from './gameMap.jsx';
 import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 let summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
@@ -71,7 +74,6 @@ class HeadApp extends React.Component {
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[newCleanName.username.userName] = gotTheInfo[0];
         this.post(newCleanName).done(gotTheInfo => {
-          console.log(1)
           that.setState({
             res: gotTheInfo[1],
             toggle: true
@@ -164,7 +166,6 @@ class HeadApp extends React.Component {
     // GET THE 10 IMAGES FROM URL
     for (let z = 0; z < this.state.playerID.length; z++) {
       let checking = this.state.playerID[z][1];
-      // console.log(this.state)
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').attr("id", "champIcon").selectAll("image")
@@ -209,8 +210,8 @@ class HeadApp extends React.Component {
   // CHAMP BUILDS
   addItemVisuals() {
     if (this.state.totalRenders === 1) {
-      let w = 250,
-          h = 600,
+      let w = 600,
+          h = 280,
           svg = d3.select("#builds")
                   .append("svg:svg")
                   .attr("width", w)
@@ -245,18 +246,14 @@ class HeadApp extends React.Component {
       if (eventPicked.target.value === 'minionsKilled') {
         if (searchEvents[searchEvents.length - 1][0].participantFrames) {
           count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents[searchEvents.length - 1][0].participantFrames[i+1].jungleMinionsKilled
-          // console.log(count);
         }
       }
       if (eventPicked.target.value === 'totalGold') {
         if (searchEvents[searchEvents.length - 1][0].participantFrames) {
-
           count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].totalGold;
-          // console.log(count)
         }
       }
       eventSpecific.push(count);
-      console.log(eventSpecific);
     }
     this.setState({
       eventSelected: eventPicked.target.value,
@@ -268,47 +265,24 @@ class HeadApp extends React.Component {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
-        <div id="form">
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
-          </form>
-        </div>
+        <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+          <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+        </form>
       )
     }
 
     // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
-      // console.log(this.state.allowScroll)
       return (
-        <div id="matchResults">
-          { this.state.res.map(matchList => {
-              return (
-                <div id="matchHistory">
-                  <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
-                    style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
-                  </input>  
-                </div>
-              )
-            })
-          }
-
-          {this.state.scrollBar}
-
-          <select defaultValue='select one' onLoad={this.whichEventPick.bind(this)} onChange={this.whichEventPick.bind(this)} id="selections" >
-            <option value="select one">select one</option>
-            <option value="WARD_PLACED">wards placed</option>
-            <option value="WARD_KILL">wards killed</option>
-            <option value='minionsKilled'>total minions killed</option>
-            <option value='totalGold'>total gold earned</option>
-          </select>
-
+        <div className="resultingInfo">
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          <GameMap />
           <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
+          <DropDownMenu scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
           <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} patch={this.state.patch} />
           <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} maxForStat={this.state.maxForStat} />
           <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} patch={this.state.patch} />
           <ChampImage timeline={this.state.allowScroll} playerInfo={this.state.playerID} png={this.state.png} champImg={this.state.champImg} spot={this.state.num} patch={this.state.patch} />
-
-          <div id="map" ref="map" />
         </div>
       )
     }
@@ -316,22 +290,11 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
       return (
-        <div id="listOMatches">
-          { this.state.res.map(matchList => {
-              return (
-                <div id="matchHistory">
-                  <input type="submit" id={matchList[0]} onClick={this.handleClick.bind(this)}
-                    style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} >
-                  </input>
-                </div>
-              )
-            })
-            
-          }
-        </div>
+        <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
       )
     }
   }
 }
 
-ReactDOM.render(<HeadApp />, document.getElementById('content'))
+// module.exports=HeadApp;
+ReactDOM.render(<HeadApp />, document.getElementById('content'));

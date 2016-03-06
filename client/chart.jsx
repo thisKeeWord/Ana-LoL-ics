@@ -27,14 +27,11 @@ class Chart extends React.Component {
         if (this.props.eventSelected === 'minionsKilled') {
           if (searchEvents[this.props.spot][0].participantFrames) {
             count = searchEvents[this.props.spot][0].participantFrames[i+1].minionsKilled + searchEvents[this.props.spot][0].participantFrames[i+1].jungleMinionsKilled
-            // console.log(count);
           }
         }
         if (this.props.eventSelected === 'totalGold') {
           if (searchEvents[this.props.spot][0].participantFrames) {
-
             count = searchEvents[this.props.spot][0].participantFrames[i+1].totalGold;
-            // console.log(count)
           }
         }
         eventSpecific.push(count);    
@@ -57,7 +54,7 @@ class Chart extends React.Component {
               .range([0, w]),
         y = d3.scale.linear()
               .domain([0, 1])
-              .rangeRound([0, 400]),
+              .rangeRound([0, 375]),
         xAxis = d3.svg.axis()
                   .scale(x)
                   .orient("bottom");
@@ -67,7 +64,7 @@ class Chart extends React.Component {
       $("#statInfo").first().remove();
       $("#infoStat").first().remove();
     }
-    console.log(this.props.maxForStat)
+
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
     if(this.props.selData) {
@@ -84,16 +81,14 @@ class Chart extends React.Component {
             return x(i) / 10;
           })
           .attr("y", (d, i) => { 
-            console.log(h-20)
-            return 400; 
+            return 370; 
           })
           .attr("width",  w / whichData[0].length - 2)
           .attr("height", (d, i) => {
-            return (d / this.props.maxForStat) * 400;
+            return (d / this.props.maxForStat) * 370;
           })
           .attr("y", (d, i) => {
-            console.log(this.props.maxForStat)
-            return 400 - (d / this.props.maxForStat) * 400 - 20; // FLIP THE BAR TO LOAD UPWARD
+            return 370 - (d / this.props.maxForStat) * 370; // FLIP THE BAR TO LOAD UPWARD
           })
           .attr("fill", d => {
             return "rgb(0, 0, 200)";
@@ -114,12 +109,12 @@ class Chart extends React.Component {
             return x(i) / 10 + 24;
           })
           .attr("y", (d, i) => {
-            return 400 - (d / this.props.maxForStat) * 400 - 22;
+            return 370 - (d / this.props.maxForStat) * 370 + 10;
           })
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
           .attr("font-size", "11px")
-          .attr("fill", "black")
+          .attr("fill", "white")
           .attr("id", "amount");
 
       // ADD LABELS TO X-AXIS
