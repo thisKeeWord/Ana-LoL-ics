@@ -8,28 +8,53 @@ class Chart extends React.Component {
     let eventSpecific = [];
     if (this.props.timeline.length) {
       let searchEvents = this.props.timeline;
+      let eventChosen = this.props.eventSelected;
 
       for (let i = 0; i < this.props.playerInfo.length; i++) {
         let count = 0;
-        if (this.props.eventSelected === 'WARD_PLACED' || this.props.eventSelected === 'WARD_KILL') {
-          if (searchEvents[this.props.spot][0].events) {
+        if (eventChosen === 'WARD_PLACED' || eventChosen === 'WARD_KILL') {
+          // if (searchEvents[this.props.spot][0].events) {
             for (let j = 0; j <= this.props.spot; j++) {
               if (searchEvents[j][0].events) {
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                  if (searchEvents[j][0].events[k].eventType === this.props.eventSelected && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
+                  if (searchEvents[j][0].events[k].eventType === eventChosen && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
                     count++;
                   }
                 }
               }
             }
-          }
+          // }
         }
-        if (this.props.eventSelected === 'minionsKilled') {
+        if (eventChosen === 'killerId' || eventChosen === 'victimId' || eventChosen === 'assistingParticipantIds') {
+          // if (searchEvents[this.props.spot][0].events) {
+            for (let j = 0; j <= this.props.spot; j++) {
+              if (searchEvents[j][0].events) {
+                for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                  if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                    if (eventChosen === 'killerId' || eventChosen === 'victimId') {
+                      if (searchEvents[j][0].events[k][eventChosen] === this.props.playerInfo[i][0]) {
+                        count++;
+                      }
+                    }
+                    if (eventChosen === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventChosen]) {
+                      for (let assists = 0; assists < searchEvents[j][0].events[k][eventChosen].length; assists++) {
+                        if (searchEvents[j][0].events[k][eventChosen][assists] === this.props.playerInfo[i][0]) {
+                          count++;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          // }
+        }
+        if (eventChosen === 'minionsKilled') {
           if (searchEvents[this.props.spot][0].participantFrames) {
             count = searchEvents[this.props.spot][0].participantFrames[i+1].minionsKilled + searchEvents[this.props.spot][0].participantFrames[i+1].jungleMinionsKilled
           }
         }
-        if (this.props.eventSelected === 'totalGold') {
+        if (eventChosen === 'totalGold') {
           if (searchEvents[this.props.spot][0].participantFrames) {
             count = searchEvents[this.props.spot][0].participantFrames[i+1].totalGold;
           }
@@ -48,7 +73,7 @@ class Chart extends React.Component {
     }
 
     // BAR INFO AND DATA
-    let w = 500, h = this.props.maxForStat, labelHeight = 400,
+    let w = 550, h = this.props.maxForStat, labelHeight = 400,
         x = d3.scale.linear()
               .domain([0, 1])
               .range([0, w]),
@@ -68,6 +93,7 @@ class Chart extends React.Component {
     // APPEND NEW BAR AND TEXT
     // BAR WAS UPSIDE DOWN
     if(this.props.selData) {
+      // console.log(this.props.maxForStat)
       if (document.getElementById("infoStat")) {
         $("#infoStat").first().remove();
       }
@@ -81,14 +107,21 @@ class Chart extends React.Component {
             return x(i) / 10;
           })
           .attr("y", (d, i) => { 
-            return 370; 
+            if(this.props.maxForStat) {
+              return 370;
+            }
           })
           .attr("width",  w / whichData[0].length - 2)
           .attr("height", (d, i) => {
-            return (d / this.props.maxForStat) * 370;
+            if(this.props.maxForStat) {
+              // console.log((d / this.props.maxForStat * 370))
+              return (d / this.props.maxForStat) * 370;
+            }
           })
           .attr("y", (d, i) => {
-            return 370 - (d / this.props.maxForStat) * 370; // FLIP THE BAR TO LOAD UPWARD
+            if(this.props.maxForStat) {
+              return 370 - (d / this.props.maxForStat) * 370; // FLIP THE BAR TO LOAD UPWARD
+            }
           })
           .attr("fill", d => {
             return "rgb(0, 0, 200)";
@@ -109,7 +142,9 @@ class Chart extends React.Component {
             return x(i) / 10 + 24;
           })
           .attr("y", (d, i) => {
-            return 370 - (d / this.props.maxForStat) * 370 + 10;
+            if(this.props.maxForStat) {
+              return 370 - (d / this.props.maxForStat) * 370 + 10;
+            }
           })
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")

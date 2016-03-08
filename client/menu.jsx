@@ -18,8 +18,11 @@ class DropDownMenu extends React.Component {
           <option value="select one">select one</option>
           <option value="WARD_PLACED">wards placed</option>
           <option value="WARD_KILL">wards killed</option>
-          <option value='minionsKilled'>total minions killed</option>
-          <option value='totalGold'>total gold earned</option>
+          <option value="minionsKilled">total minions killed</option>
+          <option value="totalGold">total gold earned</option>
+          <option value="killerId">kills</option>
+          <option value="victimId">deaths</option>
+          <option value="assistingParticipantIds">assists</option>
         </select>
       </div>
     )

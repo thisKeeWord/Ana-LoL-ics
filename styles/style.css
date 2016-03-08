@@ -4,10 +4,9 @@
   width: 512px;
   background-image: url("http://ddragon.leagueoflegends.com/cdn/6.2.1/img/map/map11.png");
 }*/
-/*body {
-  height: 1000px;
-  width: 1000px;
-}*/
+#content {
+  display: flex;
+}
 
 /*#listOMatches {
   width: 260px;
@@ -23,13 +22,11 @@
 }*/
 
 #map {
-  display: block;
   position: absolute;
   margin-top: 20px;
 }
 
 #time {
-  display: block;
   max-width: 75px;
   position: absolute;
   top: 550;
@@ -37,7 +34,6 @@
 }
 
 #scroll {
-  display: block;
 	/*top: 150;*/
 	left: 80;
   top: 550;
@@ -47,7 +43,6 @@
 #eventDisplay {
   /*margin-top: 600px;*/
   /*top: 500;*/
-  display: block;
   position: absolute;
   top: 700;
   left: 50;
@@ -55,7 +50,6 @@
 }
 
 #chart svg {
-  display: block;
   top: 550;
   left: 530;
   position: absolute;
@@ -63,15 +57,12 @@
 
 #builds {
   margin-top: 20px;
-  display: block;
 /*  top: 750;*/
   left: 550;
   position: absolute;
-  /*display: inline-block;*/
 }
 
 #scrollAndSelect {
-  display: block;
   margin-top: 20px;
   position: absolute;
 }
@@ -80,11 +71,9 @@
   margin-left: 600px;
   top: 330;
   position: absolute;
-  display: block;
 }
 
 /*input {
-  display: block;
   background-size: 30px;
   font-size: 20px;
   text-overflow: wrap;

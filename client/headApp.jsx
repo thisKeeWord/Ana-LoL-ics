@@ -194,7 +194,7 @@ class HeadApp extends React.Component {
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
     if (this.state.totalRenders === 1) {
-      let w = 500, 
+      let w = 550, 
           h = 400,
           svg = d3.select("#chart")
                   .append("svg:svg")
@@ -231,17 +231,38 @@ class HeadApp extends React.Component {
     for (let i = 0; i < this.state.playerID.length; i++) {
       let count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-        if (searchEvents[i][0].events) {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                 if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
                   count++;
+                  // console.log(count, this.state.allowScroll[i][0])
                 }
               }
             }
           }
-        }
+      }
+      if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
+          for (let j = 0; j < searchEvents.length; j++) {
+            if (searchEvents[j][0].events) {
+              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                  if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
+                    if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state.playerID[i][0]) {
+                      count++;
+                    }
+                  }
+                  if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
+                    for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
+                      if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID[i][0]) {
+                        count++;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
       }
       if (eventPicked.target.value === 'minionsKilled') {
         if (searchEvents[searchEvents.length - 1][0].participantFrames) {
@@ -255,6 +276,7 @@ class HeadApp extends React.Component {
       }
       eventSpecific.push(count);
     }
+    console.log(eventSpecific)
     this.setState({
       eventSelected: eventPicked.target.value,
       maxForStat: Math.max(...eventSpecific)
