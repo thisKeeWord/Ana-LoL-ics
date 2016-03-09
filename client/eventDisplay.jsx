@@ -41,16 +41,16 @@ class EventDisplay extends React.Component {
 						if (!champFight[1]) {
 							return (
 								<div>
-									<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={50} width={50} />
-										has been executed!
+									<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+										&nbsp;&nbsp;&nbsp; has been executed!
 								</div>
 							)
 						}
 						return (
 							<div>
-								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={50} width={50} />
-									has slain
-								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[1] + ".png"} height={50} width={50} />
+								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+									&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
+								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[1] + ".png"} height={40} width={40} />
 							</div>
 						)
 					})

@@ -88,8 +88,8 @@ class ChampBuild extends React.Component {
           .enter()
             .append("svg:image")
             .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch +'/img/champion/' + this.props.champName[build[1]] + '.png')
-            .attr('y', w * 24)
-            .style({ 'width': '24px', 'height': '24px', 'marginBottom': '3px'});
+            .attr('y', w * 40)
+            .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px'});
       
         this.props.addItems
           .append('svg:g')
@@ -104,9 +104,9 @@ class ChampBuild extends React.Component {
               }
             })
             .attr("x", (d, i) => {
-              return 24 * (i+1)
+              return 24 * i + 40;
             })
-            .attr("y", 24 * w)
+            .attr("y", 40 * w + 10)
             .style({ 'width': '24px', 'height': '24px' });
       }   
     }

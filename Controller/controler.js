@@ -16,6 +16,7 @@ var controler = {
   getData: getData
 }
 
+// FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
   request(summonerUrl + req.body.userName + "?" + stuff.stuff2, (error, resp) => {
 		if (error) return console.error("we cannot find the summoner or " + error);
@@ -28,6 +29,7 @@ function userInformation(req, res, next) {
 	})
 }
 
+// MOST RECENT 10 GAMES ON SUMMONER'S RIFT
 function matchList(req, res) {
 	var count = 0;
 	if (!req.summonerId) {
@@ -79,10 +81,12 @@ function getData(req, res) {
       positionOfPlayer = [],
       matchDataArray = [];
 
+
   request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + stuff.stuff2, function(error, newData) {
     if (error) return console.error(error);
     var info = JSON.parse(newData.body); 
 
+    // GETTING CORRECT PATCH VERSION TO COMPARE WITH PATCH DATA VERSION
     request(version, function(error, checkingVersion) {
       var versionChecks = JSON.parse(checkingVersion.body);
       var patchVersion = 0;
@@ -99,7 +103,6 @@ function getData(req, res) {
       }
 
 
-      // FIRST REQUEST TO FILE
       request("http://ddragon.leagueoflegends.com/cdn/" + patchDesired + "/data/en_US/item.json", function(err, data) {
         if (error) return console.error(error);
         var resData = JSON.parse(data.body).data;

@@ -124,7 +124,8 @@ class Chart extends React.Component {
             }
           })
           .attr("fill", d => {
-            return "rgb(0, 0, 200)";
+            // return "rgb(173, 255, 47)";
+            return "white";
           })
           .attr("id", "shape");
 
@@ -149,7 +150,7 @@ class Chart extends React.Component {
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
           .attr("font-size", "11px")
-          .attr("fill", "white")
+          .attr("fill", "black")
           .attr("id", "amount");
 
       // ADD LABELS TO X-AXIS
@@ -171,7 +172,7 @@ class Chart extends React.Component {
           .attr("text-anchor", "middle")
           .attr("font-family", "sans-serif")
           .attr("font-size", "11px")
-          .attr("fill", "black")
+          .attr("fill", "white")
           .attr("id", "whichChamp");    
     }
   }

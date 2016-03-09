@@ -107,7 +107,7 @@ class HeadApp extends React.Component {
       that.state.allowScroll = gotGameData[4];
       that.state.result = gotGameData[5];
       that.state.itemStorage = gotGameData[6];
-      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '300px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '400px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
       that.state.secondToggle = true;
       that.state.totalRenders++;
 
@@ -184,6 +184,7 @@ class HeadApp extends React.Component {
     })
   }
 
+  // SCROLL BAR CHANGE
   onChange(e) {
     e.preventDefault();
     this.setState({
@@ -210,8 +211,8 @@ class HeadApp extends React.Component {
   // CHAMP BUILDS
   addItemVisuals() {
     if (this.state.totalRenders === 1) {
-      let w = 600,
-          h = 280,
+      let w = 464,
+          h = 400,
           svg = d3.select("#builds")
                   .append("svg:svg")
                   .attr("width", w)
@@ -236,7 +237,6 @@ class HeadApp extends React.Component {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                 if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
                   count++;
-                  // console.log(count, this.state.allowScroll[i][0])
                 }
               }
             }
@@ -276,7 +276,6 @@ class HeadApp extends React.Component {
       }
       eventSpecific.push(count);
     }
-    console.log(eventSpecific)
     this.setState({
       eventSelected: eventPicked.target.value,
       maxForStat: Math.max(...eventSpecific)
@@ -287,9 +286,16 @@ class HeadApp extends React.Component {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
-        <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" name="userName" ref="userName" placeholder="enter username" required />
-        </form>
+        <div id="landingPage">
+          <p>
+          Your one stop shop to finding more than a summary but less than a replay of a game!<br />
+          We are currently in beta and will soon have side-by-side game comparison available.<br />
+          To get started, enter an ign (in game name) in the search bar.
+          </p>
+          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          </form>
+        </div>
       )
     }
 
@@ -318,5 +324,4 @@ class HeadApp extends React.Component {
   }
 }
 
-// module.exports=HeadApp;
 ReactDOM.render(<HeadApp />, document.getElementById('content'));
