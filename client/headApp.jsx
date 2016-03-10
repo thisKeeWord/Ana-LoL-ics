@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'request';
-import champion from 'champion';
 import $ from 'jquery';
 import async from 'async';
 import TimeStamp from './timeStamp.jsx';

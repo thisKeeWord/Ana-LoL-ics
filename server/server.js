@@ -4,7 +4,8 @@ var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var controller = require('./../Controller/controler.js');
-var stuff = require('./../stuff.js')
+var stuff = require('./../stuff.js');
+var port = process.env.PORT || 5000;
 var mongoURI = 'mongodb://lkee:' + process.env.stuff3 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
 mongoose.connect(mongoURI);
 
@@ -24,4 +25,4 @@ app.post('/found', controller.matchList);
 
 app.post('/getGameData', controller.getData);
 
-app.listen(3000);
+app.listen(port);
