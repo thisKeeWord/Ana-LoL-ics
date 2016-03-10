@@ -1,9 +1,11 @@
 var express = require('express');
 var app = express();
 var path = require('path');
+var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var controller = require('./../Controller/controler.js');
-
+var mongoURI = 'mongodb://localhost/productionApp';
+mongoose.connect(mongoURI);
 
 
 app.use(bodyParser.urlencoded());
