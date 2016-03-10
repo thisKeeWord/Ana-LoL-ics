@@ -69,18 +69,6 @@ class HeadApp extends React.Component {
         userName: cleanName.toLowerCase().replace(/ /g, '')
       }
     };
-    if (localStorage && !localStorage[newCleanName.username.userName]) {
-      newCleanName.url = { url: '/' };
-      this.post(newCleanName).done(gotTheInfo => {
-        localStorage[newCleanName.username.userName] = gotTheInfo[0];
-        this.post(newCleanName).done(gotTheInfo => {
-          that.setState({
-            res: gotTheInfo[1],
-            toggle: true
-          })
-        })
-      })
-    }
     if (localStorage && localStorage[newCleanName.username.userName]) {
       newCleanName.url = { url: '/found' };
       newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
@@ -91,6 +79,16 @@ class HeadApp extends React.Component {
         })
       })
     }
+    else if (localStorage && !localStorage[newCleanName.username.userName]) {
+      newCleanName.url = { url: '/' };
+      this.post(newCleanName).done(gotTheInfo => {
+        localStorage[newCleanName.username.userName] = gotTheInfo[0];
+        that.setState({
+          res: gotTheInfo[1],
+          toggle: true
+        })
+      })
+    } 
   }
 
   handleClick(e) {
