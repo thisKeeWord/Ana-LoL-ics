@@ -27,7 +27,7 @@ function userInformation(req, res, next) {
 		}
 		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
 			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
-			  request(summonerUrl + req.body.userName + "?" + stuff.stuff2, (error, resp) => {
+			  request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
 					if (error) return console.error("we cannot find the summoner or " + error);
 					if (resp.statusCode === 200) {
 						var userId = JSON.parse(resp.body);
@@ -59,7 +59,7 @@ function matchList(req, res) {
 					req.summonerId = req.body.userName;
 				}
 				var matchHistory = [];
-				request(matchHistoryList + req.summonerId + "/recent?" + stuff.stuff2, (error, response) => {
+				request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
 					if (error) return console.error(error);
 					if (response.statusCode === 200) {
 						var gamesList = JSON.parse(response.body);
@@ -75,7 +75,7 @@ function matchList(req, res) {
 						}
 
 						matchHistory.forEach(function(i) {
-							request(champImageUrl + i[1] + "?" + stuff.stuff2, function(error, good) {
+							request(champImageUrl + i[1] + "?" + process.env.stuff2, function(error, good) {
 								good = JSON.parse(good.body)
 								i[1] = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + good.key + '.png';
 								count++;
@@ -118,7 +118,7 @@ function getData(req, res) {
 		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
 			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
 
-			  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + stuff.stuff2, function(error, newData) {
+			  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + process.env.stuff2, function(error, newData) {
 			    if (error) return console.error(error);
 			    var info = JSON.parse(newData.body); 
 
@@ -159,7 +159,7 @@ function getData(req, res) {
 			          idOfPlayer.push([pId, cId]);
 
 			          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-			          request(url + cId + '?' + stuff.stuff2, function(error, champData) {
+			          request(url + cId + '?' + process.env.stuff2, function(error, champData) {
 			          	champData = JSON.parse(champData.body);
 
 			          	if (error) return console.error(error);
