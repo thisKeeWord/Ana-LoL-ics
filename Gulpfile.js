@@ -43,7 +43,7 @@ function scripts() {
 
 function serve() {
   nodemon({
-    script: './server/server.js'
+    script: './server/server.js',
     ignore: ['bower_components/']
   });
 }
