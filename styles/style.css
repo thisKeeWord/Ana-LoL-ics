@@ -1,9 +1,6 @@
 body {
   background-image: url("http://www.androidnoticias.net/wp-content/uploads/2016/02/PortadaLOL.jpg");
 }
-/*#content {
-  display: flex;
-}*/
 
 #welcome {
   margin-top: 20px;
@@ -15,9 +12,7 @@ body {
   margin-top: 20px;
   width: 250px;
   left: 950;
-  /*margin-right: 200px;*/
   position: absolute;
-  /*position: absolute;*/
 }
 
 #map {
@@ -35,7 +30,6 @@ body {
 }
 
 #scroll {
-	/*top: 150;*/
 	left: 20;
   top: 538;
 	position: absolute;
@@ -43,7 +37,6 @@ body {
 
 #eventDisplay {
   margin-top: 20px;
-/*  top: 750;*/
   left: 570;
   position: absolute;
   color: white;
@@ -57,12 +50,9 @@ body {
 }
 
 #builds {
-  /*margin-top: 600px;*/
-  /*top: 500;*/
   position: absolute;
   top: 670;
   left: 30;
-  /*margin-left: 600px;*/
   color: white;
   margin-bottom: 20px;
 }
@@ -81,12 +71,3 @@ body {
 p {
   color: white;
 }
-
-/*input {
-  background-size: 30px;
-  font-size: 20px;
-  text-overflow: wrap;
-  width: 80px;
-  background-position: left;
-  white-space: normal;
-}*/
