@@ -8,7 +8,7 @@ to improve their knowledge, strategy, gameplay, etc.
 This app is designed to present your post-game statistics in such a way that you can visually see your 
 improvements game-by-game (coming soon) and can compare stats to others. 
 
-![Screenshot](/readmeImages/Analolics1.png) ![Screenshot](/readmeImages/Analolics2.png) ![Screenshot](/readmeImages/Analolics4.png) ![Screenshot](/readmeImages/Analolics5.png)
+![Screenshot](/readmeImages/Analolics1.png) ![Screenshot](/readmeImages/Analolics6.png)
 
 ### Effects
 
