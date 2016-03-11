@@ -4,7 +4,9 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var nodemon = require('gulp-nodemon');
+var uglify = require('gulp-uglify');
 var babelify = require('babelify');
+var buffer = require('vinyl-buffer');
 
 gulp.task('browserify', scripts)
     .task('serve', serve);
@@ -29,6 +31,8 @@ function scripts() {
         console.log('Error with compiling components', err.message);
       })
       .pipe(source('bundle.js'))
+      .pipe(buffer())
+      .pipe(uglify())
       .pipe(gulp.dest('./build/'));
       console.log('Updated!', (Date.now() - updateStart) + 'ms');
     })
@@ -38,6 +42,8 @@ function scripts() {
       console.log('Error with compiling components', err.message);
     })
     .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest('./build/'));
 }
 

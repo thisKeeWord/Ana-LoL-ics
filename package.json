@@ -21,6 +21,7 @@
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-nodemon": "^2.0.6",
+    "gulp-uglify": "^1.5.3",
     "jquery": "^2.2.0",
     "mongoose": "^4.3.4",
     "nodemon": "^1.8.0",
@@ -29,6 +30,7 @@
     "react-dom": "^0.14.6",
     "reactify": "^1.1.1",
     "request": "^2.69.0",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   }
