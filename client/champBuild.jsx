@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-import stuff from './../stuff.js';
 
 
 class ChampBuild extends React.Component {

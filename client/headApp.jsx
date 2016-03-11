@@ -11,7 +11,6 @@ import ChampImage from './champImage.jsx';
 import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
-import stuff from './../stuff.js';
 let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
 let summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
 let matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";

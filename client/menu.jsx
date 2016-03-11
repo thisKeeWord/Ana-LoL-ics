@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 class DropDownMenu extends React.Component {
   onLoad(eventPicked) {
     this.props.whichEventPick(eventPicked);
@@ -8,7 +9,6 @@ class DropDownMenu extends React.Component {
   onChange(e) {
     this.props.whichEventPick(e);
   }
-
 
   render() {
     return (
