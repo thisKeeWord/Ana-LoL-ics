@@ -8,7 +8,8 @@
     "start": "node server/server.js",
     "start-dev": "npm run task",
     "task": "gulp",
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "production": "node server/server.js"
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -33,5 +34,8 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.7.0"
   }
 }
