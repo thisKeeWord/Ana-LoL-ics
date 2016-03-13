@@ -9,8 +9,6 @@
     "start-dev": "npm run task & npm start",
     "task": "gulp",
     "postinstall": "bower install"
-    // ,
-    // "production": "node server/server.js"
   },
   "dependencies": {
     "async": "^1.5.2",
