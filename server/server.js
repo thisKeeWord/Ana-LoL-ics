@@ -8,8 +8,13 @@ var controller = require('./../Controller/controler.js');
 var mongoURI = 'mongodb://localhost/productionApp';
 mongoose.connect(mongoURI);
 
+// morgan for server loggin outside of heroku
+if (!process.env.PORT) {
+  app.use(require('morgan')('dev'))
+}
+
 app.set('port', (process.env.PORT || 5000));
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, './..')));
