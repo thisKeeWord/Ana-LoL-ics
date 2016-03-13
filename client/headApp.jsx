@@ -278,6 +278,12 @@ class HeadApp extends React.Component {
     })
   }
 
+  oneOrTwoGames(e) {
+    this.setState({
+      oneTwoGames: e.target.value
+    })
+  }
+
   render() {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
@@ -299,7 +305,7 @@ class HeadApp extends React.Component {
     if (this.state.secondToggle === true && this.state.toggle === true) {
       return (
         <div className="resultingInfo">
-          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} oneOrTwoGames={this.oneOrTwoGames.bind(this)} />
           <GameMap />
           <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
           <DropDownMenu scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
@@ -314,7 +320,7 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
       return (
-        <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+        <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} oneOrTwoGames={this.oneOrTwoGames.bind(this)} />
       )
     }
   }
