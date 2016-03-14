@@ -20,7 +20,8 @@ var controler = {
 function userInformation(req, res, next) {
 	var date = Date.now();
 	var testForInt = req.body.userName;
-	if (typeof parseInt(testForInt, 10) === 'number') {
+	testForInt = testForInt.replace(/["']/g, ""))
+	if (typeof testforInt === 'number') {
 		req.summonerId = req.body.userName;
 		next();
 	}
