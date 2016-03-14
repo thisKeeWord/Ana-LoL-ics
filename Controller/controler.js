@@ -19,28 +19,35 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
-	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 10000) {
-			ThrottleCalls.remove({}, function(removed) {
-			})
-		}
-		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
-			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
-			  request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
-					if (error) return console.error("we cannot find the summoner or " + error);
-					if (resp.statusCode === 200) {
-						var userId = JSON.parse(resp.body);
-						var result = userId[req.body.userName]["id"];
-						req.summonerId = result;
-					}
-					next();
+	var testForInt = req.body.userName;
+	if (typeof parseInt(testForInt, 10) === 'number') {
+		req.summonerId = req.body.userName;
+		next();
+	}
+	else {
+		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
+			if (success.length && date - success[0]['created_at'] > 10000) {
+				ThrottleCalls.remove({}, function(removed) {
 				})
-			})
-		}
-		else {
-			return res.render('./../index.html', { error: 'too many requests, try again in a few' });
-		}
-	})
+			}
+			if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+				ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
+				  request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
+						if (error) return console.error("we cannot find the summoner or " + error);
+						if (resp.statusCode === 200) {
+							var userId = JSON.parse(resp.body);
+							var result = userId[req.body.userName]["id"];
+							req.summonerId = result;
+						}
+						next();
+					})
+				})
+			}
+			else {
+				return res.render('./../index.html', { error: 'too many requests, try again in a few' });
+			}
+		})
+	}
 }
 
 // MOST RECENT 10 GAMES ON SUMMONER'S RIFT
@@ -54,9 +61,6 @@ function matchList(req, res) {
 		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
 			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
 				var count = 0;
-				if (!req.summonerId) {
-					req.summonerId = req.body.userName;
-				}
 				var matchHistory = [];
 				request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
 					if (error) return console.error(error);
