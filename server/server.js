@@ -4,18 +4,13 @@ var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var controller = require('./../Controller/controler.js');
-// var mongoURI = 'mongodb://lkee:' + process.env.stuff3 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
-var mongoURI = 'mongodb://localhost/productionApp';
+var mongoURI = 'mongodb://lkee:' + process.env.stuff3 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
 mongoose.connect(mongoURI);
 
-// morgan for server loggin outside of heroku
-if (!process.env.PORT) {
-  app.use(require('morgan')('dev'))
-}
-
 app.set('port', (process.env.PORT || 5000));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
+// app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, './..')));
 
@@ -24,8 +19,6 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', controller.userInformation, controller.matchList);
-
-app.post('/found', controller.matchList);
 
 app.post('/getGameData', controller.getData);
 

@@ -44,7 +44,7 @@ class HeadApp extends React.Component {
   post(data) {
     return $.ajax({
       type: 'POST',
-      url: data.url.url,
+      url: data.url.yooRL,
       data: JSON.stringify(data.username),
       contentType: 'application/json'
     })
@@ -65,10 +65,12 @@ class HeadApp extends React.Component {
     let newCleanName = {
       username: {
         userName: cleanName.toLowerCase().replace(/ /g, '')
+      },
+      url: {
+        yooRL: '/'
       }
     };
     if (localStorage && localStorage[newCleanName.username.userName]) {
-      newCleanName.url = { url: '/found' };
       newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
@@ -78,7 +80,6 @@ class HeadApp extends React.Component {
       })
     }
     else if (localStorage && !localStorage[newCleanName.username.userName]) {
-      newCleanName.url = { url: '/' };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[newCleanName.username.userName] = gotTheInfo[0];
         that.setState({
@@ -86,7 +87,7 @@ class HeadApp extends React.Component {
           toggle: true
         })
       })
-    } 
+    }
   }
 
   handleClick(e) {

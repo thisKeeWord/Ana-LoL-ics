@@ -8,7 +8,6 @@ var url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/";
 var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
 var matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
 var version = "https://ddragon.leagueoflegends.com/api/versions.json";
-var stuff = require('./../stuff.js')
 
 
 var controler = {
@@ -20,29 +19,35 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
-	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 10000) {
-			ThrottleCalls.remove({}, function(removed) {
-			})
-		}
-		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
-			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
-			  // request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
-			  request(summonerUrl + req.body.userName + "?" + stuff.stuff2, (error, resp) => {
-					if (error) return console.error("we cannot find the summoner or " + error);
-					if (resp.statusCode === 200) {
-						var userId = JSON.parse(resp.body);
-						var result = userId[req.body.userName]["id"];
-						req.summonerId = result;
-					}
-					next();
+	if (isNaN(req.body.userName) === 'false') {
+		req.summonerId = req.body.userName;
+		next();
+	}
+	else {
+		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
+			if (success.length && date - success[0]['created_at'] > 10000) {
+				ThrottleCalls.remove({}, function(removed) {
 				})
-			})
-		}
-		else {
-			return res.render('./../index.html', { error: 'too many requests, try again in a few' });
-		}
-	})
+			}
+			if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+				ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
+				  request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
+
+						if (error) return console.error("we cannot find the summoner or " + error);
+						if (resp.statusCode === 200) {
+							var userId = JSON.parse(resp.body);
+							var result = userId[req.body.userName]["id"];
+							req.summonerId = result;
+						}
+						next();
+					})
+				})
+			}
+			else {
+				return res.render('./../index.html', { error: 'too many requests, try again in a few' });
+			}
+		})
+	}
 }
 
 // MOST RECENT 10 GAMES ON SUMMONER'S RIFT
@@ -56,12 +61,8 @@ function matchList(req, res) {
 		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
 			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
 				var count = 0;
-				if (!req.summonerId) {
-					req.summonerId = req.body.userName;
-				}
 				var matchHistory = [];
-				request(matchHistoryList + req.summonerId + "/recent?" + stuff.stuff2, (error, response) => {
-				// request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
+				request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
 					if (error) return console.error(error);
 					if (response.statusCode === 200) {
 						var gamesList = JSON.parse(response.body);
