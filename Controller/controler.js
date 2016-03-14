@@ -19,7 +19,7 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
-	if (isNAN(req.body.username) === 'false') {
+	if (isNaN(req.body.userName) === 'false') {
 		req.summonerId = req.body.userName;
 		next();
 	}
