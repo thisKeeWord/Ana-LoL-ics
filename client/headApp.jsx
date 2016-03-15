@@ -54,10 +54,10 @@ class HeadApp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const that = this;
-    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
-    const cleanName = inGameName.toLowerCase().replace(/ /g, '')
-    const newCleanName = {
+    var that = this;
+    var inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
+    var cleanName = inGameName.toLowerCase().replace(/ /g, '')
+    var newCleanName = {
       url: {
         yooRL: '/'
       }
