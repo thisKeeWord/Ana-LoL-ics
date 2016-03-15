@@ -4,6 +4,5 @@
   "dependencies": {
     "jquery": "~2.2.0",
     "d3": "~3.5.14",
-    "jquery-ui": "~1.11.4"
   }
 }
