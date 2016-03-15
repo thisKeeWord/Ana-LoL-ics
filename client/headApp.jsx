@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
@@ -54,7 +55,7 @@ class HeadApp extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const that = this;
-    const inGameName = e.target.userName.value;
+    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
     const cleanName = inGameName.toLowerCase().replace(/ /g, '')
     const newCleanName = {
       url: {
