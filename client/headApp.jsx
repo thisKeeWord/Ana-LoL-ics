@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'request';
 import $ from 'jquery';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
@@ -222,15 +221,15 @@ class HeadApp extends React.Component {
     for (let i = 0; i < this.state.playerID.length; i++) {
       let count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-          for (let j = 0; j < searchEvents.length; j++) {
-            if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
-                  count++;
-                }
+        for (let j = 0; j < searchEvents.length; j++) {
+          if (searchEvents[j][0].events) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+              if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
+                count++;
               }
             }
           }
+        }
       }
       if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
           for (let j = 0; j < searchEvents.length; j++) {

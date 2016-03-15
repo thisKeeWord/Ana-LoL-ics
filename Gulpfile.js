@@ -15,7 +15,7 @@ function scripts() {
   var bundler = browserify({
     entries: ['./client/app.jsx'],
     transform: babelify.configure({ presets: ['react', 'es2015'] }),
-    debug: true,
+    debug: false,
     cache: {},
     packageCache: {},
     fullPaths: true
