@@ -6,10 +6,6 @@ class GamesOnSR extends React.Component {
     this.props.onClick(e);
   }
 
-  onChange(e) {
-    this.props.oneOrTwoGames(e)
-  }
-
   render() {
     return (
       <div id="matches">
