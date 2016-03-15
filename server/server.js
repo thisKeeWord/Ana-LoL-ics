@@ -1,4 +1,3 @@
-var dotenv = require('dotenv').config({ path: 'config.env' });
 var express = require('express');
 var app = express();
 var path = require('path');
