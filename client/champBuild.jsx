@@ -15,9 +15,9 @@ class ChampBuild extends React.Component {
         const itemStore = [];
 
         // AT CURRENT SPOT IN TIMELINE
-        for (const j = 0; j <= this.props.spot; j++) {
+        for (let j = 0; j <= this.props.spot; j++) {
           if (searchEvents[j][0].events) {
-            for (const k = 0; k < searchEvents[j][0].events.length; k++) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
               const findItem = searchEvents[j][0].events[k].itemId;
 
               // ITEM_PURCHASED
@@ -74,7 +74,7 @@ class ChampBuild extends React.Component {
       }
 
       // EACH PLAYER'S BUILDS
-      for (const w = 0; w < this.props.playerInfo.length; w++) {
+      for (let w = 0; w < this.props.playerInfo.length; w++) {
 
         // WID=WIDTH HARDCODED FOR NOW
         const wid = 466;

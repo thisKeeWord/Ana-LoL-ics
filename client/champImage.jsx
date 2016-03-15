@@ -24,7 +24,7 @@ class ChampImage extends React.Component {
 
     if(this.props.png.length) {
 
-      for (const w = 0; w < this.props.playerInfo.length; w++) {
+      for (let w = 0; w < this.props.playerInfo.length; w++) {
         const checking = this.props.playerInfo[w];
 
         // REMOVE PREVIOUS ICONS      

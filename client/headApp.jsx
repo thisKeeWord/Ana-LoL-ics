@@ -154,7 +154,7 @@ class HeadApp extends React.Component {
           .attr('id', 'rift');
 
     // GET THE 10 IMAGES FROM URL
-    for (const z = 0; z < this.state.playerID.length; z++) {
+    for (let z = 0; z < this.state.playerID.length; z++) {
       const checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
@@ -219,12 +219,12 @@ class HeadApp extends React.Component {
     eventPicked.preventDefault();
     const eventSpecific = [];
     const searchEvents = this.state.allowScroll;
-    for (const i = 0; i < this.state.playerID.length; i++) {
+    for (let i = 0; i < this.state.playerID.length; i++) {
       const count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-        for (const j = 0; j < searchEvents.length; j++) {
+        for (let j = 0; j < searchEvents.length; j++) {
           if (searchEvents[j][0].events) {
-            for (const k = 0; k < searchEvents[j][0].events.length; k++) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
               if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
                 count++;
               }
@@ -233,9 +233,9 @@ class HeadApp extends React.Component {
         }
       }
       if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
-          for (const j = 0; j < searchEvents.length; j++) {
+          for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
-              for (const k = 0; k < searchEvents[j][0].events.length; k++) {
+              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                 if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
                     if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state.playerID[i][0]) {
@@ -243,7 +243,7 @@ class HeadApp extends React.Component {
                     }
                   }
                   if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
-                    for (const assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
+                    for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
                       if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID[i][0]) {
                         count++;
                       }
