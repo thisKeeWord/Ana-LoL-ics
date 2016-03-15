@@ -3,11 +3,11 @@ import React from 'react';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		let interaction = [];
+		const interaction = [];
 		if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events && this.props.playerInfo.length && this.props.champImg.length) {
-			let searchEvents = this.props.timeline[this.props.spot][0].events;
+			const searchEvents = this.props.timeline[this.props.spot][0].events;
 
-			for (let i = 0; i < searchEvents.length; i++) {
+			for (const i = 0; i < searchEvents.length; i++) {
 				if (searchEvents[i].eventType === "CHAMPION_KILL") {
 					if (searchEvents[i].killerId === 0) {
 						interaction.push([ this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] ])
@@ -22,7 +22,7 @@ class EventDisplay extends React.Component {
 	}
 
 	render() {
-		let stat = this.log();
+		const stat = this.log();
 
 		// DOESN'T EXIST INITIALLY
 		if (!stat) {

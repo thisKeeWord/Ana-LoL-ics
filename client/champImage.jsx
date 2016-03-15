@@ -4,7 +4,7 @@ import React from 'react';
 class ChampImage extends React.Component {
   addChampImg() {
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
-    let domain = 
+    const domain = 
         {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
@@ -24,8 +24,8 @@ class ChampImage extends React.Component {
 
     if(this.props.png.length) {
 
-      for (let w = 0; w < this.props.playerInfo.length; w++) {
-        let checking = this.props.playerInfo[w];
+      for (const w = 0; w < this.props.playerInfo.length; w++) {
+        const checking = this.props.playerInfo[w];
 
         // REMOVE PREVIOUS ICONS      
         // USE SVG FROM STATE TO APPEND NEW ICONS
@@ -60,7 +60,7 @@ class ChampImage extends React.Component {
   }
 
   render() {
-    let addChampImage = this.addChampImg();
+    const addChampImage = this.addChampImg();
     if (!addChampImage) {
       return (
         <div id="champImages" />

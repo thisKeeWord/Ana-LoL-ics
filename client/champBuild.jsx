@@ -6,19 +6,19 @@ class ChampBuild extends React.Component {
   // GET PLAYER'S ITEM BUILD
   itemization() {
     if (this.props.timeline.length) {
-      let eachPlayersItems = [];
-      let searchEvents = this.props.timeline;
-      let itemStorage = this.props.itemStorage;
+      const eachPlayersItems = [];
+      const searchEvents = this.props.timeline;
+      const itemStorage = this.props.itemStorage;
 
       // 10 ARRAYS, 1 PER PLAYER
       this.props.playerInfo.forEach(player => {
-        let itemStore = [];
+        const itemStore = [];
 
         // AT CURRENT SPOT IN TIMELINE
-        for (let j = 0; j <= this.props.spot; j++) {
+        for (const j = 0; j <= this.props.spot; j++) {
           if (searchEvents[j][0].events) {
-            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-              let findItem = searchEvents[j][0].events[k].itemId;
+            for (const k = 0; k < searchEvents[j][0].events.length; k++) {
+              const findItem = searchEvents[j][0].events[k].itemId;
 
               // ITEM_PURCHASED
               if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
@@ -42,9 +42,9 @@ class ChampBuild extends React.Component {
               // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
               if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
                 if (searchEvents[j][0].events[k].itemAfter === 0) {
-                  let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
+                  const checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                   itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
-                  let retrieveItem = k;
+                  const retrieveItem = k;
                   while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                     if (itemStorage[checkItemEvent].from) {
                       if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
@@ -74,11 +74,11 @@ class ChampBuild extends React.Component {
       }
 
       // EACH PLAYER'S BUILDS
-      for (let w = 0; w < this.props.playerInfo.length; w++) {
+      for (const w = 0; w < this.props.playerInfo.length; w++) {
 
         // WID=WIDTH HARDCODED FOR NOW
-        let wid = 466;
-        let build = this.props.playerInfo[w];
+        const wid = 466;
+        const build = this.props.playerInfo[w];
 
         this.props.addItems.append('svg:g')
           .attr("class", "champIcons")
@@ -114,14 +114,14 @@ class ChampBuild extends React.Component {
    
 
   render() {
-    let showItems = this.itemization();
+    const showItems = this.itemization();
     if (!showItems) {
       return (
         <div id="builds" />
       )
     }
 
-    let items = this.appendItems(showItems)
+    const items = this.appendItems(showItems)
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG
     return (
       <div id="builds">

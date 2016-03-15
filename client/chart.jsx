@@ -5,18 +5,18 @@ class Chart extends React.Component {
 
   diff() {
     // FIND SELECTION --> WARD PLACEMENT OR DELETIONS
-    let eventSpecific = [];
+    const eventSpecific = [];
     if (this.props.timeline.length) {
-      let searchEvents = this.props.timeline;
-      let eventChosen = this.props.eventSelected;
+      const searchEvents = this.props.timeline;
+      const eventChosen = this.props.eventSelected;
 
-      for (let i = 0; i < this.props.playerInfo.length; i++) {
-        let count = 0;
+      for (const i = 0; i < this.props.playerInfo.length; i++) {
+        const count = 0;
         if (eventChosen === 'WARD_PLACED' || eventChosen === 'WARD_KILL') {
           // if (searchEvents[this.props.spot][0].events) {
-            for (let j = 0; j <= this.props.spot; j++) {
+            for (const j = 0; j <= this.props.spot; j++) {
               if (searchEvents[j][0].events) {
-                for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                for (const k = 0; k < searchEvents[j][0].events.length; k++) {
                   if (searchEvents[j][0].events[k].eventType === eventChosen && (searchEvents[j][0].events[k].creatorId === this.props.playerInfo[i][0] || searchEvents[j][0].events[k].killerId === this.props.playerInfo[i][0])) {
                     count++;
                   }
@@ -27,9 +27,9 @@ class Chart extends React.Component {
         }
         if (eventChosen === 'killerId' || eventChosen === 'victimId' || eventChosen === 'assistingParticipantIds') {
           // if (searchEvents[this.props.spot][0].events) {
-            for (let j = 0; j <= this.props.spot; j++) {
+            for (const j = 0; j <= this.props.spot; j++) {
               if (searchEvents[j][0].events) {
-                for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                for (const k = 0; k < searchEvents[j][0].events.length; k++) {
                   if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
                     if (eventChosen === 'killerId' || eventChosen === 'victimId') {
                       if (searchEvents[j][0].events[k][eventChosen] === this.props.playerInfo[i][0]) {
@@ -37,7 +37,7 @@ class Chart extends React.Component {
                       }
                     }
                     if (eventChosen === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventChosen]) {
-                      for (let assists = 0; assists < searchEvents[j][0].events[k][eventChosen].length; assists++) {
+                      for (const assists = 0; assists < searchEvents[j][0].events[k][eventChosen].length; assists++) {
                         if (searchEvents[j][0].events[k][eventChosen][assists] === this.props.playerInfo[i][0]) {
                           count++;
                         }
@@ -67,13 +67,13 @@ class Chart extends React.Component {
 
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
-    let getName = [];
-    for (let name = 0; name < this.props.playerInfo.length; name++) {
+    const getName = [];
+    for (const name = 0; name < this.props.playerInfo.length; name++) {
       getName.push(this.props.champName[this.props.playerInfo[name][1]])
     }
 
     // BAR INFO AND DATA
-    let w = 550, h = this.props.maxForStat, labelHeight = 400,
+    const w = 550, h = this.props.maxForStat, labelHeight = 400,
         x = d3.scale.linear()
               .domain([0, 1])
               .range([0, w]),
@@ -178,7 +178,7 @@ class Chart extends React.Component {
   }
 
   render() {
-    let whichData = this.diff();
+    const whichData = this.diff();
     if (!whichData) {
       return (
         <div id="chart">
@@ -186,7 +186,7 @@ class Chart extends React.Component {
       )
     }
 
-    let bar = this.redo(whichData);
+    const bar = this.redo(whichData);
     return (
     	<div id="chart">
         {bar}

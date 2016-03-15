@@ -54,10 +54,10 @@ class HeadApp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    var that = this;
-    var inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
-    var cleanName = inGameName.toLowerCase().replace(/ /g, '')
-    var newCleanName = {
+    const that = this;
+    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
+    const cleanName = inGameName.toLowerCase().replace(/ /g, '')
+    const newCleanName = {
       url: {
         yooRL: '/'
       }
@@ -85,7 +85,7 @@ class HeadApp extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    let sendGameId  = e.target.id,
+    const sendGameId  = e.target.id,
         that = this;
     this.postForGame(sendGameId).done(function(gotGameData) {
 
@@ -116,7 +116,7 @@ class HeadApp extends React.Component {
     }
 
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
-    let domain = {
+    const domain = {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
         },
@@ -129,15 +129,15 @@ class HeadApp extends React.Component {
         nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
         // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
-        let xScale = d3.scale.linear()
+        const xScale = d3.scale.linear()
           .domain([domain.min.x, domain.max.x])
           .range([0, width]);
 
-        let yScale = d3.scale.linear()
+        const yScale = d3.scale.linear()
           .domain([domain.min.y, domain.max.y])
           .range([height, 0]);
 
-        let svg = d3.select("#map").append("svg:svg")
+        const svg = d3.select("#map").append("svg:svg")
           .attr("id", "backdrop")
           .attr("width", width)
           .attr("height", height)
@@ -154,8 +154,8 @@ class HeadApp extends React.Component {
           .attr('id', 'rift');
 
     // GET THE 10 IMAGES FROM URL
-    for (let z = 0; z < this.state.playerID.length; z++) {
-      let checking = this.state.playerID[z][1];
+    for (const z = 0; z < this.state.playerID.length; z++) {
+      const checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').attr("id", "champIcon").selectAll("image")
@@ -185,7 +185,7 @@ class HeadApp extends React.Component {
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
     if (this.state.totalRenders === 1) {
-      let w = 550, 
+      const w = 550, 
           h = 400,
           svg = d3.select("#chart")
                   .append("svg:svg")
@@ -201,7 +201,7 @@ class HeadApp extends React.Component {
   // CHAMP BUILDS
   addItemVisuals() {
     if (this.state.totalRenders === 1) {
-      let w = 464,
+      const w = 464,
           h = 400,
           svg = d3.select("#builds")
                   .append("svg:svg")
@@ -217,14 +217,14 @@ class HeadApp extends React.Component {
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    let eventSpecific = [];
-    let searchEvents = this.state.allowScroll;
-    for (let i = 0; i < this.state.playerID.length; i++) {
-      let count = 0;
+    const eventSpecific = [];
+    const searchEvents = this.state.allowScroll;
+    for (const i = 0; i < this.state.playerID.length; i++) {
+      const count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-        for (let j = 0; j < searchEvents.length; j++) {
+        for (const j = 0; j < searchEvents.length; j++) {
           if (searchEvents[j][0].events) {
-            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+            for (const k = 0; k < searchEvents[j][0].events.length; k++) {
               if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
                 count++;
               }
@@ -233,9 +233,9 @@ class HeadApp extends React.Component {
         }
       }
       if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
-          for (let j = 0; j < searchEvents.length; j++) {
+          for (const j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+              for (const k = 0; k < searchEvents[j][0].events.length; k++) {
                 if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
                     if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state.playerID[i][0]) {
@@ -243,7 +243,7 @@ class HeadApp extends React.Component {
                     }
                   }
                   if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
-                    for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
+                    for (const assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
                       if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID[i][0]) {
                         count++;
                       }
