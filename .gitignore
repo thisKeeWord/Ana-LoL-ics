@@ -6,6 +6,7 @@ node_modules
 
 # stuff
 stuff.js
+
 config.env
 
 # bundle
