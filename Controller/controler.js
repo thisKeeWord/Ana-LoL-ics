@@ -1,5 +1,4 @@
 var request = require('request');
-var async = require('async');
 var ThrottleCalls = require('./throttleCalls.js');
 var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
 var matchHistoryList = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/";
