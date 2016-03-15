@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import request from 'request';
 import $ from 'jquery';
 import async from 'async';
@@ -11,10 +10,6 @@ import ChampImage from './champImage.jsx';
 import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
-let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
-let summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
-let matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
-let version = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 
 class HeadApp extends React.Component {
@@ -320,4 +315,4 @@ class HeadApp extends React.Component {
   }
 }
 
-ReactDOM.render(<HeadApp />, document.getElementById('content'));
+module.exports=HeadApp;
