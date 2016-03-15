@@ -44,6 +44,7 @@ class HeadApp extends React.Component {
     })
   }
 
+  // GET THE MATCH HISTORY
   postForGame(perGameData) {
     return $.ajax({
       type: 'POST',
@@ -52,16 +53,19 @@ class HeadApp extends React.Component {
     })
   }
 
+  // HANDLE IGN SUBMIT FORM
   handleSubmit(e) {
     e.preventDefault();
-    var that = this;
-    var inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
-    var cleanName = inGameName.toLowerCase().replace(/ /g, '')
-    var newCleanName = {
+    const that = this;
+    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
+    const cleanName = inGameName.toLowerCase().replace(/ /g, '')
+    const newCleanName = {
       url: {
         yooRL: '/'
       }
     };
+
+    // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
       this.post(newCleanName).done(gotTheInfo => {
@@ -71,6 +75,8 @@ class HeadApp extends React.Component {
         })
       })
     }
+
+    // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
       this.post(newCleanName).done(gotTheInfo => {
@@ -83,6 +89,7 @@ class HeadApp extends React.Component {
     }
   }
 
+  // HANDLE CLICK FOR MATCH SELECTION
   handleClick(e) {
     e.preventDefault();
     const sendGameId  = e.target.id,
@@ -293,6 +300,10 @@ class HeadApp extends React.Component {
     if (this.state.secondToggle === true && this.state.toggle === true) {
       return (
         <div className="resultingInfo">
+          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          </form>
+
           <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
           <GameMap />
           <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
@@ -308,7 +319,12 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
       return (
-        <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+        <div id="second">
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+              <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          </form>
+        </div>
       )
     }
   }
