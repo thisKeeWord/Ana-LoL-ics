@@ -1,5 +1,4 @@
 import React from 'react';
-import async from 'async';
 
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME

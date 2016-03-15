@@ -1,8 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import request from 'request';
 import $ from 'jquery';
-import async from 'async';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
 import Chart from './chart.jsx';
@@ -11,10 +8,6 @@ import ChampImage from './champImage.jsx';
 import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
-let url = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/';
-let summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
-let matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
-let version = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 
 class HeadApp extends React.Component {
@@ -60,18 +53,16 @@ class HeadApp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let that = this;
-    let cleanName = React.findDOMNode(this.refs.userName).value;
-    let newCleanName = {
-      username: {
-        userName: cleanName.toLowerCase().replace(/ /g, '')
-      },
+    const that = this;
+    const inGameName = e.target.userName.value;
+    const cleanName = inGameName.toLowerCase().replace(/ /g, '')
+    const newCleanName = {
       url: {
         yooRL: '/'
       }
     };
-    if (localStorage && localStorage[newCleanName.username.userName]) {
-      newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
+    if (localStorage && localStorage[cleanName]) {
+      newCleanName.username = { userName: localStorage[cleanName] };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
@@ -79,9 +70,10 @@ class HeadApp extends React.Component {
         })
       })
     }
-    else if (localStorage && !localStorage[newCleanName.username.userName]) {
+    if (localStorage && !localStorage[cleanName]) {
+      newCleanName.username = { userName: cleanName };
       this.post(newCleanName).done(gotTheInfo => {
-        localStorage[newCleanName.username.userName] = gotTheInfo[0];
+        localStorage[cleanName] = gotTheInfo[0];
         that.setState({
           res: gotTheInfo[1],
           toggle: true
@@ -229,15 +221,15 @@ class HeadApp extends React.Component {
     for (let i = 0; i < this.state.playerID.length; i++) {
       let count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-          for (let j = 0; j < searchEvents.length; j++) {
-            if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
-                  count++;
-                }
+        for (let j = 0; j < searchEvents.length; j++) {
+          if (searchEvents[j][0].events) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+              if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
+                count++;
               }
             }
           }
+        }
       }
       if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
           for (let j = 0; j < searchEvents.length; j++) {
@@ -327,4 +319,4 @@ class HeadApp extends React.Component {
   }
 }
 
-ReactDOM.render(<HeadApp />, document.getElementById('content'));
+module.exports=HeadApp;
