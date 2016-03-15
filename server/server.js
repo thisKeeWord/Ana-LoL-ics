@@ -1,4 +1,4 @@
-// var dotenv = require('dotenv').config({ path: 'config.env' });
+var dotenv = require('dotenv').config({ path: 'config.env' });
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var controller = require('./../Controller/controler.js');
 var mongoURI = 'mongodb://lkee:' + process.env.stuff4 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
+// console.log(process.env.stuff4)
 mongoose.connect(mongoURI);
 
 app.set('port', (process.env.PORT || 5000));

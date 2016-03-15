@@ -18,6 +18,7 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
+	console.log(req.body.userName)
 	if (isNaN(req.body.userName) === false) {
 		req.summonerId = req.body.userName;
 		return next();
