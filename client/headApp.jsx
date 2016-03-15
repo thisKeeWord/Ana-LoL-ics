@@ -220,7 +220,7 @@ class HeadApp extends React.Component {
     const eventSpecific = [];
     const searchEvents = this.state.allowScroll;
     for (let i = 0; i < this.state.playerID.length; i++) {
-      const count = 0;
+      let count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
         for (let j = 0; j < searchEvents.length; j++) {
           if (searchEvents[j][0].events) {

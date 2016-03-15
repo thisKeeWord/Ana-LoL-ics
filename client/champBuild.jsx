@@ -44,7 +44,7 @@ class ChampBuild extends React.Component {
                 if (searchEvents[j][0].events[k].itemAfter === 0) {
                   const checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                   itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
-                  const retrieveItem = k;
+                  let retrieveItem = k;
                   while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                     if (itemStorage[checkItemEvent].from) {
                       if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {

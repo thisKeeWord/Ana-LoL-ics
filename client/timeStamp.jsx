@@ -3,13 +3,13 @@ import React from 'react';
 class TimeStamp extends React.Component {
   // CONVERTING MILLISECONDS TO HH:MM:SS:MS
   swap() {
-    const convert = this.props.conversion;
+    let convert = this.props.conversion;
 
     if (this.props.timeline.length && this.props.conversion.length) {
     	convert = this.props.timeline[this.props.conversion][0].timestamp;
     }
   
-    const milliseconds = parseInt(convert % 1000),
+    let milliseconds = parseInt(convert % 1000),
         seconds = parseInt((convert / 1000) % 60),
         minutes = parseInt((convert / (1000 * 60)) % 60),
         hours = parseInt((convert / (1000 * 60 * 60)) % 24);
