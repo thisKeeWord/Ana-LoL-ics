@@ -58,7 +58,7 @@ function matchList(req, res) {
 				if (error) return console.error(error);
 			})
 		}
-		if ((success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+		if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
 			ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 				var count = 0;
 				var matchHistory = [];
@@ -120,7 +120,7 @@ function getData(req, res) {
 				if (error) return console.error(error);
 			})
 		}
-		if ((success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+		if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
 			ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
 
 			  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + process.env.stuff3, function(error, newData) {
