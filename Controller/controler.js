@@ -78,8 +78,7 @@ function matchList(req, res) {
 						}
 
 						matchHistory.forEach(function(i) {
-							request(champImageUrl + i[1] + "?" + stuff.stuff2, function(error, good) {
-							// request(champImageUrl + i[1] + "?" + process.env.stuff2, function(error, good) {
+							request(champImageUrl + i[1] + "?" + process.env.stuff2, function(error, good) {
 								good = JSON.parse(good.body)
 								i[1] = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + good.key + '.png';
 								count++;
