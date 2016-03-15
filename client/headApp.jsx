@@ -60,18 +60,16 @@ class HeadApp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let that = this;
-    let cleanName = React.findDOMNode(this.refs.userName).value;
-    let newCleanName = {
-      username: {
-        userName: cleanName.toLowerCase().replace(/ /g, '')
-      },
+    const that = this;
+    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
+    const cleanName = inGameName.toLowerCase().replace(/ /g, '')
+    const newCleanName = {
       url: {
         yooRL: '/'
       }
     };
-    if (localStorage && localStorage[newCleanName.username.userName]) {
-      newCleanName.username = { userName: localStorage[newCleanName.username.userName] };
+    if (localStorage && localStorage[cleanName]) {
+      newCleanName.username = { userName: localStorage[cleanName] };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
@@ -79,9 +77,10 @@ class HeadApp extends React.Component {
         })
       })
     }
-    else if (localStorage && !localStorage[newCleanName.username.userName]) {
+    if (localStorage && !localStorage[cleanName]) {
+      newCleanName.username = { userName: cleanName };
       this.post(newCleanName).done(gotTheInfo => {
-        localStorage[newCleanName.username.userName] = gotTheInfo[0];
+        localStorage[cleanName] = gotTheInfo[0];
         that.setState({
           res: gotTheInfo[1],
           toggle: true

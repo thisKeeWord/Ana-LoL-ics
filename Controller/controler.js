@@ -19,26 +19,27 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
-	if (isNaN(req.body.userName) === 'false') {
+	if (isNaN(req.body.userName) === false) {
 		req.summonerId = req.body.userName;
-		next();
+		return next();
 	}
 	else {
 		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
 			if (success.length && date - success[0]['created_at'] > 10000) {
-				ThrottleCalls.remove({}, function(removed) {
+				ThrottleCalls.remove({}, function(error, removed) {
+					if (error) return console.error(error);
 				})
 			}
-			if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
-				ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
-				  request(summonerUrl + req.body.userName + "?" + process.env.stuff2, (error, resp) => {
+			if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
+				ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.userName }, function(error, throttling) {
+				  request(summonerUrl + req.body.userName + "?" + process.env.stuff1, (error, resp) => {
 						if (error) return console.error("we cannot find the summoner or " + error);
 						if (resp.statusCode === 200) {
 							var userId = JSON.parse(resp.body);
 							var result = userId[req.body.userName]["id"];
 							req.summonerId = result;
 						}
-						next();
+						return next();
 					})
 				})
 			}
@@ -55,10 +56,11 @@ function matchList(req, res) {
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
 		if (success.length && date - success[0]['created_at'] > 10000) {
 			ThrottleCalls.remove({}, function(removed) {
+				if (error) return console.error(error);
 			})
 		}
-		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
-			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
+		if ((success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+			ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 				var count = 0;
 				var matchHistory = [];
 				request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
@@ -81,12 +83,13 @@ function matchList(req, res) {
 								good = JSON.parse(good.body)
 								i[1] = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + good.key + '.png';
 								count++;
+
 								if (count === 10) {
 									matchHistory = matchHistory.filter(function(summonersRift) {
 										return summonersRift.length > 2;
 									})
 									return res.status(200).send([ req.summonerId, matchHistory ]);
-								}
+								}						
 							}) 
 						})
 					}
@@ -114,13 +117,14 @@ function getData(req, res) {
   var date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
 		if (success.length && date - success[0]['created_at'] > 10000) {
-			ThrottleCalls.remove({}, function(removed) {
+			ThrottleCalls.remove({}, function(error, removed) {
+				if (error) return console.error(error);
 			})
 		}
-		if ((success.length && success.length < 7 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
-			ThrottleCalls.create({ 'created_at': date }, function(error, throttling) {
+		if ((success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0) || !success.length ) {
+			ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
 
-			  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + process.env.stuff2, function(error, newData) {
+			  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + process.env.stuff3, function(error, newData) {
 			    if (error) return console.error(error);
 			    var info = JSON.parse(newData.body); 
 
