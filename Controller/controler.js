@@ -178,7 +178,6 @@ function getGameData(that, count, total, compareVersions, patchDesired, gameTime
 	        info.participants.forEach(function(i) {
 	          var pId = i.participantId;
 	          var cId = i.championId;
-
 	          // PARTICIPANT-ID AND CHAMPION-ID
 	          idOfPlayer.push([pId, cId]);
 
@@ -192,8 +191,7 @@ function getGameData(that, count, total, compareVersions, patchDesired, gameTime
 
 	            imgOfChamp[cId] = champData.key;
 	            positionOfPlayer.push([ info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.x, info.timeline.frames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-
-	            if (Object.keys(imgOfChamp).length === 10) {
+	            if (count === 9) {
 	            	matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
 	            	res.status(200).send(matchDataArray);
 	            }
