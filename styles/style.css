@@ -30,6 +30,7 @@ input {
   width: 240px;
   right: 40;
   position: absolute;
+  color: white;
 }
 
 #map {
