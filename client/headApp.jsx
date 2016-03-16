@@ -9,6 +9,7 @@ import ChampImage from './champImage.jsx';
 import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
+import WhosGames from './whosGames.jsx';
 
 
 class HeadApp extends React.Component {
@@ -71,7 +72,8 @@ class HeadApp extends React.Component {
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
-          toggle: true
+          toggle: true,
+          whosGames: cleanName.toUpperCase() 
         })
       })
     }
@@ -83,7 +85,8 @@ class HeadApp extends React.Component {
         localStorage[cleanName] = gotTheInfo[0];
         that.setState({
           res: gotTheInfo[1],
-          toggle: true
+          toggle: true,
+          whosGames: cleanName.toUpperCase() 
         })
       })
     }
@@ -104,7 +107,7 @@ class HeadApp extends React.Component {
       that.state.allowScroll = gotGameData[4];
       that.state.result = gotGameData[5];
       that.state.itemStorage = gotGameData[6];
-      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '400px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '370px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
       that.state.secondToggle = true;
       that.state.totalRenders++;
 
@@ -284,11 +287,9 @@ class HeadApp extends React.Component {
     if (this.state.toggle === false) {
       return (
         <div id="landingPage">
-          <p>
           Your one stop shop to finding more than a summary but less than a replay of a game!<br />
           We are currently in beta and will soon have side-by-side game comparison available.<br />
           To get started, enter an ign (in game name) in the search bar.
-          </p>
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
@@ -300,9 +301,11 @@ class HeadApp extends React.Component {
     if (this.state.secondToggle === true && this.state.toggle === true) {
       return (
         <div className="resultingInfo">
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
+
+          <WhosGames summonersName={this.state.whosGames} /> 
 
           <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
           <GameMap />
@@ -320,10 +323,13 @@ class HeadApp extends React.Component {
     if (this.state.toggle === true) {
       return (
         <div id="second">
-          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-              <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
+
+          <WhosGames summonersName={this.state.whosGames} /> 
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          
         </div>
       )
     }
