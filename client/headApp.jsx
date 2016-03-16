@@ -9,6 +9,7 @@ import ChampImage from './champImage.jsx';
 import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
+import WhosGames from './whosGames.jsx';
 
 
 class HeadApp extends React.Component {
@@ -44,6 +45,7 @@ class HeadApp extends React.Component {
     })
   }
 
+  // GET THE MATCH HISTORY
   postForGame(perGameData) {
     return $.ajax({
       type: 'POST',
@@ -52,6 +54,7 @@ class HeadApp extends React.Component {
     })
   }
 
+  // HANDLE IGN SUBMIT FORM
   handleSubmit(e) {
     e.preventDefault();
     const that = this;
@@ -62,30 +65,37 @@ class HeadApp extends React.Component {
         yooRL: '/'
       }
     };
+
+    // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
-          toggle: true
+          toggle: true,
+          whosGames: cleanName.toUpperCase() 
         })
       })
     }
+
+    // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
         that.setState({
           res: gotTheInfo[1],
-          toggle: true
+          toggle: true,
+          whosGames: cleanName.toUpperCase() 
         })
       })
     }
   }
 
+  // HANDLE CLICK FOR MATCH SELECTION
   handleClick(e) {
     e.preventDefault();
-    let sendGameId  = e.target.id,
+    const sendGameId  = e.target.id,
         that = this;
     this.postForGame(sendGameId).done(function(gotGameData) {
 
@@ -97,7 +107,7 @@ class HeadApp extends React.Component {
       that.state.allowScroll = gotGameData[4];
       that.state.result = gotGameData[5];
       that.state.itemStorage = gotGameData[6];
-      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '400px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '370px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
       that.state.secondToggle = true;
       that.state.totalRenders++;
 
@@ -116,7 +126,7 @@ class HeadApp extends React.Component {
     }
 
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
-    let domain = {
+    const domain = {
           min: {x: -120, y: -120},
           max: {x: 14870, y: 14980}
         },
@@ -129,15 +139,15 @@ class HeadApp extends React.Component {
         nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
         // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
-        let xScale = d3.scale.linear()
+        const xScale = d3.scale.linear()
           .domain([domain.min.x, domain.max.x])
           .range([0, width]);
 
-        let yScale = d3.scale.linear()
+        const yScale = d3.scale.linear()
           .domain([domain.min.y, domain.max.y])
           .range([height, 0]);
 
-        let svg = d3.select("#map").append("svg:svg")
+        const svg = d3.select("#map").append("svg:svg")
           .attr("id", "backdrop")
           .attr("width", width)
           .attr("height", height)
@@ -155,7 +165,7 @@ class HeadApp extends React.Component {
 
     // GET THE 10 IMAGES FROM URL
     for (let z = 0; z < this.state.playerID.length; z++) {
-      let checking = this.state.playerID[z][1];
+      const checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
       svg.append('svg:g').attr("id", "champIcon").selectAll("image")
@@ -185,7 +195,7 @@ class HeadApp extends React.Component {
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
     if (this.state.totalRenders === 1) {
-      let w = 550, 
+      const w = 550, 
           h = 400,
           svg = d3.select("#chart")
                   .append("svg:svg")
@@ -201,7 +211,7 @@ class HeadApp extends React.Component {
   // CHAMP BUILDS
   addItemVisuals() {
     if (this.state.totalRenders === 1) {
-      let w = 464,
+      const w = 464,
           h = 400,
           svg = d3.select("#builds")
                   .append("svg:svg")
@@ -217,8 +227,8 @@ class HeadApp extends React.Component {
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    let eventSpecific = [];
-    let searchEvents = this.state.allowScroll;
+    const eventSpecific = [];
+    const searchEvents = this.state.allowScroll;
     for (let i = 0; i < this.state.playerID.length; i++) {
       let count = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
@@ -272,22 +282,14 @@ class HeadApp extends React.Component {
     })
   }
 
-  oneOrTwoGames(e) {
-    this.setState({
-      oneTwoGames: e.target.value
-    })
-  }
-
   render() {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
         <div id="landingPage">
-          <p>
           Your one stop shop to finding more than a summary but less than a replay of a game!<br />
           We are currently in beta and will soon have side-by-side game comparison available.<br />
           To get started, enter an ign (in game name) in the search bar.
-          </p>
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
@@ -299,7 +301,13 @@ class HeadApp extends React.Component {
     if (this.state.secondToggle === true && this.state.toggle === true) {
       return (
         <div className="resultingInfo">
-          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} oneOrTwoGames={this.oneOrTwoGames.bind(this)} />
+          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          </form>
+
+          <WhosGames summonersName={this.state.whosGames} /> 
+
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
           <GameMap />
           <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
           <DropDownMenu scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
@@ -314,7 +322,15 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
       return (
-        <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} oneOrTwoGames={this.oneOrTwoGames.bind(this)} />
+        <div id="second">
+          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+          </form>
+
+          <WhosGames summonersName={this.state.whosGames} /> 
+          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          
+        </div>
       )
     }
   }

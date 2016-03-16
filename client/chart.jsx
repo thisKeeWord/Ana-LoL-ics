@@ -5,10 +5,10 @@ class Chart extends React.Component {
 
   diff() {
     // FIND SELECTION --> WARD PLACEMENT OR DELETIONS
-    let eventSpecific = [];
+    const eventSpecific = [];
     if (this.props.timeline.length) {
-      let searchEvents = this.props.timeline;
-      let eventChosen = this.props.eventSelected;
+      const searchEvents = this.props.timeline;
+      const eventChosen = this.props.eventSelected;
 
       for (let i = 0; i < this.props.playerInfo.length; i++) {
         let count = 0;
@@ -67,13 +67,13 @@ class Chart extends React.Component {
 
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
-    let getName = [];
+    const getName = [];
     for (let name = 0; name < this.props.playerInfo.length; name++) {
       getName.push(this.props.champName[this.props.playerInfo[name][1]])
     }
 
     // BAR INFO AND DATA
-    let w = 550, h = this.props.maxForStat, labelHeight = 400,
+    const w = 550, h = this.props.maxForStat, labelHeight = 400,
         x = d3.scale.linear()
               .domain([0, 1])
               .range([0, w]),
@@ -178,7 +178,7 @@ class Chart extends React.Component {
   }
 
   render() {
-    let whichData = this.diff();
+    const whichData = this.diff();
     if (!whichData) {
       return (
         <div id="chart">
@@ -186,7 +186,7 @@ class Chart extends React.Component {
       )
     }
 
-    let bar = this.redo(whichData);
+    const bar = this.redo(whichData);
     return (
     	<div id="chart">
         {bar}

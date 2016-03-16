@@ -22,7 +22,7 @@ class TimeStamp extends React.Component {
   }
 
   render() {
-  	let callSwap = this.swap();
+  	const callSwap = this.swap();
     return (
       <div id="time">
         {callSwap}

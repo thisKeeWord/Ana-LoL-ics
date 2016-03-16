@@ -3,40 +3,52 @@ body {
 }
 
 #welcome {
-  margin-top: 20px;
+  margin-top: 15px;
   color: white;
   font-size: 30px;
+  position: absolute;
+  left: 40;
+}
+
+#landingPage {
+  color: white;
+  top: 100;
+  position: absolute;
+  left: 40;
+}
+
+#formSubmit {
+  margin-top: 20px;
+}
+
+input {
+  text-align: center;
 }
 
 #matches {
-  margin-top: 20px;
-  width: 250px;
-  left: 950;
+  margin-top: 70px;
+  width: 240px;
+  right: 40;
   position: absolute;
 }
 
 #map {
   position: absolute;
-  margin-top: 20px;
+  margin-top: 70px;
   left: 30;
 }
 
 #time {
   max-width: 80px;
-  top: 620;
-  left: 464;
+  top: 605;
+  left: 440;
   color: white;
   position: absolute;
-}
-
-#scroll {
-	left: 20;
-  top: 538;
-	position: absolute;
+  font-size: 20px;
 }
 
 #eventDisplay {
-  margin-top: 20px;
+  margin-top: 70px;
   left: 570;
   position: absolute;
   color: white;
@@ -44,7 +56,7 @@ body {
 
 #chart svg {
   top: 670;
-  left: 570;
+  right: 40;
   position: absolute;
   margin-bottom: 20px;
 }
@@ -58,16 +70,36 @@ body {
 }
 
 #scrollAndSelect {
-  margin-top: 20px;
+  margin-top: 50px;
   position: absolute;
 }
 
 #selections {
-  margin-left: 600px;
-  top: 540;
+  margin-left: 1000;
+  top: 550;
   position: absolute;
 }
 
-p {
+#scroll {
+  left: 20;
+  top: 548;
+  position: absolute;
+}
+
+#whichSummoner {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 30;
   color: white;
+  width: 470px;
+  position: absolute;
+  left: 400;
+  margin-top: 20px;
+}
+
+#getSummonersGames {
+  margin-top: 20px;
+  width: 131px;
+  position: absolute;
+  right: 40;
 }
