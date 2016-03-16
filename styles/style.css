@@ -27,7 +27,7 @@ input {
 
 #matches {
   margin-top: 70px;
-  width: 240px;
+  width: 170px;
   right: 40;
   position: absolute;
 }
@@ -102,4 +102,9 @@ input {
   width: 131px;
   position: absolute;
   right: 40;
+}
+
+.games {
+  text-align: right;
+  width: 170px;
 }

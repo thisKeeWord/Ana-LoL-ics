@@ -11,8 +11,8 @@ class ChampImage extends React.Component {
         },
 
         // SCALING MAP DOWN
-        width = 512,
-        height = 512,
+        width = 400,
+        height = 400,
 
         xScale = d3.scale.linear()
           .domain([domain.min.x, domain.max.x])
@@ -40,7 +40,7 @@ class ChampImage extends React.Component {
               .attr('x', d => { return xScale(d[0]) })
               .attr('y', d => { return yScale(d[1]) })
               .attr('class', 'image')
-              .style({ 'width': '24px', 'height': '24px' })
+              .style({ 'width': '17px', 'height': '17px' })
         }
 
         // USER MAY GO STRAIGHT TO LAST FRAME
@@ -53,7 +53,7 @@ class ChampImage extends React.Component {
               .attr('x', d => { return xScale(d[0]) })
               .attr('y', d => { return yScale(d[1]) })
               .attr('class', 'image')
-              .style({ 'width': '24px', 'height': '24px' });
+              .style({ 'width': '17px', 'height': '17px' });
         }
       }
     }

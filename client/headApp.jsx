@@ -132,8 +132,8 @@ class HeadApp extends React.Component {
         },
 
         // SCALING MAP DOWN
-        width = 512,
-        height = 512,
+        width = 400,
+        height = 400,
 
         // NEWEST VERSION OF SUMMONER'S RIFT
         nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
@@ -175,7 +175,7 @@ class HeadApp extends React.Component {
           .attr('x', d => { return xScale(d[0]) })
           .attr('y', d => { return yScale(d[1]) })
           .attr('class', 'image')
-          .style({ 'width': '24px', 'height': '24px' });         
+          .style({ 'width': '17px', 'height': '17px' });         
     }
 
     // SET STATE FOR SVG TO USE LATER
@@ -196,7 +196,7 @@ class HeadApp extends React.Component {
   addStatChoice() {
     if (this.state.totalRenders === 1) {
       const w = 550, 
-          h = 400,
+          h = 300,
           svg = d3.select("#chart")
                   .append("svg:svg")
                   .attr("width", w)
@@ -211,7 +211,7 @@ class HeadApp extends React.Component {
   // CHAMP BUILDS
   addItemVisuals() {
     if (this.state.totalRenders === 1) {
-      const w = 464,
+      const w = 304,
           h = 400,
           svg = d3.select("#builds")
                   .append("svg:svg")
