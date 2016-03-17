@@ -23,37 +23,38 @@ class ChampImage extends React.Component {
           .range([height, 0]);
 
     if(this.props.png.length) {
+      for (let count = 1; count <= this.props.gamesToSee; count++) {
+        for (let w = 0; w < this.props.playerInfo.length; w++) {
+          const checking = this.props.playerInfo[w];
 
-      for (let w = 0; w < this.props.playerInfo.length; w++) {
-        const checking = this.props.playerInfo[w];
+          // REMOVE PREVIOUS ICONS      
+          // USE SVG FROM STATE TO APPEND NEW ICONS
+          // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
+          // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
+          if (this.props.timeline[this.props.spot][0].participantFrames[w+1].position) {
+            d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+            this.props.png.append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
+              .data([[ this.props.timeline[this.props.spot][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot][0].participantFrames[w+1].position.y ]])
+              .enter().append("svg:image")
+                .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch + '/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
+                .attr('x', d => { return xScale(d[0]) })
+                .attr('y', d => { return yScale(d[1]) })
+                .attr('class', 'image')
+                .style({ 'width': '17px', 'height': '17px' })
+          }
 
-        // REMOVE PREVIOUS ICONS      
-        // USE SVG FROM STATE TO APPEND NEW ICONS
-        // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
-        // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
-        if (this.props.timeline[this.props.spot][0].participantFrames[w+1].position) {
-          d3.select("#champIcon").remove();
-          this.props.png.append('svg:g').attr("id", "champIcon").selectAll("image")
-            .data([[ this.props.timeline[this.props.spot][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot][0].participantFrames[w+1].position.y ]])
-            .enter().append("svg:image")
-              .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch + '/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
-              .attr('x', d => { return xScale(d[0]) })
-              .attr('y', d => { return yScale(d[1]) })
-              .attr('class', 'image')
-              .style({ 'width': '17px', 'height': '17px' })
-        }
-
-        // USER MAY GO STRAIGHT TO LAST FRAME
-         if (!this.props.timeline[this.props.spot][0].participantFrames[w+1].position && this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position) {
-         d3.select("#champIcon").remove();
-          this.props.png.append('svg:g').attr("id", "champIcon").selectAll("image")
-            .data([[ this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.y ]])
-            .enter().append("svg:image")
-              .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch + '/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
-              .attr('x', d => { return xScale(d[0]) })
-              .attr('y', d => { return yScale(d[1]) })
-              .attr('class', 'image')
-              .style({ 'width': '17px', 'height': '17px' });
+          // USER MAY GO STRAIGHT TO LAST FRAME
+           if (!this.props.timeline[this.props.spot][0].participantFrames[w+1].position && this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position) {
+           d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+            this.props.png.append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
+              .data([[ this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.x, this.props.timeline[this.props.spot-1][0].participantFrames[w+1].position.y ]])
+              .enter().append("svg:image")
+                .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch + '/img/champion/' + this.props.champImg[this.props.playerInfo[w][1]] + '.png')
+                .attr('x', d => { return xScale(d[0]) })
+                .attr('y', d => { return yScale(d[1]) })
+                .attr('class', 'image')
+                .style({ 'width': '17px', 'height': '17px' });
+          }
         }
       }
     }

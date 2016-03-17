@@ -31,7 +31,9 @@ class HeadApp extends React.Component {
       toggle: false,
       patch: 0,
       secondToggle: false,
-      maxForStat: 0
+      maxForStat: 0,
+      gamesToSee: 1,
+      clicksForGame: []
     }
   }
 
@@ -95,34 +97,66 @@ class HeadApp extends React.Component {
   // HANDLE CLICK FOR MATCH SELECTION
   handleClick(e) {
     e.preventDefault();
-    const sendGameId  = e.target.id,
-        that = this;
-    this.postForGame(sendGameId).done(function(gotGameData) {
+    // let clicksForGame = [];
+    this.state.clicksForGame.push(e.target.id);
+    const that = this;
+    let count = this.state.gamesToSee;
+    console.log(this.state.clicksForGame, 'clicksForGame', this.state.gamesToSee)
+    if (this.state.clicksForGame.length === this.state.gamesToSee) {
+      this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
 
-      // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
-      that.state.patch = gotGameData[0];
-      that.state.pos = gotGameData[1];
-      that.state.champImg = gotGameData[2];
-      that.state.playerID = gotGameData[3];
-      that.state.allowScroll = gotGameData[4];
-      that.state.result = gotGameData[5];
-      that.state.itemStorage = gotGameData[6];
-      that.state.scrollBar = (<input id="scroll" type='range' style={{ width: '370px'}} min='0' max={gotGameData[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
-      that.state.secondToggle = true;
-      that.state.totalRenders++;
+        // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+        that.state.patch = gotGameOne[0];
+        that.state.pos = gotGameOne[1];
+        that.state.champImg = gotGameOne[2];
+        that.state.playerID = gotGameOne[3];
+        that.state.allowScroll = gotGameOne[4];
+        that.state.result = gotGameOne[5];
+        that.state.itemStorage = gotGameOne[6];
+        that.state.scrollBar = (<input id={"scroll" + count * that.state.gamesToSee} type='range' style={{ width: '370px'}} min='0' max={gotGameOne[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+        that.state.secondToggle = true;
+        that.state.totalRenders++;
+        that.state.clicksForGame.length--;
 
-      // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
-      that.move();
-      that.addStatChoice();
-      that.move();
-      that.addItemVisuals();
-    })
+        // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+        that.move(count);
+        that.addStatChoice(count);
+        that.move(count);
+        that.addItemVisuals(count);
+        console.log(that.state.clicksForGame)
+
+      }).then(() => {
+        if (that.state.clicksForGame.length === 1) {
+          that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
+
+            // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+            that.state.patch = gotGameOne[0];
+            that.state.pos = gotGameOne[1];
+            that.state.champImg = gotGameOne[2];
+            that.state.playerID = gotGameOne[3];
+            that.state.allowScroll = gotGameOne[4];
+            that.state.result = gotGameOne[5];
+            that.state.itemStorage = gotGameOne[6];
+            that.state.scrollBar = (<input id={"scroll" + (count - 1) * that.state.gamesToSee} type='range' style={{ width: '370px'}} min='0' max={gotGameOne[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
+            that.state.totalRenders++;
+            that.state.clicksForGame.length--;
+            console.log(that.state.clicksForGame)
+
+            // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+            that.move(count - 1);
+            that.addStatChoice(count - 1);
+            that.move(count - 1);
+            that.addItemVisuals(count - 1);
+          })
+        }
+      })
+    }
   }
 
-  move() {
+  move(count) {
     // SEEMS 10 MAPS ARE RENDERED --> WILL EDIT THIS WEEKEND
-    if (document.getElementById("backdrop")) {
-      $("#backdrop").first().remove();
+    if (document.getElementById("backdrop" + count * this.state.gamesToSee)) {
+      $("#backdrop" + count * this.state.gamesToSee).first().remove();
     }
 
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
@@ -147,8 +181,8 @@ class HeadApp extends React.Component {
           .domain([domain.min.y, domain.max.y])
           .range([height, 0]);
 
-        const svg = d3.select("#map").append("svg:svg")
-          .attr("id", "backdrop")
+        const svg = d3.select("#map" + count * this.state.gamesToSee).append("svg:svg")
+          .attr("id", "backdrop" + count * this.state.gamesToSee)
           .attr("width", width)
           .attr("height", height)
           .attr('x', '0')
@@ -168,7 +202,7 @@ class HeadApp extends React.Component {
       const checking = this.state.playerID[z][1];
 
       // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
-      svg.append('svg:g').attr("id", "champIcon").selectAll("image")
+      svg.append('svg:g').attr("id", "champIcon" + count * this.state.gamesToSee).selectAll("image")
         .data([this.state.pos[z]])
         .enter().append("svg:image")
           .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.state.patch + '/img/champion/' + this.state.champImg[checking] + '.png')
@@ -193,15 +227,15 @@ class HeadApp extends React.Component {
   }
 
   // BACKGROUND FOR THE BAR GRAPH
-  addStatChoice() {
-    if (this.state.totalRenders === 1) {
+  addStatChoice(count) {
+    if (this.state.totalRenders <= 2) {
       const w = 550, 
           h = 300,
-          svg = d3.select("#chart")
+          svg = d3.select("#chart" + count * this.state.gamesToSee)
                   .append("svg:svg")
                   .attr("width", w)
                   .attr("height", h)
-                  .attr("id", "allStat");
+                  .attr("id", "allStat" + count);
       this.setState({
         selData: svg
       })
@@ -209,15 +243,15 @@ class HeadApp extends React.Component {
   }
 
   // CHAMP BUILDS
-  addItemVisuals() {
-    if (this.state.totalRenders === 1) {
+  addItemVisuals(count) {
+    if (this.state.totalRenders <= 2) {
       const w = 304,
           h = 400,
-          svg = d3.select("#builds")
+          svg = d3.select("#builds" + count * this.state.gamesToSee)
                   .append("svg:svg")
                   .attr("width", w)
                   .attr("height", h)
-                  .attr("id", "allItems");
+                  .attr("id", "allItems" + count);
       this.setState({
         addItems: svg
       })
@@ -230,56 +264,62 @@ class HeadApp extends React.Component {
     const eventSpecific = [];
     const searchEvents = this.state.allowScroll;
     for (let i = 0; i < this.state.playerID.length; i++) {
-      let count = 0;
+      let anotherCount = 0;
       if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
         for (let j = 0; j < searchEvents.length; j++) {
           if (searchEvents[j][0].events) {
             for (let k = 0; k < searchEvents[j][0].events.length; k++) {
               if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state.playerID[i][0] || searchEvents[j][0].events[k].killerId === this.state.playerID[i][0])) {
-                count++;
+                anotherCount++;
               }
             }
           }
         }
       }
       if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
-          for (let j = 0; j < searchEvents.length; j++) {
-            if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
-                  if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
-                    if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state.playerID[i][0]) {
-                      count++;
-                    }
+        for (let j = 0; j < searchEvents.length; j++) {
+          if (searchEvents[j][0].events) {
+            for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+              if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
+                  if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state.playerID[i][0]) {
+                    anotherCount++;
                   }
-                  if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
-                    for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
-                      if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID[i][0]) {
-                        count++;
-                      }
+                }
+                if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
+                  for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
+                    if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID[i][0]) {
+                      anotherCount++;
                     }
                   }
                 }
               }
             }
           }
+        }
       }
       if (eventPicked.target.value === 'minionsKilled') {
         if (searchEvents[searchEvents.length - 1][0].participantFrames) {
-          count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents[searchEvents.length - 1][0].participantFrames[i+1].jungleMinionsKilled
+          anotherCount = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents[searchEvents.length - 1][0].participantFrames[i+1].jungleMinionsKilled
         }
       }
       if (eventPicked.target.value === 'totalGold') {
         if (searchEvents[searchEvents.length - 1][0].participantFrames) {
-          count = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].totalGold;
+          anotherCount = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].totalGold;
         }
       }
-      eventSpecific.push(count);
+      eventSpecific.push(anotherCount);
     }
     this.setState({
       eventSelected: eventPicked.target.value,
       maxForStat: Math.max(...eventSpecific)
     })
+  }
+
+  numGamesSee(e) {
+    e.preventDefault();
+    this.state.gamesToSee = parseInt(e.target.value, 10);
+
   }
 
   render() {
@@ -307,14 +347,14 @@ class HeadApp extends React.Component {
 
           <WhosGames summonersName={this.state.whosGames} /> 
 
-          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
-          <GameMap />
-          <TimeStamp timeline={this.state.allowScroll} conversion={this.state.num} />
-          <DropDownMenu scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
-          <EventDisplay timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} patch={this.state.patch} />
-          <Chart timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} maxForStat={this.state.maxForStat} />
-          <ChampBuild timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} patch={this.state.patch} />
-          <ChampImage timeline={this.state.allowScroll} playerInfo={this.state.playerID} png={this.state.png} champImg={this.state.champImg} spot={this.state.num} patch={this.state.patch} />
+          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
+          <GameMap gamesToSee={this.state.gamesToSee} />
+          <TimeStamp gamesToSee={this.state.gamesToSee} timeline={this.state.allowScroll} conversion={this.state.num} />
+          <DropDownMenu gamesToSee={this.state.gamesToSee} scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
+          <EventDisplay gamesToSee={this.state.gamesToSee} timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champImg={this.state.champImg} patch={this.state.patch} />
+          <Chart gamesToSee={this.state.gamesToSee} timeline={this.state.allowScroll} spot={this.state.num} selData={this.state.selData} playerInfo={this.state.playerID} eventSelected={this.state.eventSelected} champName={this.state.champImg} maxForStat={this.state.maxForStat} />
+          <ChampBuild gamesToSee={this.state.gamesToSee} timeline={this.state.allowScroll} spot={this.state.num} playerInfo={this.state.playerID} champName={this.state.champImg} itemStorage={this.state.itemStorage} addItems={this.state.addItems} patch={this.state.patch} />
+          <ChampImage gamesToSee={this.state.gamesToSee} timeline={this.state.allowScroll} playerInfo={this.state.playerID} png={this.state.png} champImg={this.state.champImg} spot={this.state.num} patch={this.state.patch} />
         </div>
       )
     }
@@ -328,7 +368,7 @@ class HeadApp extends React.Component {
           </form>
 
           <WhosGames summonersName={this.state.whosGames} /> 
-          <GamesOnSR res={this.state.res} onClick={this.handleClick.bind(this)} />
+          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
           
         </div>
       )

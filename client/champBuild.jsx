@@ -68,52 +68,56 @@ class ChampBuild extends React.Component {
     if(this.props.addItems) {
 
       // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
-      if (document.getElementById("allItems")) {
-        $(".champBuilds").remove();
-        $(".champIcons").remove();
-      }
-
-      // EACH PLAYER'S BUILDS
-      for (let w = 0; w < this.props.playerInfo.length; w++) {
-
-        // WID=WIDTH HARDCODED FOR NOW
-        const wid = 466;
-        const build = this.props.playerInfo[w];
-
-        this.props.addItems.append('svg:g')
-          .attr("class", "champIcons")
-          .selectAll("image")
-          .data([[]])
-          .enter()
-            .append("svg:image")
-            .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch +'/img/champion/' + this.props.champName[build[1]] + '.png')
-            .attr('y', w * 40)
-            .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px'});
+      for (let i = 1; i <= this.props.gamesToSee; i++) {
+        if (document.getElementById("allItems" + i)) {
+          $(".champBuilds" + i).remove();
+          $(".champIcons"+ i).remove();
+        }
       
-        this.props.addItems
-          .append('svg:g')
-          .attr('class', 'champBuilds')
-          .selectAll("image")
-          .data(showItems[w][0])
-          .enter()
-            .append("svg:image")
-            .attr('xlink:href', d => {
-              if (d) {
-                return ("http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/item/" + d + ".png");
-              }
-            })
-            .attr("x", (d, i) => {
-              return 24 * i + 40;
-            })
-            .attr("y", 40 * w + 10)
-            .style({ 'width': '24px', 'height': '24px' });
-      }   
+
+        // EACH PLAYER'S BUILDS
+        for (let w = 0; w < this.props.playerInfo.length; w++) {
+
+          // WID=WIDTH HARDCODED FOR NOW
+          const wid = 466;
+          const build = this.props.playerInfo[w];
+
+          this.props.addItems.append('svg:g')
+            .attr("class", "champIcons" + i)
+            .selectAll("image")
+            .data([[]])
+            .enter()
+              .append("svg:image")
+              .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props.patch +'/img/champion/' + this.props.champName[build[1]] + '.png')
+              .attr('y', w * 40)
+              .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px'});
+        
+          this.props.addItems
+            .append('svg:g')
+            .attr('class', 'champBuilds' + i)
+            .selectAll("image")
+            .data(showItems[w][0])
+            .enter()
+              .append("svg:image")
+              .attr('xlink:href', d => {
+                if (d) {
+                  return ("http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/item/" + d + ".png");
+                }
+              })
+              .attr("x", (d, i) => {
+                return 24 * i + 40;
+              })
+              .attr("y", 40 * w + 10)
+              .style({ 'width': '24px', 'height': '24px' });
+        }
+      } 
     }
   }
     
    
 
   render() {
+    let ray = [];
     const showItems = this.itemization();
     if (!showItems) {
       return (
@@ -122,10 +126,20 @@ class ChampBuild extends React.Component {
     }
 
     const items = this.appendItems(showItems)
+    for (let j = 1; j <= this.props.gamesToSee; j++) {
+      ray.push(j)
+    }
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG
     return (
-      <div id="builds">
-        {items}
+      <div>
+        { ray.map(j => {
+            return (
+              <div id={"builds" + j}>
+                {items}
+              </div>
+            )
+          })
+        }
       </div>
     )
   }

@@ -12,7 +12,7 @@ class DropDownMenu extends React.Component {
 
   render() {
     return (
-      <div id="scrollAndSelect">
+      <div id={"scrollAndSelect" + this.props.gamesToSee}>
         {this.props.scrollBar}
         <select defaultValue='select one' onLoad={this.onLoad.bind(this)} onChange={this.onChange.bind(this)} id="selections" >
           <option value="select one">select one</option>

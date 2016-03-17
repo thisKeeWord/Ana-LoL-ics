@@ -25,20 +25,29 @@ input {
   text-align: center;
 }
 
-#matches {
+#matches1 {
   margin-top: 70px;
   width: 170px;
   right: 40;
   position: absolute;
+  color: white;
 }
 
-#map {
+#choices1 {
+  margin-top: 70px;
+  width: 170px;
+  right: 40;
+  position: absolute;
+  color: white;
+}
+
+#map1 {
   position: absolute;
   margin-top: 70px;
   left: 30;
 }
 
-#time {
+#time1 {
   max-width: 80px;
   top: 605;
   left: 440;
@@ -47,21 +56,21 @@ input {
   font-size: 20px;
 }
 
-#eventDisplay {
+#eventDisplay1 {
   margin-top: 70px;
   left: 570;
   position: absolute;
   color: white;
 }
 
-#chart svg {
+#chart1 svg {
   top: 670;
   right: 40;
   position: absolute;
   margin-bottom: 20px;
 }
 
-#builds {
+#builds1 {
   position: absolute;
   top: 670;
   left: 30;
@@ -69,18 +78,18 @@ input {
   margin-bottom: 20px;
 }
 
-#scrollAndSelect {
+#scrollAndSelect1 {
   margin-top: 50px;
   position: absolute;
 }
 
-#selections {
+#selections1 {
   margin-left: 1000;
   top: 550;
   position: absolute;
 }
 
-#scroll {
+#scroll1 {
   left: 20;
   top: 548;
   position: absolute;
@@ -104,7 +113,136 @@ input {
   right: 40;
 }
 
-.games {
+.games1 {
   text-align: right;
   width: 170px;
+}
+
+
+
+
+#matches2 {
+  margin-top: 70px;
+  width: 170px;
+  /*right: 40;*/
+  position: absolute;
+  color: white;
+}
+
+#map2 {
+  position: absolute;
+  margin-top: 70px;
+  left: 500;
+}
+
+#time2 {
+  max-width: 80px;
+  top: 605;
+  /*left: 440;*/
+  color: white;
+  position: absolute;
+  font-size: 20px;
+}
+
+#eventDisplay2 {
+  margin-top: 70px;
+  /*left: 570;*/
+  position: absolute;
+  color: white;
+}
+
+#chart2 svg {
+  top: 670;
+  /*right: 40;*/
+  position: absolute;
+  margin-bottom: 20px;
+}
+
+#builds2 {
+  position: absolute;
+  top: 670;
+  /*left: 30;*/
+  color: white;
+  margin-bottom: 20px;
+}
+
+#scrollAndSelect2 {
+  margin-top: 50px;
+  position: absolute;
+}
+
+#selections2 {
+  /*margin-left: 1000;*/
+  top: 550;
+  position: absolute;
+}
+
+#scroll2 {
+  /*left: 20;*/
+  top: 548;
+  position: absolute;
+}
+
+.games2 {
+  text-align: right;
+  width: 170px;
+}
+
+
+
+
+
+
+#map4 {
+  position: absolute;
+  /*margin-top: 70px;*/
+  left: 30;
+}
+
+#time4 {
+  max-width: 80px;
+  /*top: 605;*/
+  left: 440;
+  color: white;
+  position: absolute;
+  font-size: 20px;
+}
+
+#eventDisplay4 {
+  /*margin-top: 70px;*/
+  left: 570;
+  position: absolute;
+  color: white;
+}
+
+#chart4 svg {
+  /*top: 670;*/
+  right: 40;
+  position: absolute;
+  margin-bottom: 20px;
+}
+
+#builds4 {
+  position: absolute;
+  /*top: 670;*/
+  left: 30;
+  color: white;
+  margin-bottom: 20px;
+}
+
+#scrollAndSelect4 {
+  /*margin-top: 50px;*/
+  position: absolute;
+}
+
+#selections4 {
+  margin-left: 1000;
+  /*top: 550;*/
+  position: absolute;
+}
+
+#scroll4 {
+  left: 20;
+  /*top: 548;*/
+  position: absolute;
 }
