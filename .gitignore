@@ -8,9 +8,6 @@ node_modules
 stuff.js
 config.env
 
-# bundle
-build/bundle.js
-
 # demo html
 demoData.html
 
