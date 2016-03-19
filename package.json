@@ -2,14 +2,13 @@
   "name": "Ana-LoL-ics",
   "version": "1.0.0",
   "description": "",
-  "main": "Gulpfile.js",
+  "main": "bundle.js",
   "scripts": {
     "prestart": "npm run task",
     "start": "node server/server.js",
     "start-dev": "npm run task & npm start",
     "task": "gulp",
-    "postinstall": "bower install",
-    "production": "node server/server.js"
+    "postinstall": "bower install"
   },
   "dependencies": {
     "babel-preset-es2015": "^6.5.0",
