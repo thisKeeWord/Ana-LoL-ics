@@ -2,18 +2,22 @@ import React from 'react';
 
 class GameMap extends React.Component {
   render() {
-    let arr = [];
-    for (let i = 1; i <= this.props.gamesToSee; i++) {
-      arr.push(i);
+    if (this.props.gamesToSee === 1) {
+      console.log('chose 2 doe')
+      return (
+        <div id={"map" + 1 * this.props.gamesToSee} />
+      )
     }
-    return (
-      <div>
-        { arr.map(i => {
-            return ( <div id={"map" + i * this.props.gamesToSee} /> )
-          })
-        }
-      </div> 
-    )
+
+    if (this.props.gamesToSee === 2) {
+      return (
+        <div>
+        <div id={"map" + 1 * this.props.gamesToSee} />
+
+        <div id={"map" + 2 * this.props.gamesToSee} />
+        </div>
+      )
+    }
   }
 }
 

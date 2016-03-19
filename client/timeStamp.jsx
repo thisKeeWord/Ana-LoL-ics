@@ -5,8 +5,8 @@ class TimeStamp extends React.Component {
   swap() {
     let convert = this.props.conversion;
 
-    if (this.props.timeline.length && this.props.conversion.length) {
-    	convert = this.props.timeline[this.props.conversion][0].timestamp;
+    if (this.props.timeline1.length && this.props.conversion.length) {
+    	convert = this.props.timeline1[this.props.conversion][0].timestamp;
     }
   
     let milliseconds = parseInt(convert % 1000),
