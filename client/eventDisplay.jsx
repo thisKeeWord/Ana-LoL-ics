@@ -3,12 +3,13 @@ import React from 'react';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		let interaction = [];
+		let eventPerGame = [];
 
 		// FIRST/SECOND GAME
 		if ((this.props.timeline1 && this.props.champImg1 && this.props.playerInfo1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.champImg2 && this.props.playerInfo2 && this.props.gamesToSee === 2)) {
-			let eventPerGame = [];
 			for (let i = 1; i <= this.props.gamesToSee; i++) {
+				let interaction = [];
+				
 				if (this.props["timeline" + i.toString()][this.props.spot]) {
 					if (this.props["timeline" + i.toString()][this.props.spot][0].events) {
 						let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
