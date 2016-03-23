@@ -124,7 +124,7 @@ input {
 #matches2 {
   margin-top: 70px;
   width: 170px;
-  /*right: 40;*/
+  left: 552px;
   position: absolute;
   color: white;
 }
@@ -132,7 +132,7 @@ input {
 #map2 {
   position: absolute;
   margin-top: 70px;
-  left: 500;
+  left: 30;
 }
 
 #time2 {
@@ -152,34 +152,34 @@ input {
 }
 
 #chart2 svg {
-  top: 670;
-  /*right: 40;*/
+  top: 515;
+  left: 30;
   position: absolute;
   margin-bottom: 20px;
 }
 
 #builds2 {
   position: absolute;
-  top: 670;
-  /*left: 30;*/
+  top: 795;
+  left: 30;
   color: white;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect2 {
-  margin-top: 50px;
+  margin-top: 10px;
   position: absolute;
 }
 
 #selections2 {
   /*margin-left: 1000;*/
-  top: 550;
+  top: 465;
   position: absolute;
 }
 
 #scroll2 {
   /*left: 20;*/
-  top: 548;
+  top: 463;
   position: absolute;
 }
 
@@ -195,8 +195,8 @@ input {
 
 #map4 {
   position: absolute;
-  /*margin-top: 70px;*/
-  left: 30;
+  margin-top: 70px;
+  right: 30;
 }
 
 #time4 {
@@ -216,33 +216,33 @@ input {
 }
 
 #chart4 svg {
-  /*top: 670;*/
-  right: 40;
+  top: 515;
+  right: 30;
   position: absolute;
   margin-bottom: 20px;
 }
 
 #builds4 {
   position: absolute;
-  /*top: 670;*/
-  left: 30;
+  top: 795;
+  right: 126;
   color: white;
   margin-bottom: 20px;
 }
 
-#scrollAndSelect4 {
-  /*margin-top: 50px;*/
+/*scrollAndSelect4 {
+  margin-top: 50px;
   position: absolute;
 }
 
 #selections4 {
   margin-left: 1000;
-  /*top: 550;*/
+  top: 550;
   position: absolute;
 }
 
 #scroll4 {
   left: 20;
-  /*top: 548;*/
+  top: 548;
   position: absolute;
-}
+}*/

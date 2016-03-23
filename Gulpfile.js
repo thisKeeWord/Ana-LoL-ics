@@ -15,7 +15,7 @@ function scripts() {
   var bundler = browserify({
     entries: ['./client/app.jsx'],
     transform: babelify.configure({ presets: ['react', 'es2015'] }),
-    debug: false,
+    debug: true,
     cache: {},
     packageCache: {},
     fullPaths: true
@@ -31,8 +31,8 @@ function scripts() {
         console.log('Error with compiling components', err.message);
       })
       .pipe(source('bundle.js'))
-      .pipe(buffer())
-      .pipe(uglify())
+      // .pipe(buffer())
+      // .pipe(uglify())
       .pipe(gulp.dest('./build/'));
       console.log('Updated!', (Date.now() - updateStart) + 'ms');
     })
@@ -42,8 +42,8 @@ function scripts() {
       console.log('Error with compiling components', err.message);
     })
     .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(uglify())
+    // .pipe(buffer())
+    // .pipe(uglify())
     .pipe(gulp.dest('./build/'));
 }
 
