@@ -3,23 +3,23 @@ import React from 'react';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		const interaction = [];
-		const eventPerGame = [];
+		let interaction = [];
 
 		// FIRST/SECOND GAME
 		if ((this.props.timeline1 && this.props.champImg1 && this.props.playerInfo1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.champImg2 && this.props.playerInfo2 && this.props.gamesToSee === 2)) {
+			let eventPerGame = [];
 			for (let i = 1; i <= this.props.gamesToSee; i++) {
 				if (this.props["timeline" + i.toString()][this.props.spot]) {
 					if (this.props["timeline" + i.toString()][this.props.spot][0].events) {
 						let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
 
-						for (let i = 0; i < searchEvents.length; i++) {
-							if (searchEvents[i].eventType === "CHAMPION_KILL") {
-								if (searchEvents[i].killerId === 0) {
-									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[i].victimId - 1][1]] ])
+						for (let j = 0; j < searchEvents.length; j++) {
+							if (searchEvents[j].eventType === "CHAMPION_KILL") {
+								if (searchEvents[j].killerId === 0) {
+									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ])
 								}
 								else {
-									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[i].killerId - 1][1]], this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[i].victimId - 1][1]] ]);
+									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].killerId - 1][1]], this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ]);
 								}
 							}
 						}
@@ -47,9 +47,10 @@ class EventDisplay extends React.Component {
 
 		// GAME 1
 		if (this.props.gamesToSee === 1) {
+			console.log(stat, 'stat')
 			return (
 				<div id={"eventDisplay" + 1 * this.props.gamesToSee}>
-					{ stat.map(champFight => {
+					{ stat[0].map(champFight => {
 
 							if (!champFight[1]) {
 								return (
@@ -80,7 +81,7 @@ class EventDisplay extends React.Component {
 					{	eventArr.map(i => {
 							return (
 								<div id={"eventDisplay" + i * this.props.gamesToSee}>
-									{ stat.map(champFight => {
+									{ stat[i-1].map(champFight => {
 											if (!champFight[1]) {
 												return (
 													<div>

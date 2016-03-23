@@ -130,17 +130,13 @@ class HeadApp extends React.Component {
         that.state.clicksForGame.length--;
         if (this.state.gamesToSee === 1) {
           that.state.scrollBar = (<input id={"scroll1"} type='range' style={{ width: '370px'}} min='0' max={gotGameOne[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
-        }
 
-        // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
-        if (this.state.gamesToSee === 1) {
+          // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
           that.addStatChoice();
           that.move();
           that.addItemVisuals();
         }
-
-
       }).then(() => {
         if (that.state.clicksForGame.length === 1) {
           that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
