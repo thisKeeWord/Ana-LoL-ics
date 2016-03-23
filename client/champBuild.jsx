@@ -19,50 +19,102 @@ class ChampBuild extends React.Component {
           let itemStore = [];
 
           // AT CURRENT SPOT IN TIMELINE
-          for (let j = 0; j <= this.props.spot; j++) {
-            if (searchEvents[j][0].events) {
-              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                let findItem = searchEvents[j][0].events[k].itemId;
+          if (searchEvents[this.props.spot]) {
 
-                // ITEM_PURCHASED
-                if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                  itemStore.push(findItem);
-                }
+            for (let j = 0; j <= this.props.spot; j++) {
+              if (searchEvents[j][0].events) {
+                for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                  let findItem = searchEvents[j][0].events[k].itemId;
 
-                // ITEM_DESTROYED
-                if (searchEvents[j][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                  if (itemStore.lastIndexOf(findItem) !== -1) {
-                    itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                  // ITEM_PURCHASED
+                  if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    itemStore.push(findItem);
                   }
-                }
 
-                // ITEM_SOLD
-                if (searchEvents[j][0].events[k].eventType === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
-                  if (itemStore.lastIndexOf(findItem) !== -1) {
-                    itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                  // ITEM_DESTROYED
+                  if (searchEvents[j][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    if (itemStore.lastIndexOf(findItem) !== -1) {
+                      itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                    }
                   }
-                }
 
-                // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
-                  if (searchEvents[j][0].events[k].itemAfter === 0) {
-                    let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
-                    itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
-                    let retrieveItem = k;
-                    while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
-                      if (itemStorage[checkItemEvent].from) {
-                        if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
-                          itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
+                  // ITEM_SOLD
+                  if (searchEvents[j][0].events[k].eventType === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    if (itemStore.lastIndexOf(findItem) !== -1) {
+                      itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                    }
+                  }
+
+                  // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
+                  if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    if (searchEvents[j][0].events[k].itemAfter === 0) {
+                      let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
+                      let retrieveItem = k;
+                      while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                        if (itemStorage[checkItemEvent].from) {
+                          if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
+                            itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
+                          }
                         }
-                      }
-                      retrieveItem--;
-                    } 
+                        retrieveItem--;
+                      } 
+                    }
                   }
                 }
               }
+              eachPlayersItems.push([itemStore])
             }
           }
-          eachPlayersItems.push([itemStore])
+
+          // IF SCROLL EXCEEDS GAME LENGTH
+          else {
+            for (let i = 0; i <= searchEvents.length - 1; i++) {
+              if (searchEvents[i][0].events) {
+                for (let k = 0; k < searchEvents[i][0].events.length; k++) {
+                  let findItem = searchEvents[i][0].events[k].itemId;
+
+                  // ITEM_PURCHASED
+                  if (searchEvents[i][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[i][0].events[k].participantId === player[0]) {
+                    itemStore.push(findItem);
+                  }
+
+                  // ITEM_DESTROYED
+                  if (searchEvents[i][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[i][0].events[k].participantId === player[0]) {
+                    if (itemStore.lastIndexOf(findItem) !== -1) {
+                      itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                    }
+                  }
+
+                  // ITEM_SOLD
+                  if (searchEvents[i][0].events[k].eventType === "ITEM_SOLD" && searchEvents[i][0].events[k].participantId === player[0]) {
+                    if (itemStore.lastIndexOf(findItem) !== -1) {
+                      itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                    }
+                  }
+
+                  // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
+                  if (searchEvents[i][0].events[k].eventType === "ITEM_UNDO" && searchEvents[i][0].events[k].participantId === player[0]) {
+                    if (searchEvents[i][0].events[k].itemAfter === 0) {
+                      let checkItemEvent = searchEvents[i][0].events[k].itemBefore;
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[i][0].events[k].itemBefore), 1);
+                      let retrieveItem = k;
+                      while (searchEvents[i][0].events[retrieveItem] && searchEvents[i][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                        if (itemStorage[checkItemEvent].from) {
+                          if (searchEvents[i][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[i][0].events[retrieveItem].itemId.toString())) {
+                            itemStore.push(searchEvents[i][0].events[retrieveItem].itemId);
+                          }
+                        }
+                        retrieveItem--;
+                      } 
+                    }
+                  }
+                }
+              }
+              eachPlayersItems.push([itemStore])
+            }
+          }
+          
         })
         itemsPerGame.push(eachPlayersItems);  
       }

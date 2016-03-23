@@ -3,10 +3,9 @@ import React from 'react';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		let eventPerGame = [];
-
 		// FIRST/SECOND GAME
 		if ((this.props.timeline1 && this.props.champImg1 && this.props.playerInfo1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.champImg2 && this.props.playerInfo2 && this.props.gamesToSee === 2)) {
+			let eventPerGame = [];
 			for (let i = 1; i <= this.props.gamesToSee; i++) {
 				let interaction = [];
 				
@@ -25,8 +24,11 @@ class EventDisplay extends React.Component {
 							}
 						}
 					}
+					eventPerGame.push(interaction);
 				}
-				eventPerGame.push(interaction);
+				else {
+					eventPerGame.push([]);
+				}
 			}
 			console.log(eventPerGame)
 			return eventPerGame;
@@ -34,7 +36,7 @@ class EventDisplay extends React.Component {
 	}
 
 	render() {
-		const stat = this.log();
+		let stat = this.log();
 		console.log(stat, 'stat')
 
 		// DOESN'T EXIST INITIALLY
