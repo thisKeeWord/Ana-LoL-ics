@@ -126,7 +126,8 @@ class ChampBuild extends React.Component {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
         if (document.getElementById("allItems" + i * this.props.gamesToSee)) {
           $(".champBuilds" + i * this.props.gamesToSee).remove();
-          $(".champIcons"+ i * this.props.gamesToSee).remove();
+          $(".champIcons" + i * this.props.gamesToSee).remove();
+          $("allItems" + i * this.props.gamesToSee).remove();
         }
       
 
