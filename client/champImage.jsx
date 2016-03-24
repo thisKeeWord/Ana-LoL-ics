@@ -1,26 +1,29 @@
 import React from 'react';
 
-
 class ChampImage extends React.Component {
   addChampImg() {
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
-    const domain = 
-        {
-          min: {x: -120, y: -120},
-          max: {x: 14870, y: 14980}
-        },
+    const domain = {
+            min: {x: -120, y: -120},
+            max: {x: 14870, y: 14980}
+          };
 
         // SCALING MAP DOWN
-        width = 400,
-        height = 400,
+    let width = 400,
+        height = 400;
 
-        xScale = d3.scale.linear()
-          .domain([domain.min.x, domain.max.x])
-          .range([0, width]),
+    if (this.props.gamesToSee === 1) {
+      width = 500;
+      height = 500;
+    }
 
-        yScale = d3.scale.linear()
-          .domain([domain.min.y, domain.max.y])
-          .range([height, 0]);
+    const xScale = d3.scale.linear()
+      .domain([domain.min.x, domain.max.x])
+      .range([0, width]);
+
+    const yScale = d3.scale.linear()
+      .domain([domain.min.y, domain.max.y])
+      .range([height, 0]);
 
     if((this.props.png1 && this.props.gamesToSee === 1) || (this.props.png2 && this.props.gamesToSee === 2)) {
       for (let count = 1; count <= this.props.gamesToSee; count++) {
@@ -41,7 +44,7 @@ class ChampImage extends React.Component {
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '17px', 'height': '17px' })
+                  .style({ 'width': '24px', 'height': '24px' })
             }
 
 
@@ -55,7 +58,7 @@ class ChampImage extends React.Component {
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '17px', 'height': '17px' });
+                  .style({ 'width': '24px', 'height': '24px' });
             }
           }
           else {
@@ -68,7 +71,7 @@ class ChampImage extends React.Component {
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '17px', 'height': '17px' })
+                  .style({ 'width': '24px', 'height': '24px' })
             }
 
 
@@ -82,7 +85,7 @@ class ChampImage extends React.Component {
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '17px', 'height': '17px' });
+                  .style({ 'width': '24px', 'height': '24px' });
             }
           }
         }

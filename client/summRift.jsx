@@ -13,12 +13,13 @@ class GamesOnSR extends React.Component {
   render() {
     return (
       <div id={"matches" + this.props.gamesToSee}>
-        click on 
+        click on
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <select defaultValue='1' onChange={this.onChange.bind(this)} id={"choices1"}>
           <option value="1">1</option>
           <option value="2">2</option>
         </select> 
-        of the following: <br/>
+        from list: <br/>
         { this.props.res.map(matchList => {
             return (
               <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />

@@ -30,14 +30,12 @@ class EventDisplay extends React.Component {
 					eventPerGame.push([]);
 				}
 			}
-			console.log(eventPerGame)
 			return eventPerGame;
 		}
 	}
 
 	render() {
 		let stat = this.log();
-		console.log(stat, 'stat')
 
 		// DOESN'T EXIST INITIALLY
 		if (!stat) {
@@ -50,7 +48,6 @@ class EventDisplay extends React.Component {
 
 		// GAME 1
 		if (this.props.gamesToSee === 1) {
-			console.log(stat, 'stat')
 			return (
 				<div id={"eventDisplay" + 1 * this.props.gamesToSee}>
 					{ stat[0].map(champFight => {
@@ -88,16 +85,16 @@ class EventDisplay extends React.Component {
 											if (!champFight[1]) {
 												return (
 													<div>
-														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
 															&nbsp;&nbsp;&nbsp; has been executed!
 													</div>
 												)
 											}
 											return (
 												<div>
-													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
 														&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
-													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[1] + ".png"} height={40} width={40} />
+													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[1] + ".png"} height={30} width={30} />
 												</div>
 											)
 										})

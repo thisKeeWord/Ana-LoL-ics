@@ -26,7 +26,7 @@ class HeadApp extends React.Component {
       png1: [],
       num1: 0,
       selData1: '',
-      eventSelected1: '',
+      eventSelected: '',
       addItems1: '',
       toggle: false,
       patch1: 0,
@@ -42,7 +42,6 @@ class HeadApp extends React.Component {
       png2: [],
       num2: 0,
       selData2: '',
-      eventSelected2: '',
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
@@ -167,18 +166,23 @@ class HeadApp extends React.Component {
   move() {
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
     const domain = {
-          min: {x: -120, y: -120},
-          max: {x: 14870, y: 14980}
-        },
+            min: {x: -120, y: -120},
+            max: {x: 14870, y: 14980}
+          },
 
-        // SCALING MAP DOWN
-        width = 400,
-        height = 400,
+          // NEWEST VERSION OF SUMMONER'S RIFT
+          nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
-        // NEWEST VERSION OF SUMMONER'S RIFT
-        nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
+      // SCALING MAP DOWN
+      let width = 400,
+          height = 400;
 
-        // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
+      if (this.state.gamesToSee === 1) {
+        width = 500;
+        height = 500;
+      }
+
+    // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
     const xScale = d3.scale.linear()
       .domain([domain.min.x, domain.max.x])
       .range([0, width]);
@@ -208,7 +212,7 @@ class HeadApp extends React.Component {
       }
     }
 
-    if (this.state.totalRenders === 1 && this.state.gamesToSee === 1) {
+    if (this.state.gamesToSee === 1) {
       let svg = d3.select("#map" + 1 * this.state.gamesToSee).append("svg:svg")
         .attr("id", "backdrop" + 1 * this.state.gamesToSee)
         .attr("width", width)
@@ -237,7 +241,7 @@ class HeadApp extends React.Component {
             .attr('x', d => { return xScale(d[0]) })
             .attr('y', d => { return yScale(d[1]) })
             .attr('class', 'image')
-            .style({ 'width': '17px', 'height': '17px' });         
+            .style({ 'width': '24px', 'height': '24px' });         
       }
 
       // SET STATE FOR SVG TO USE LATER
@@ -246,7 +250,7 @@ class HeadApp extends React.Component {
       })
     }
 
-    if (this.state.gamesToSee === 2 && this.state.totalRenders === 2) {
+    if (this.state.gamesToSee === 2) {
       let svg = d3.select("#map" + 1 * this.state.gamesToSee).append("svg:svg")
         .attr("id", "backdrop" + 1 * this.state.gamesToSee)
         .attr("width", width)
@@ -275,7 +279,7 @@ class HeadApp extends React.Component {
             .attr('x', d => { return xScale(d[0]) })
             .attr('y', d => { return yScale(d[1]) })
             .attr('class', 'image')
-            .style({ 'width': '17px', 'height': '17px' });         
+            .style({ 'width': '24px', 'height': '24px' });         
       }
 
       const svg2 = d3.select("#map" + 2 * this.state.gamesToSee).append("svg:svg")
@@ -306,9 +310,9 @@ class HeadApp extends React.Component {
             .attr('x', d => { return xScale(d[0]) })
             .attr('y', d => { return yScale(d[1]) })
             .attr('class', 'image')
-            .style({ 'width': '17px', 'height': '17px' });         
+            .style({ 'width': '24px', 'height': '24px' });         
       }
-      console.log('what')
+      
       // SET STATE FOR SVG TO USE LATER
       this.setState({
         png1: svg,
@@ -327,31 +331,46 @@ class HeadApp extends React.Component {
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
-    const w = 550, 
-          h = 300;
+    const w = 550;
     if (this.state.gamesToSee === 1) {
+      if (document.getElementById("chart2")) {
+        $("#chart2").first().remove();
+      }
+      if (document.getElementById("chart4")) {
+        $("#chart4").first().remove()
+      }
+
       const svg = d3.select("#chart1")
               .append("svg:svg")
               .attr("width", w)
-              .attr("height", h)
+              .attr("height", 400)
               .attr("id", "allStat1");
+
       if (this.state.gamesToSee === 1) {
         this.setState({
           selData1: svg
         })
       }
     }
+
     if (this.state.gamesToSee === 2) {
+      if (document.getElementById("chart1") || document.getElementById("allStat1")) {
+        $("#chart1").first().remove();
+        $("#allStat1").first().remove();
+      }
+
       const svg = d3.select("#chart2")
               .append("svg:svg")
               .attr("width", w)
-              .attr("height", h)
+              .attr("height", 300)
               .attr("id", "allStat2");
+
       const svg2 = d3.select("#chart4")
               .append("svg:svg")
               .attr("width", w)
-              .attr("height", h)
+              .attr("height", 300)
               .attr("id", "allStat4");
+
       this.setState({
         selData1: svg,
         selData2: svg2
@@ -361,9 +380,25 @@ class HeadApp extends React.Component {
 
   // CHAMP BUILDS
   addItemVisuals() {
+    // REMOVE PREVIOUS ITEM VISUALS
+    if (this.state.gamesToSee === 1) {
+      if (document.getElementById("builds2")) {
+        $("#builds2").first().remove();
+      }
+      if (document.getElementById("builds4")) {
+        $("#builds4").first().remove();
+      }
+    }
+
+    if (this.state.gamesToSee === 2) {
+      if (document.getElementById("allItems1")) {
+        $("#allItems1").first().remove();
+      }
+    }   
+
     const w = 304,
           h = 400;
-    if (this.state.totalRenders === 1 && this.state.gamesToSee === 1) {
+    if (this.state.gamesToSee === 1) {
       const svg = d3.select("#builds1")
               .append("svg:svg")
               .attr("width", w)
@@ -373,7 +408,7 @@ class HeadApp extends React.Component {
         addItems1: svg
       })
     }
-    if (this.state.totalRenders === 2 && this.state.gamesToSee === 2) {
+    if (this.state.gamesToSee === 2) {
       const svg = d3.select("#builds2")
               .append("svg:svg")
               .attr("width", w)
@@ -395,38 +430,39 @@ class HeadApp extends React.Component {
   // USER SELECTION ON DROPDOWN MENU
   whichEventPick(eventPicked) {
     eventPicked.preventDefault();
-    const eventSpecific1 = [];
-    const eventSpecific2 = [];
-    const searchEvents1 = this.state.allowScroll1;
-    const searchEvents2 = this.state.allowScroll2;
-    if (this.state.totalRenders === 1) {
-      for (let i = 0; i < this.state.playerID1.length; i++) {
-        let firstCount = 0;
+    const eventsForGames = [];
+
+    // NUMBER OF GAMES WANTED
+    for (let t = 1; t <= this.state.gamesToSee; t++) {
+      let searchEvents = this.state["allowScroll" + t.toString()];
+      let eventSpecific = [];
+      for (let i = 0; i < this.state["playerID" + t.toString()].length; i++) {
+        let statCount = 0;
         if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-          for (let j = 0; j < searchEvents1.length; j++) {
-            if (searchEvents1[j][0].events) {
-              for (let k = 0; k < searchEvents1[j][0].events.length; k++) {
-                if (searchEvents1[j][0].events[k].eventType === eventPicked.target.value && (searchEvents1[j][0].events[k].creatorId === this.state.playerID1[i][0] || searchEvents1[j][0].events[k].killerId === this.state.playerID1[i][0])) {
-                  firstCount++;
+          for (let j = 0; j < searchEvents.length; j++) {
+            if (searchEvents[j][0].events) {
+              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
+                  statCount++;
                 }
               }
             }
           }
         }
         if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
-          for (let j = 0; j < searchEvents1.length; j++) {
-            if (searchEvents1[j][0].events) {
-              for (let k = 0; k < searchEvents1[j][0].events.length; k++) {
-                if (searchEvents1[j][0].events[k].eventType === 'CHAMPION_KILL') {
+          for (let j = 0; j < searchEvents.length; j++) {
+            if (searchEvents[j][0].events) {
+              for (let k = 0; k < searchEvents[j][0].events.length; k++) {
+                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
-                    if (searchEvents1[j][0].events[k][eventPicked.target.value] === this.state.playerID1[i][0]) {
-                      firstCount++;
+                    if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state["playerID" + t.toString()][i][0]) {
+                      statCount++;
                     }
                   }
-                  if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents1[j][0].events[k][eventPicked.target.value]) {
-                    for (let assists = 0; assists < searchEvents1[j][0].events[k][eventPicked.target.value].length; assists++) {
-                      if (searchEvents1[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID1[i][0]) {
-                        firstCount++;
+                  if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents[j][0].events[k][eventPicked.target.value]) {
+                    for (let assists = 0; assists < searchEvents[j][0].events[k][eventPicked.target.value].length; assists++) {
+                      if (searchEvents[j][0].events[k][eventPicked.target.value][assists] === this.state["playerID" + t.toString()][i][0]) {
+                        statCount++;
                       }
                     }
                   }
@@ -436,75 +472,30 @@ class HeadApp extends React.Component {
           }
         }
         if (eventPicked.target.value === 'minionsKilled') {
-          if (searchEvents1[searchEvents1.length - 1][0].participantFrames) {
-            firstCount = searchEvents1[searchEvents1.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents1[searchEvents1.length - 1][0].participantFrames[i+1].jungleMinionsKilled
+          if (searchEvents[searchEvents.length - 1][0].participantFrames) {
+            statCount = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents[searchEvents.length - 1][0].participantFrames[i+1].jungleMinionsKilled
           }
         }
         if (eventPicked.target.value === 'totalGold') {
-          if (searchEvents1[searchEvents1.length - 1][0].participantFrames) {
-            firstCount = searchEvents1[searchEvents1.length - 1][0].participantFrames[i+1].totalGold;
+          if (searchEvents[searchEvents.length - 1][0].participantFrames) {
+            statCount = searchEvents[searchEvents.length - 1][0].participantFrames[i+1].totalGold;
           }
         }
-        eventSpecific1.push(firstCount);
+        eventSpecific.push(statCount);
       }
+      eventsForGames.push(eventSpecific);
+    }
+    if (this.state.gamesToSee === 1) {
       this.setState({
-        eventSelected1: eventPicked.target.value,
-        maxForStat1: Math.max(...eventSpecific1)
+        eventSelected: eventPicked.target.value,
+        maxForStat1: Math.max(...eventsForGames[0])
       })
     }
-
-    // SECOND GAME
-    if (this.state.totalRenders === 2) {
-      for (let i = 0; i < this.state.playerID2.length; i++) {
-        let secondCount = 0;
-        if (eventPicked.target.value === 'WARD_PLACED' || eventPicked.target.value === 'WARD_KILL') {
-          for (let j = 0; j < searchEvents2.length; j++) {
-            if (searchEvents2[j][0].events) {
-              for (let k = 0; k < searchEvents2[j][0].events.length; k++) {
-                if (searchEvents2[j][0].events[k].eventType === eventPicked.target.value && (searchEvents2[j][0].events[k].creatorId === this.state.playerID2[i][0] || searchEvents2[j][0].events[k].killerId === this.state.playerID2[i][0])) {
-                  secondCount++;
-                }
-              }
-            }
-          }
-        }
-        if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId' || eventPicked.target.value === 'assistingParticipantIds') {
-          for (let j = 0; j < searchEvents2.length; j++) {
-            if (searchEvents2[j][0].events) {
-              for (let k = 0; k < searchEvents2[j][0].events.length; k++) {
-                if (searchEvents2[j][0].events[k].eventType === 'CHAMPION_KILL') {
-                  if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
-                    if (searchEvents2[j][0].events[k][eventPicked.target.value] === this.state.playerID2[i][0]) {
-                      secondCount++;
-                    }
-                  }
-                  if (eventPicked.target.value === 'assistingParticipantIds' && searchEvents2[j][0].events[k][eventPicked.target.value]) {
-                    for (let assists = 0; assists < searchEvents2[j][0].events[k][eventPicked.target.value].length; assists++) {
-                      if (searchEvents2[j][0].events[k][eventPicked.target.value][assists] === this.state.playerID2[i][0]) {
-                        secondCount++;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        if (eventPicked.target.value === 'minionsKilled') {
-          if (searchEvents2[searchEvents2.length - 1][0].participantFrames) {
-            secondCount = searchEvents2[searchEvents2.length - 1][0].participantFrames[i+1].minionsKilled + searchEvents2[searchEvents2.length - 1][0].participantFrames[i+1].jungleMinionsKilled
-          }
-        }
-        if (eventPicked.target.value === 'totalGold') {
-          if (searchEvents2[searchEvents2.length - 1][0].participantFrames) {
-            secondCount = searchEvents2[searchEvents2.length - 1][0].participantFrames[i+1].totalGold;
-          }
-        }
-        eventSpecific1.push(secondCount);
-      }
+    if (this.state.gamesToSee === 2) {
       this.setState({
-        eventSelected2: eventPicked.target.value,
-        maxForStat2: Math.max(...eventSpecific2)
+        eventSelected: eventPicked.target.value,
+        maxForStat1: Math.max(...eventsForGames[0]),
+        maxForStat2: Math.max(...eventsForGames[1])
       })
     }
   }
@@ -518,6 +509,7 @@ class HeadApp extends React.Component {
   render() {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
+      $('body').css('background-image', "url('http://www.androidnoticias.net/wp-content/uploads/2016/02/PortadaLOL.jpg')");
       return (
         <div id="landingPage">
           Your one stop shop to finding more than a summary but less than a replay of a game!<br />
@@ -532,6 +524,7 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
+      $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
@@ -545,7 +538,7 @@ class HeadApp extends React.Component {
           <TimeStamp gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} conversion={this.state.num1} timeline2={this.state.allowScroll2} />
           <DropDownMenu gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
           <EventDisplay gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
-          <Chart gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} selData1={this.state.selData1} playerInfo1={this.state.playerID1} eventSelected1={this.state.eventSelected1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected2={this.state.eventSelected2} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
+          <Chart gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
           <ChampBuild gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} />
           <ChampImage gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.num1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
         </div>
@@ -554,6 +547,7 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
+      $('body').css('background', '#292929');
       return (
         <div id="second">
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>

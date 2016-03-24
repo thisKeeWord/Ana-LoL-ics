@@ -23,13 +23,13 @@ class TimeStamp extends React.Component {
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+    return hours + ":" + minutes + ":" + seconds;
   }
 
   render() {
   	const callSwap = this.swap();
     return (
-      <div id="time">
+      <div id={"time" + this.props.gamesToSee}>
         {callSwap}
       </div>
     )

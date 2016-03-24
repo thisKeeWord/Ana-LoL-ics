@@ -180,7 +180,6 @@ function getGameData(that, count, total, compareVersions, patchDesired, gameTime
 	          var cId = i.championId;
 	          // PARTICIPANT-ID AND CHAMPION-ID
 	          idOfPlayer.push([pId, cId]);
-	          console.log(idOfPlayer)
 
 	          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
 	          request(url + cId + '?' + process.env.stuff2, function(error, champData) {

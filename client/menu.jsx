@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class DropDownMenu extends React.Component {
   onLoad(eventPicked) {
     this.props.whichEventPick(eventPicked);

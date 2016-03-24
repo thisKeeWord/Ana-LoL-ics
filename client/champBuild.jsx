@@ -1,7 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
 
-
 class ChampBuild extends React.Component {
   // GET PLAYER'S ITEM BUILD
   itemization() {
@@ -138,32 +137,64 @@ class ChampBuild extends React.Component {
           let wid = 466;
           let build = this.props["playerInfo" + i.toString()][w];
 
-          this.props["addItems" + i.toString()].append('svg:g')
-            .attr("class", "champIcons" + i * this.props.gamesToSee)
-            .selectAll("image")
-            .data([[]])
-            .enter()
-              .append("svg:image")
-              .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
-              .attr('y', w * 40)
-              .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px'});
-        
-          this.props["addItems" + i.toString()].append('svg:g')
-            .attr('class', 'champBuilds' + i * this.props.gamesToSee)
-            .selectAll("image")
-            .data(showItems[i-1][w][0])
-            .enter()
-              .append("svg:image")
-              .attr('xlink:href', d => {
-                if (d) {
-                  return ("http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/item/" + d + ".png");
-                }
-              })
-              .attr("x", (d, i) => {
-                return 24 * i + 40;
-              })
-              .attr("y", 40 * w + 10)
-              .style({ 'width': '24px', 'height': '24px' });
+          // FLIP SECOND BUILD FOR SYMMETRY
+          if (i === 2) {
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr("class", "champIcons" + i * this.props.gamesToSee)
+              .selectAll("image")
+              .data([[]])
+              .enter()
+                .append("svg:image")
+                .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
+                .attr('y', w * 40)
+                .attr('x', 264)
+                .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px' });
+          
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'champBuilds' + i * this.props.gamesToSee)
+              .selectAll("image")
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("svg:image")
+                .attr('xlink:href', d => {
+                  if (d) {
+                    return ("http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/item/" + d + ".png");
+                  }
+                })
+                .attr("x", (d, i) => {
+                  return 240 - 24 * i;
+                })
+                .attr("y", 40 * w + 10)
+                .style({ 'width': '24px', 'height': '24px' });
+          }
+          else {
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr("class", "champIcons" + i * this.props.gamesToSee)
+              .selectAll("image")
+              .data([[]])
+              .enter()
+                .append("svg:image")
+                .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
+                .attr('y', w * 40)
+                .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px', 'float': 'right'});
+          
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'champBuilds' + i * this.props.gamesToSee)
+              .selectAll("image")
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("svg:image")
+                .attr('xlink:href', d => {
+                  if (d) {
+                    return ("http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/item/" + d + ".png");
+                  }
+                })
+                .attr("x", (d, i) => {
+                  return 24 * i + 40;
+                })
+                .attr("y", 40 * w + 10)
+                .style({ 'width': '24px', 'height': '24px' });
+          }
         }
       }
     }

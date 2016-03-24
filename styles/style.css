@@ -1,5 +1,5 @@
 body {
-  background-image: url("http://www.androidnoticias.net/wp-content/uploads/2016/02/PortadaLOL.jpg");
+  font-family: sans-serif;
 }
 
 #welcome {
@@ -30,15 +30,14 @@ input {
   width: 170px;
   right: 40;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #choices1 {
-  margin-top: 70px;
-  width: 170px;
-  right: 40;
+  width: 35px;
+  right: 76;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #map1 {
@@ -51,7 +50,7 @@ input {
   max-width: 80px;
   top: 605;
   left: 440;
-  color: white;
+  color: #cccccc;
   position: absolute;
   font-size: 20px;
 }
@@ -60,7 +59,7 @@ input {
   margin-top: 70px;
   left: 570;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #chart1 svg {
@@ -74,7 +73,7 @@ input {
   position: absolute;
   top: 670;
   left: 30;
-  color: white;
+  color: #cccccc;
   margin-bottom: 20px;
 }
 
@@ -99,7 +98,7 @@ input {
   text-align: center;
   font-size: 20px;
   font-weight: 30;
-  color: white;
+  color: #cccccc;
   width: 470px;
   position: absolute;
   left: 400;
@@ -120,13 +119,21 @@ input {
 
 
 
+#time2 {
+  max-width: 80px;
+  top: 605;
+  left: 440;
+  color: #cccccc;
+  position: absolute;
+  font-size: 20px;
+}
 
 #matches2 {
   margin-top: 70px;
   width: 170px;
   left: 552px;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #map2 {
@@ -137,22 +144,22 @@ input {
 
 #time2 {
   max-width: 80px;
-  top: 605;
-  /*left: 440;*/
-  color: white;
+  top: 545;
+  left: 608;
+  color: #cccccc;
   position: absolute;
   font-size: 20px;
 }
 
 #eventDisplay2 {
-  margin-top: 70px;
-  /*left: 570;*/
+  top: 585;
+  left: 435;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #chart2 svg {
-  top: 515;
+  top: 1060;
   left: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -160,9 +167,9 @@ input {
 
 #builds2 {
   position: absolute;
-  top: 795;
+  top: 585;
   left: 30;
-  color: white;
+  color: #cccccc;
   margin-bottom: 20px;
 }
 
@@ -172,14 +179,14 @@ input {
 }
 
 #selections2 {
-  /*margin-left: 1000;*/
-  top: 465;
+  top: 995;
+  left: 568;
   position: absolute;
 }
 
 #scroll2 {
-  /*left: 20;*/
   top: 463;
+  left: 443;
   position: absolute;
 }
 
@@ -187,9 +194,6 @@ input {
   text-align: right;
   width: 170px;
 }
-
-
-
 
 
 
@@ -203,20 +207,20 @@ input {
   max-width: 80px;
   /*top: 605;*/
   left: 440;
-  color: white;
+  color: #cccccc;
   position: absolute;
   font-size: 20px;
 }
 
 #eventDisplay4 {
-  /*margin-top: 70px;*/
-  left: 570;
+  top: 585;
+  right: 435;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
 #chart4 svg {
-  top: 515;
+  top: 1060;
   right: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -224,25 +228,8 @@ input {
 
 #builds4 {
   position: absolute;
-  top: 795;
-  right: 126;
-  color: white;
+  top: 585;
+  right: 30;
+  color: #cccccc;
   margin-bottom: 20px;
 }
-
-/*scrollAndSelect4 {
-  margin-top: 50px;
-  position: absolute;
-}
-
-#selections4 {
-  margin-left: 1000;
-  top: 550;
-  position: absolute;
-}
-
-#scroll4 {
-  left: 20;
-  top: 548;
-  position: absolute;
-}*/
