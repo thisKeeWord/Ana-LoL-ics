@@ -63,46 +63,45 @@ class ChampBuild extends React.Component {
                   }
                 }
               }
-              eachPlayersItems.push([itemStore])
             }
           }
 
           // IF SCROLL EXCEEDS GAME LENGTH
-          else {
-            for (let i = 0; i <= searchEvents.length - 1; i++) {
-              if (searchEvents[i][0].events) {
-                for (let k = 0; k < searchEvents[i][0].events.length; k++) {
-                  let findItem = searchEvents[i][0].events[k].itemId;
+          if (!searchEvents[this.props.spot]) {
+            for (let z = 0; z < searchEvents.length; z++) {
+              if (searchEvents[z][0].events) {
+                for (let k = 0; k < searchEvents[z][0].events.length; k++) {
+                  let findItem = searchEvents[z][0].events[k].itemId;
 
                   // ITEM_PURCHASED
-                  if (searchEvents[i][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[i][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     itemStore.push(findItem);
                   }
 
                   // ITEM_DESTROYED
-                  if (searchEvents[i][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[i][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_SOLD
-                  if (searchEvents[i][0].events[k].eventType === "ITEM_SOLD" && searchEvents[i][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].eventType === "ITEM_SOLD" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                  if (searchEvents[i][0].events[k].eventType === "ITEM_UNDO" && searchEvents[i][0].events[k].participantId === player[0]) {
-                    if (searchEvents[i][0].events[k].itemAfter === 0) {
-                      let checkItemEvent = searchEvents[i][0].events[k].itemBefore;
-                      itemStore.splice(itemStore.lastIndexOf(searchEvents[i][0].events[k].itemBefore), 1);
+                  if (searchEvents[z][0].events[k].eventType === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
+                    if (searchEvents[z][0].events[k].itemAfter === 0) {
+                      let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
-                      while (searchEvents[i][0].events[retrieveItem] && searchEvents[i][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                      while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
-                          if (searchEvents[i][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[i][0].events[retrieveItem].itemId.toString())) {
-                            itemStore.push(searchEvents[i][0].events[retrieveItem].itemId);
+                          if (searchEvents[z][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[z][0].events[retrieveItem].itemId.toString())) {
+                            itemStore.push(searchEvents[z][0].events[retrieveItem].itemId);
                           }
                         }
                         retrieveItem--;
@@ -111,10 +110,9 @@ class ChampBuild extends React.Component {
                   }
                 }
               }
-              eachPlayersItems.push([itemStore])
             }
           }
-          
+          eachPlayersItems.push([itemStore])
         })
         itemsPerGame.push(eachPlayersItems);  
       }
@@ -127,9 +125,9 @@ class ChampBuild extends React.Component {
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
-        if (document.getElementById("allItems" + i)) {
-          $(".champBuilds" + i).remove();
-          $(".champIcons"+ i).remove();
+        if (document.getElementById("allItems" + i * this.props.gamesToSee)) {
+          $(".champBuilds" + i * this.props.gamesToSee).remove();
+          $(".champIcons"+ i * this.props.gamesToSee).remove();
         }
       
 
@@ -141,7 +139,7 @@ class ChampBuild extends React.Component {
           let build = this.props["playerInfo" + i.toString()][w];
 
           this.props["addItems" + i.toString()].append('svg:g')
-            .attr("class", "champIcons" + i)
+            .attr("class", "champIcons" + i * this.props.gamesToSee)
             .selectAll("image")
             .data([[]])
             .enter()
@@ -151,7 +149,7 @@ class ChampBuild extends React.Component {
               .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px'});
         
           this.props["addItems" + i.toString()].append('svg:g')
-            .attr('class', 'champBuilds' + i)
+            .attr('class', 'champBuilds' + i * this.props.gamesToSee)
             .selectAll("image")
             .data(showItems[i-1][w][0])
             .enter()
