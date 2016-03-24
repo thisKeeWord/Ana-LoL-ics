@@ -2,7 +2,7 @@
   "name": "Ana-LoL-ics",
   "version": "1.0.0",
   "description": "",
-  "main": "bundle.js",
+  "main": "Gulpfile.js",
   "scripts": {
     "prestart": "npm run task",
     "start": "node server/server.js",
