@@ -3,26 +3,39 @@ import React from 'react';
 class EventDisplay extends React.Component {
 	// LOGS CHAMPION KILLS PER FRAME
 	log() {
-		const interaction = [];
-		if (this.props.timeline.length && this.props.timeline[this.props.spot][0].events && this.props.playerInfo.length && this.props.champImg.length) {
-			const searchEvents = this.props.timeline[this.props.spot][0].events;
+		// FIRST/SECOND GAME
+		if ((this.props.timeline1 && this.props.champImg1 && this.props.playerInfo1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.champImg2 && this.props.playerInfo2 && this.props.gamesToSee === 2)) {
+			let eventPerGame = [];
+			for (let i = 1; i <= this.props.gamesToSee; i++) {
+				let interaction = [];
+				
+				if (this.props["timeline" + i.toString()][this.props.spot]) {
+					if (this.props["timeline" + i.toString()][this.props.spot][0].events) {
+						let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
 
-			for (let i = 0; i < searchEvents.length; i++) {
-				if (searchEvents[i].eventType === "CHAMPION_KILL") {
-					if (searchEvents[i].killerId === 0) {
-						interaction.push([ this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] ])
+						for (let j = 0; j < searchEvents.length; j++) {
+							if (searchEvents[j].eventType === "CHAMPION_KILL") {
+								if (searchEvents[j].killerId === 0) {
+									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ])
+								}
+								else {
+									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].killerId - 1][1]], this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ]);
+								}
+							}
+						}
 					}
-					else {
-						interaction.push([ this.props.champImg[this.props.playerInfo[searchEvents[i].killerId - 1][1]], this.props.champImg[this.props.playerInfo[searchEvents[i].victimId - 1][1]] ]);
-					}
+					eventPerGame.push(interaction);
+				}
+				else {
+					eventPerGame.push([]);
 				}
 			}
-			return interaction;
+			return eventPerGame;
 		}
 	}
 
 	render() {
-		const stat = this.log();
+		let stat = this.log();
 
 		// DOESN'T EXIST INITIALLY
 		if (!stat) {
@@ -33,30 +46,66 @@ class EventDisplay extends React.Component {
 			)
 		}
 
-		return (
-			<div id="eventDisplay">
-				{ stat.map(champFight => {
+		// GAME 1
+		if (this.props.gamesToSee === 1) {
+			return (
+				<div id={"eventDisplay" + 1 * this.props.gamesToSee}>
+					{ stat[0].map(champFight => {
 
-						if (!champFight[1]) {
+							if (!champFight[1]) {
+								return (
+									<div>
+										<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch1 + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+											&nbsp;&nbsp;&nbsp; has been executed!
+									</div>
+								)
+							}
 							return (
 								<div>
-									<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
-										&nbsp;&nbsp;&nbsp; has been executed!
+									<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch1 + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
+										&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
+									<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch1 + "/img/champion/" + champFight[1] + ".png"} height={40} width={40} />
 								</div>
 							)
-						}
-						return (
-							<div>
-								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
-									&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
-								<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch + "/img/champion/" + champFight[1] + ".png"} height={40} width={40} />
-							</div>
-						)
-					})
-				}
-			</div>
-		)	
-		
+						})
+					}
+				</div>
+			)
+		}
+
+		// GAME 2
+		if (this.props.gamesToSee === 2) {
+			let eventArr = [1, 2];
+			return (
+				<div>
+					{	eventArr.map(i => {
+							return (
+								<div id={"eventDisplay" + i * this.props.gamesToSee}>
+									{ stat[i-1].map(champFight => {
+											if (!champFight[1]) {
+												return (
+													<div>
+														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
+															&nbsp;&nbsp;&nbsp; has been executed!
+													</div>
+												)
+											}
+											return (
+												<div>
+													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
+														&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
+													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[1] + ".png"} height={30} width={30} />
+												</div>
+											)
+										})
+									}
+								</div>
+							)
+						})
+					}
+				</div>
+			)
+		}
 	}
 }
 

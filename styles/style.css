@@ -1,5 +1,5 @@
 body {
-  background-image: url("http://www.androidnoticias.net/wp-content/uploads/2016/02/PortadaLOL.jpg");
+  font-family: sans-serif;
 }
 
 #welcome {
@@ -25,63 +25,70 @@ input {
   text-align: center;
 }
 
-#matches {
+#matches1 {
   margin-top: 70px;
-  width: 240px;
+  width: 170px;
   right: 40;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
-#map {
+#choices1 {
+  width: 35px;
+  right: 76;
+  position: absolute;
+  color: #cccccc;
+}
+
+#map1 {
   position: absolute;
   margin-top: 70px;
   left: 30;
 }
 
-#time {
+#time1 {
   max-width: 80px;
   top: 605;
   left: 440;
-  color: white;
+  color: #cccccc;
   position: absolute;
   font-size: 20px;
 }
 
-#eventDisplay {
+#eventDisplay1 {
   margin-top: 70px;
   left: 570;
   position: absolute;
-  color: white;
+  color: #cccccc;
 }
 
-#chart svg {
+#chart1 svg {
   top: 670;
   right: 40;
   position: absolute;
   margin-bottom: 20px;
 }
 
-#builds {
+#builds1 {
   position: absolute;
   top: 670;
   left: 30;
-  color: white;
+  color: #cccccc;
   margin-bottom: 20px;
 }
 
-#scrollAndSelect {
+#scrollAndSelect1 {
   margin-top: 50px;
   position: absolute;
 }
 
-#selections {
+#selections1 {
   margin-left: 1000;
   top: 550;
   position: absolute;
 }
 
-#scroll {
+#scroll1 {
   left: 20;
   top: 548;
   position: absolute;
@@ -91,7 +98,7 @@ input {
   text-align: center;
   font-size: 20px;
   font-weight: 30;
-  color: white;
+  color: #cccccc;
   width: 470px;
   position: absolute;
   left: 400;
@@ -103,4 +110,126 @@ input {
   width: 131px;
   position: absolute;
   right: 40;
+}
+
+.games1 {
+  text-align: right;
+  width: 170px;
+}
+
+
+
+#time2 {
+  max-width: 80px;
+  top: 605;
+  left: 440;
+  color: #cccccc;
+  position: absolute;
+  font-size: 20px;
+}
+
+#matches2 {
+  margin-top: 70px;
+  width: 170px;
+  left: 552px;
+  position: absolute;
+  color: #cccccc;
+}
+
+#map2 {
+  position: absolute;
+  margin-top: 70px;
+  left: 30;
+}
+
+#time2 {
+  max-width: 80px;
+  top: 545;
+  left: 608;
+  color: #cccccc;
+  position: absolute;
+  font-size: 20px;
+}
+
+#eventDisplay2 {
+  top: 585;
+  left: 435;
+  position: absolute;
+  color: #cccccc;
+}
+
+#chart2 svg {
+  top: 1060;
+  left: 30;
+  position: absolute;
+  margin-bottom: 20px;
+}
+
+#builds2 {
+  position: absolute;
+  top: 585;
+  left: 30;
+  color: #cccccc;
+  margin-bottom: 20px;
+}
+
+#scrollAndSelect2 {
+  margin-top: 10px;
+  position: absolute;
+}
+
+#selections2 {
+  top: 995;
+  left: 568;
+  position: absolute;
+}
+
+#scroll2 {
+  top: 463;
+  left: 443;
+  position: absolute;
+}
+
+.games2 {
+  text-align: right;
+  width: 170px;
+}
+
+
+
+#map4 {
+  position: absolute;
+  margin-top: 70px;
+  right: 30;
+}
+
+#time4 {
+  max-width: 80px;
+  /*top: 605;*/
+  left: 440;
+  color: #cccccc;
+  position: absolute;
+  font-size: 20px;
+}
+
+#eventDisplay4 {
+  top: 585;
+  right: 435;
+  position: absolute;
+  color: #cccccc;
+}
+
+#chart4 svg {
+  top: 1060;
+  right: 30;
+  position: absolute;
+  margin-bottom: 20px;
+}
+
+#builds4 {
+  position: absolute;
+  top: 585;
+  right: 30;
+  color: #cccccc;
+  margin-bottom: 20px;
 }

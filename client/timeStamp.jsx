@@ -5,8 +5,13 @@ class TimeStamp extends React.Component {
   swap() {
     let convert = this.props.conversion;
 
-    if (this.props.timeline.length && this.props.conversion.length) {
-    	convert = this.props.timeline[this.props.conversion][0].timestamp;
+    if (((this.props.timeline1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.gamesToSee === 2)) && this.props.conversion.length) {
+      if (this.props.timeline1.length > this.props.timeline2.length) {
+      	convert = this.props.timeline1[this.props.conversion][0].timestamp;
+      }
+      else {
+        convert = this.props.timeline2[this.props.conversion][0].timestamp;
+      }
     }
   
     let milliseconds = parseInt(convert % 1000),
@@ -18,13 +23,13 @@ class TimeStamp extends React.Component {
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+    return hours + ":" + minutes + ":" + seconds;
   }
 
   render() {
   	const callSwap = this.swap();
     return (
-      <div id="time">
+      <div id={"time" + this.props.gamesToSee}>
         {callSwap}
       </div>
     )

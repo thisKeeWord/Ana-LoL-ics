@@ -116,7 +116,7 @@ function getMatchList(date, req, res, next) {
 						perGameSpec.push(gamesList.games[i]["gameId"])
 						perGameSpec.push(gamesList.games[i]["championId"])
 						var date = new Date(gamesList.games[i]["createDate"])
-						perGameSpec.push(date.toString());
+						perGameSpec.push(date.toLocaleString());
 					}
 					matchHistory.push(perGameSpec);
 				}

@@ -6,13 +6,23 @@ class GamesOnSR extends React.Component {
     this.props.onClick(e);
   }
 
+  onChange(e) {
+    this.props.numGamesSee(e);
+  }
+
   render() {
     return (
-      <div id="matches">
-        click on one of the following: <br/>
+      <div id={"matches" + this.props.gamesToSee}>
+        click on
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select defaultValue='1' onChange={this.onChange.bind(this)} id={"choices1"}>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select> 
+        from list: <br/>
         { this.props.res.map(matchList => {
             return (
-              <input type="submit" id={matchList[0]} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "30px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"40px"}} value={matchList[2]} />
+              <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
             )
           })
         }
