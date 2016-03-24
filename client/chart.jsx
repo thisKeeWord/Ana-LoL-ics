@@ -263,7 +263,7 @@ class Chart extends React.Component {
         <div>
           { ray.map(l => {
               return (
-                <div id={"chart" + l * this.props.gamesToSee}>
+                <div id={"chart" + l * this.props.gamesToSee} key={l}>
                   {bar}
                 </div>
               )
