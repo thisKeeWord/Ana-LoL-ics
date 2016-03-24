@@ -382,6 +382,9 @@ class HeadApp extends React.Component {
   addItemVisuals() {
     // REMOVE PREVIOUS ITEM VISUALS
     if (this.state.gamesToSee === 1) {
+      if (document.getElementById("")) {
+        $("#builds1").first().remove();
+      }
       if (document.getElementById("builds2")) {
         $("#builds2").first().remove();
       }
@@ -393,6 +396,12 @@ class HeadApp extends React.Component {
     if (this.state.gamesToSee === 2) {
       if (document.getElementById("allItems1")) {
         $("#allItems1").first().remove();
+      }
+      if (document.getElementById("allItems2")) {
+        $("#allItems2").first().remove();
+      }
+      if (document.getElementById("allItems4")) {
+        $("#allItems4").first().remove();
       }
     }   
 
