@@ -80,18 +80,18 @@ class EventDisplay extends React.Component {
 				<div>
 					{	eventArr.map(i => {
 							return (
-								<div id={"eventDisplay" + i * this.props.gamesToSee}>
+								<div id={"eventDisplay" + i * this.props.gamesToSee} key={i}>
 									{ stat[i-1].map(champFight => {
 											if (!champFight[1]) {
 												return (
-													<div>
+													<div id="playerExecuted">
 														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
 															&nbsp;&nbsp;&nbsp; has been executed!
 													</div>
 												)
 											}
 											return (
-												<div>
+												<div id="playerKPlayer">
 													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[0] + ".png"} height={30} width={30} />
 														&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
 													<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + champFight[1] + ".png"} height={30} width={30} />

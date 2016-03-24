@@ -228,7 +228,7 @@ class ChampBuild extends React.Component {
         <div>
           { arr.map(i => {
               return (
-                  <div id={"builds" + i * this.props.gamesToSee}>
+                  <div id={"builds" + i * this.props.gamesToSee} key={i}>
                   {items}
                 </div>
               )

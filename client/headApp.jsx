@@ -16,15 +16,12 @@ class HeadApp extends React.Component {
   constructor() {
     super();
     this.state = {
-      totalRenders: 0,
-      scrollBar: '',
       playerID1: [],
       pos1: [],
       champImg1: {},
       allowScroll1: [],
       result1: {},
       png1: [],
-      num1: 0,
       selData1: '',
       eventSelected: '',
       addItems1: '',
@@ -40,12 +37,10 @@ class HeadApp extends React.Component {
       allowScroll2: [],
       result2: {},
       png2: [],
-      num2: 0,
       selData2: '',
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
-
     }
   }
 
@@ -117,6 +112,7 @@ class HeadApp extends React.Component {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
 
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+        that.state.spot = 0;
         that.state.patch1 = gotGameOne[0];
         that.state.pos1 = gotGameOne[1];
         that.state.champImg1 = gotGameOne[2];
@@ -127,9 +123,8 @@ class HeadApp extends React.Component {
         that.state.secondToggle = true;
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
-        if (this.state.gamesToSee === 1) {
-          that.state.scrollBar = (<input id={"scroll1"} type='range' style={{ width: '370px'}} min='0' max={gotGameOne[4].length - 1} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
 
+        if (this.state.gamesToSee === 1) {
           // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
           that.addStatChoice();
@@ -148,7 +143,6 @@ class HeadApp extends React.Component {
             that.state.allowScroll2 = gotGameOne[4];
             that.state.result2 = gotGameOne[5];
             that.state.itemStorage2 = gotGameOne[6];
-            that.state.scrollBar = (<input id={"scroll2"} type='range' style={{ width: '370px'}} min='0' max={Math.max(that.state.allowScroll1.length - 1, gotGameOne[4].length - 1)} step='1' defaultValue='0' onChange={that.onChange.bind(that)}></input>);
             that.state.totalRenders = 2;
             that.state.clicksForGame.length--;
 
@@ -325,7 +319,7 @@ class HeadApp extends React.Component {
   onChange(e) {
     e.preventDefault();
     this.setState({
-      num1: e.target.value
+      spot: e.target.value
     })
   }
 
@@ -333,11 +327,16 @@ class HeadApp extends React.Component {
   addStatChoice() {
     const w = 550;
     if (this.state.gamesToSee === 1) {
+      if (document.getElementById("chart1")) {
+        $("#allStat1").first().remove();
+      }
       if (document.getElementById("chart2")) {
-        $("#chart2").first().remove();
+        $("#chart2").remove();
+        $("#allStat2").remove();
       }
       if (document.getElementById("chart4")) {
-        $("#chart4").first().remove()
+        $("#chart4").remove();
+        $("#allStat4").remove();
       }
 
       const svg = d3.select("#chart1")
@@ -355,8 +354,14 @@ class HeadApp extends React.Component {
 
     if (this.state.gamesToSee === 2) {
       if (document.getElementById("chart1") || document.getElementById("allStat1")) {
-        $("#chart1").first().remove();
-        $("#allStat1").first().remove();
+        $("#chart1").remove();
+        $("#allStat1").remove();
+      }
+      if (document.getElementById("chart2")) {
+        $("#allStat2").first().remove();
+      }
+      if (document.getElementById("chart4")) {
+        $("#allStat4").first().remove();
       }
 
       const svg = d3.select("#chart2")
@@ -394,8 +399,8 @@ class HeadApp extends React.Component {
     }
 
     if (this.state.gamesToSee === 2) {
-      if (document.getElementById("builds1")) {
-        $("#builds1").first().remove();
+      if (document.getElementById("allItems1")) {
+        $("#allItems1").first().remove();
       }
       if (document.getElementById("allItems2")) {
         $("#allItems2").first().remove();
@@ -544,14 +549,14 @@ class HeadApp extends React.Component {
 
           <WhosGames summonersName={this.state.whosGames} /> 
 
-          <GamesOnSR gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
-          <GameMap gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} />
-          <TimeStamp gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} conversion={this.state.num1} timeline2={this.state.allowScroll2} />
-          <DropDownMenu gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} scrollBar={this.state.scrollBar} whichEventPick={this.whichEventPick.bind(this)} />
-          <EventDisplay gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
-          <Chart gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
-          <ChampBuild gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} spot={this.state.num1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} />
-          <ChampImage gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.num1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
+          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
+          <GameMap gamesToSee={this.state.gamesToSee} />
+          <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} />
+          <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} />
+          <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
+          <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
+          <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} />
+          <ChampImage gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.spot} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
         </div>
       )
     }
@@ -566,7 +571,7 @@ class HeadApp extends React.Component {
           </form>
 
           <WhosGames summonersName={this.state.whosGames} /> 
-          <GamesOnSR gamesToSee={this.state.gamesToSee} totalRenders={this.state.totalRenders} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
+          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
           
         </div>
       )

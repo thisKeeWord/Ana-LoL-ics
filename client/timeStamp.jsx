@@ -5,7 +5,11 @@ class TimeStamp extends React.Component {
   swap() {
     let convert = this.props.conversion;
 
-    if (((this.props.timeline1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.gamesToSee === 2)) && this.props.conversion.length) {
+    if (this.props.timeline1 && this.props.gamesToSee === 1 && this.props.conversion.length) {
+      convert = this.props.timeline1[this.props.conversion][0].timestamp;
+    }
+
+    if (this.props.timeline2 && this.props.gamesToSee === 2 && this.props.conversion.length) {
       if (this.props.timeline1.length > this.props.timeline2.length) {
       	convert = this.props.timeline1[this.props.conversion][0].timestamp;
       }

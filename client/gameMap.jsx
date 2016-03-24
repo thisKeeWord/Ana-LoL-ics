@@ -12,12 +12,12 @@ class GameMap extends React.Component {
       let gameMapArr = [1, 2];
       return (
         <div>
-        { gameMapArr.map(i => {
-            return (
-              <div id={"map" + i * this.props.gamesToSee} />
-            )
-          })
-        }
+          { gameMapArr.map(i => {
+              return (
+                <div id={"map" + i * this.props.gamesToSee} key={i} />
+              )
+            })
+          }
         </div>
       )
     }
