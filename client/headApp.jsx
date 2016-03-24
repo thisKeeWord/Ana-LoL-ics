@@ -113,6 +113,7 @@ class HeadApp extends React.Component {
 
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
+        that.state.eventSelected = 'select one';
         that.state.patch1 = gotGameOne[0];
         that.state.pos1 = gotGameOne[1];
         that.state.champImg1 = gotGameOne[2];
@@ -517,7 +518,6 @@ class HeadApp extends React.Component {
   numGamesSee(e) {
     e.preventDefault();
     this.state.gamesToSee = parseInt(e.target.value, 10);
-
   }
 
   render() {
@@ -529,8 +529,10 @@ class HeadApp extends React.Component {
           Your one stop shop to finding more than a summary but less than a replay of a game!<br />
           To get started, enter an ign (in game name) in the search bar.
           <br /><br /><br /><br />
-          (Legal Jibber Jabber: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.<br/>
-          League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)
+          (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
+           or opinions of Riot Games or anyone officially involved in producing or managing<br />
+           League of Legends.League of Legends and Riot Games are trademarks or registered<br />
+           trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
@@ -548,11 +550,10 @@ class HeadApp extends React.Component {
           </form>
 
           <WhosGames summonersName={this.state.whosGames} /> 
-
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
           <GameMap gamesToSee={this.state.gamesToSee} />
           <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} />
-          <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} />
+          <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} />
           <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
           <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
           <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} />
@@ -572,7 +573,6 @@ class HeadApp extends React.Component {
 
           <WhosGames summonersName={this.state.whosGames} /> 
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
-          
         </div>
       )
     }
