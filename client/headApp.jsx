@@ -513,8 +513,10 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           Your one stop shop to finding more than a summary but less than a replay of a game!<br />
-          We are currently in beta and will soon have side-by-side game comparison available.<br />
           To get started, enter an ign (in game name) in the search bar.
+          <br /><br /><br /><br />
+          (Legal Jibber Jabber: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.<br/>
+          League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" name="userName" ref="userName" placeholder="enter username" required />
           </form>
