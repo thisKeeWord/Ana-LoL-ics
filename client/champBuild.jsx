@@ -124,22 +124,29 @@ class ChampBuild extends React.Component {
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
+        let colorOfTeam = 'blue';
+
         if (document.getElementById("allItems" + i * this.props.gamesToSee)) {
           $(".champBuilds" + i * this.props.gamesToSee).remove();
           $(".champIcons" + i * this.props.gamesToSee).remove();
           $("allItems" + i * this.props.gamesToSee).remove();
+
         }
       
 
         // EACH PLAYER'S BUILDS
-        for (let w = 0; w < this.props["playerInfo" + i.toString()].length; w++) {
 
+        for (let w = 0; w < this.props["playerInfo" + i.toString()].length; w++) {
+          if (w > 4) {
+            colorOfTeam = 'purple';
+          }
           // WID=WIDTH HARDCODED FOR NOW
           let wid = 466;
           let build = this.props["playerInfo" + i.toString()][w];
 
           // FLIP SECOND BUILD FOR SYMMETRY
           if (i === 2) {
+            d3.select("#whichTeamBuild" + colorOfTeam + w + '0').remove();
             this.props["addItems" + i.toString()].append('svg:g')
               .attr("class", "champIcons" + i * this.props.gamesToSee)
               .selectAll("image")
@@ -150,6 +157,19 @@ class ChampBuild extends React.Component {
                 .attr('y', w * 40)
                 .attr('x', 264)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px' });
+
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr("id", "whichTeamBuild" + colorOfTeam + w + '0')
+              .selectAll("rect")
+              .data([[]])
+                .enter()
+                  .append("rect")
+                    .attr('y', w * 40)
+                    .attr('x', 264)
+                    .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 39)
+                    .attr('width', 39)
+                    .attr("fill", "transparent");
           
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
@@ -169,6 +189,7 @@ class ChampBuild extends React.Component {
                 .style({ 'width': '24px', 'height': '24px' });
           }
           else {
+            d3.select("#whichTeamBuild" + colorOfTeam + w).remove();
             this.props["addItems" + i.toString()].append('svg:g')
               .attr("class", "champIcons" + i * this.props.gamesToSee)
               .selectAll("image")
@@ -178,6 +199,18 @@ class ChampBuild extends React.Component {
                 .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
                 .attr('y', w * 40)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px', 'float': 'right'});
+
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr("id", "whichTeamBuild" + colorOfTeam + w)
+              .selectAll("rect")
+              .data([[]])
+                .enter()
+                  .append("rect")
+                    .attr('y', w * 40)
+                    .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 39)
+                    .attr('width', 39)
+                    .attr("fill", "transparent");
           
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
