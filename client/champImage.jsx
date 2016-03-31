@@ -135,7 +135,7 @@ class ChampImage extends React.Component {
               d3.select("#champIcon" + count * this.props.gamesToSee).remove();
               d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
-                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
@@ -146,7 +146,7 @@ class ChampImage extends React.Component {
 
 
               this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
-                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("rect")
                     .attr('x', d => { return xScale(d[0]) })
