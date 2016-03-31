@@ -19,7 +19,7 @@ class GamesOnSR extends React.Component {
           <option value="1">1</option>
           <option value="2">2</option>
         </select> 
-        from list: <br/
+        from list: <br/>
         { this.props.res.map(matchList => {
             return (
               <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
