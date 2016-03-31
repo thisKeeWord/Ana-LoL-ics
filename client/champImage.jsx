@@ -38,6 +38,7 @@ class ChampImage extends React.Component {
         
 
         for (let w = 0; w < this.props["playerInfo" + count.toString()].length; w++) {
+
           if (w > 4) {
             colorOfTeam = 'purple';
           }
@@ -47,10 +48,11 @@ class ChampImage extends React.Component {
           // USE SVG FROM STATE TO APPEND NEW ICONS
           // MAYBE DIDN'T HIT THE NEXT MINUTE TO LOG PLAYER POSITION
           // MOVED REMOVE METHOD TO IF STATEMENT TO NOT REMOVE IMAGE
+          d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+          d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
+
           if (this.props["timeline" + count.toString()][this.props.spot]) {
             if (this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position) {
-              d3.select("#champIcon" + count * this.props.gamesToSee).remove();
-              d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
                 .data([[ this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.y ]])
                 .enter()
@@ -77,8 +79,6 @@ class ChampImage extends React.Component {
 
               // USER MAY GO STRAIGHT TO LAST FRAME
             if (!this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position && this.props["timeline" + count.toString()][this.props.spot-1][0].participantFrames[w+1].position) {
-              d3.select("#champIcon" + count * this.props.gamesToSee).remove();
-              d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
                 .data([[ this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.y ]])
                 .enter()                
@@ -90,7 +90,7 @@ class ChampImage extends React.Component {
                   .style({ 'width': '24px', 'height': '24px' });
 
 
-              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam + w + whichGameBorder).selectAll("rect")
                 .data([[ this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("rect")
@@ -104,8 +104,6 @@ class ChampImage extends React.Component {
           }
           else {
             if (this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position) {
-              d3.select("#champIcon" + count * this.props.gamesToSee).remove();
-              d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
                 .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
                 .enter()
@@ -117,7 +115,7 @@ class ChampImage extends React.Component {
                   .style({ 'width': '24px', 'height': '24px' });
 
 
-              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam + w + whichGameBorder).selectAll("rect")
                 .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("rect")
@@ -132,10 +130,8 @@ class ChampImage extends React.Component {
 
               // USER MAY GO STRAIGHT TO LAST FRAME
             if (!this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position && this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position) {
-              d3.select("#champIcon" + count * this.props.gamesToSee).remove();
-              d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
-                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
@@ -145,8 +141,8 @@ class ChampImage extends React.Component {
                   .style({ 'width': '24px', 'height': '24px' });
 
 
-              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
-                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam + w + whichGameBorder).selectAll("rect")
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.y ]])
                 .enter()
                   .append("rect")
                     .attr('x', d => { return xScale(d[0]) })
