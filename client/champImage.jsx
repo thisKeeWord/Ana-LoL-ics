@@ -26,8 +26,16 @@ class ChampImage extends React.Component {
       .range([height, 0]);
 
     if((this.props.png1 && this.props.gamesToSee === 1) || (this.props.png2 && this.props.gamesToSee === 2)) {
+      let colorOfTeam = 'blue';
       for (let count = 1; count <= this.props.gamesToSee; count++) {
+
+        // BLUE OR PURPLE SIDE
+        
+
         for (let w = 0; w < this.props["playerInfo" + count.toString()].length; w++) {
+          if (w > 4) {
+            colorOfTeam = 'purple';
+          }
           const checking = this.props["playerInfo" + count.toString()][w];
 
           // REMOVE PREVIOUS ICONS      
@@ -37,55 +45,111 @@ class ChampImage extends React.Component {
           if (this.props["timeline" + count.toString()][this.props.spot]) {
             if (this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position) {
               d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+              d3.select("#whichTeam" + colorOfTeam + w).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
                 .data([[ this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.y ]])
-                .enter().append("svg:image")
+                .enter()
+                  .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '24px', 'height': '24px' })
+                  .style({ 'width': '23px', 'height': '23px' });
+
+
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam + w).selectAll("rect")
+                .data([[ this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position.y ]])
+                .enter()
+                  .append("rect")
+                    .attr('x', d => { return xScale(d[0]) })
+                    .attr('y', d => { return yScale(d[1]) })
+                    .style({ 'stroke-width': 1, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 24)
+                    .attr('width', 24)
+                    .attr("fill", "transparent");
             }
 
 
               // USER MAY GO STRAIGHT TO LAST FRAME
             if (!this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w+1].position && this.props["timeline" + count.toString()][this.props.spot-1][0].participantFrames[w+1].position) {
               d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+              d3.select("#whichTeam" + colorOfTeam + w).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
-                .data([[ this.props["timeline" + count.toString()][this.props.spot-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot-1][0].participantFrames[w+1].position.y ]])
-                .enter().append("svg:image")
+                .data([[ this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.y ]])
+                .enter()                
+                  .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '24px', 'height': '24px' });
+                  .style({ 'width': '23px', 'height': '23px' });
+
+
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
+                .data([[ this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props.spot - 1][0].participantFrames[w+1].position.y ]])
+                .enter()
+                  .append("rect")
+                    .attr('x', d => { return xScale(d[0]) })
+                    .attr('y', d => { return yScale(d[1]) })
+                    .style({ 'stroke-width': 1, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 24)
+                    .attr('width', 24)
+                    .attr("fill", "transparent");
             }
           }
           else {
             if (this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position) {
               d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+              d3.select("#whichTeam" + colorOfTeam + w).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
                 .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
-                .enter().append("svg:image")
+                .enter()
+                  .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '24px', 'height': '24px' })
+                  .style({ 'width': '23px', 'height': '23px' });
+
+
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .enter()
+                  .append("rect")
+                    .attr('x', d => { return xScale(d[0]) })
+                    .attr('y', d => { return yScale(d[1]) })
+                    .style({ 'stroke-width': 1, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 24)
+                    .attr('width', 24)
+                    .attr("fill", "transparent");
             }
 
 
               // USER MAY GO STRAIGHT TO LAST FRAME
             if (!this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position && this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position) {
               d3.select("#champIcon" + count * this.props.gamesToSee).remove();
+              d3.select("#whichTeam" + colorOfTeam + w).remove();
               this.props["png" + count.toString()].append('svg:g').attr("id", "champIcon" + count * this.props.gamesToSee).selectAll("image")
-                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1-1][0].participantFrames[w+1].position.y ]])
-                .enter().append("svg:image")
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .enter()
+                  .append("image")
                   .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + count.toString()] + '/img/champion/' + this.props["champImg" + count.toString()][this.props["playerInfo" + count.toString()][w][1]] + '.png')
                   .attr('x', d => { return xScale(d[0]) })
                   .attr('y', d => { return yScale(d[1]) })
                   .attr('class', 'image')
-                  .style({ 'width': '24px', 'height': '24px' });
+                  .style({ 'width': '23px', 'height': '23px' });
+
+
+              this.props["png" + count.toString()].append('svg:g').attr("id", "whichTeam" + colorOfTeam).selectAll("rect")
+                .data([[ this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.x, this.props["timeline" + count.toString()][this.props["timeline" + count.toString()].length - 1][0].participantFrames[w+1].position.y ]])
+                .enter()
+                  .append("rect")
+                    .attr('x', d => { return xScale(d[0]) })
+                    .attr('y', d => { return yScale(d[1]) })
+                    .style({ 'stroke-width': 1, 'stroke': colorOfTeam.toString() })
+                    .attr('height', 24)
+                    .attr('width', 24)
+                    .attr("fill", "transparent");
             }
           }
         }
