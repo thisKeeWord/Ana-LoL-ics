@@ -138,25 +138,33 @@ class Chart extends React.Component {
     // GAMES
     for (let l = 1; l <= this.props.gamesToSee; l++) {
       let getName = [];
-      let h = this.props["maxForStat" + l.toString()];
       if (this.props["selData" + l.toString()]) {
-        for (let name = 0; name < this.props["playerInfo" + l.toString()].length; name++) {
-          getName.push(this.props["champName" + l.toString()][this.props["playerInfo" + l.toString()][name][1]])
+        let nameOfChamp = this.props["champName" + l.toString()],
+            playerInformation = this.props["playerInfo" + l.toString()],
+            whichSelData = this.props["selData" + l.toString()],
+            whichMaxStat = this.props["maxForStat" + l.toString()];
+
+
+        for (let name = 0; name < playerInformation.length; name++) {
+          getName.push(nameOfChamp[playerInformation[name][1]])
         } 
 
         // CHECK IF TEXT AND BAR EXISTS, THEN REMOVE
-        if (document.getElementById("statInfo" + l * this.props.gamesToSee) && document.getElementById("infoStat" + l * this.props.gamesToSee)) {
+        
+        if (document.getElementById("statInfo" + l * this.props.gamesToSee) && document.getElementById("infoStat" + l * this.props.gamesToSee) && document.getElementById("nameStat" + l * this.props.gamesToSee)) {
           $("#statInfo" + l * this.props.gamesToSee).first().remove();
           $("#infoStat" + l * this.props.gamesToSee).first().remove();
+          $("#nameStat" + l * this.props.gamesToSee).first().remove();
         }
+
 
         // APPEND NEW BAR AND TEXT
         // BAR WAS UPSIDE DOWN
-        if(this.props["selData" + l.toString()]) {
+        if(whichSelData) {
           if (document.getElementById("infoStat" + l * this.props.gamesToSee)) {
             $("#infoStat" + l * this.props.gamesToSee).first().remove();
           }
-          this.props["selData" + l.toString()].append("g")
+          whichSelData.append("g")
             .attr("id", "statInfo" + l * this.props.gamesToSee)
             .selectAll("rect")
             .data(whichData[l-1])
@@ -166,19 +174,19 @@ class Chart extends React.Component {
                 return x(i) / 10;
               })
               .attr("y", (d, i) => { 
-                if(this.props["maxForStat" + l.toString()]) {
+                if(whichMaxStat) {
                   return (labelHeight - 30);
                 }
               })
               .attr("width",  w / whichData[l-1].length - 2)
               .attr("height", (d, i) => {
-                if(this.props["maxForStat" + l.toString()]) {
-                  return (d / this.props["maxForStat" + l.toString()]) * (labelHeight - 30);
+                if(whichMaxStat) {
+                  return (d / whichMaxStat) * (labelHeight - 30);
                 }
               })
               .attr("y", (d, i) => {
-                if(this.props["maxForStat" + l.toString()]) {
-                  return (labelHeight - 30) - (d / this.props["maxForStat" + l.toString()]) * (labelHeight - 30); // FLIP THE BAR TO LOAD UPWARD
+                if(whichMaxStat) {
+                  return (labelHeight - 30) - (d / whichMaxStat) * (labelHeight - 30); // FLIP THE BAR TO LOAD UPWARD
                 }
               })
               .attr("fill", d => {
@@ -187,7 +195,7 @@ class Chart extends React.Component {
               .attr("id", "shape");
 
           // APPEND TEXT INSIDE BAR
-          this.props["selData" + l.toString()].append("g")
+          whichSelData.append("g")
             .attr("id", "infoStat" + l * this.props.gamesToSee)
             .selectAll("text")
             .data(whichData[l-1])
@@ -200,8 +208,8 @@ class Chart extends React.Component {
                 return x(i) / 10 + 24;
               })
               .attr("y", (d, i) => {
-                if(this.props["maxForStat" + l.toString()]) {
-                  return (labelHeight - 30) - (d / this.props["maxForStat" + l.toString()]) * (labelHeight - 30) + 10;
+                if(whichMaxStat) {
+                  return (labelHeight - 30) - (d / whichMaxStat) * (labelHeight - 30) + 10;
                 }
               })
               .attr("text-anchor", "middle")
@@ -211,27 +219,77 @@ class Chart extends React.Component {
               .attr("id", "amount");
 
           // ADD LABELS TO X-AXIS
-          this.props["selData" + l.toString()].append("g")
-            .attr("id", "infoStat" + l * this.props.gamesToSee)
-            .selectAll("text")
-            .data(getName)
-            .enter()
-            .append("text")
-              .text((d, i) => {
-                return d;
-              })
-              .attr("x", (d, i) => {
-                return x(i) / 10 + 24;
-              })
-              .attr("y", (d, i) => {
-                return labelHeight - 10;
-              })
-              .attr("text-anchor", "middle")
-              .attr("font-family", "sans-serif")
-              .attr("font-size", "11px")
-              .attr("fill", "white")
-              .attr("id", "whichChamp" + l);
-      
+          let allTheNames = whichSelData.append("g").attr("id", "nameStat" + l * this.props.gamesToSee);
+
+          for (let textName = 0; textName < getName.length; textName++) {
+            allTheNames.append("g")
+              .attr("id", "splitChamp" + textName)      
+              .selectAll("text")
+              .data([getName[textName]])
+              .enter()
+              .append("text")
+                .text((d, i) => {
+                  return d;
+                })
+                .attr("x", x(textName) / 10 + 26)
+                .attr("y", labelHeight - 15)
+                .attr("text-anchor", "middle")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "11px")
+                .attr("fill", "white")
+                .attr("id", "whichChamp" + textName + l.toString());
+
+            let wrapWord = Number(allTheNames.selectAll("#whichChamp" + textName + l.toString()).style("width").replace(/px/g,''));
+
+            if (wrapWord > 52) {
+              console.log(typeof wrapWord)
+              let splitName = getName[textName].split(/(?=[A-Z])/);
+
+              if (splitName.length > 1) {
+                $("#splitChamp" + textName).remove();
+
+                for (let appendWord = 0; appendWord < splitName.length; appendWord++) {
+                  allTheNames.append("g").append("g")
+                    .attr("id", "splitChamp" + textName.toString() + appendWord)
+                    .selectAll("text")
+                    .data([splitName[appendWord]])
+                    .enter()
+                    .append("text")
+                      .text((d, i) => {
+                        return d;
+                      })
+                      .attr("x", x(textName) / 10 + 26)
+                      .attr("y", labelHeight - 15 + appendWord * 12.5)
+                      .attr("text-anchor", "middle")
+                      .attr("font-family", "sans-serif")
+                      .attr("font-size", "11px")
+                      .attr("fill", "white")
+                      .attr("id", "whichChamp" + textName + l.toString());
+                }
+              }
+              
+              else {
+                $("#splitChamp" + textName).remove();
+
+                allTheNames.append("g")
+                  .attr("id", "splitChamp" + textName)
+                  .selectAll("text")
+                  .data([splitName])
+                  .enter()
+                  .append("text")
+                    .text((d, i) => {
+                      return d;
+                    })
+                    .attr("x", x(textName) / 10 + 26)
+                    .attr("y", labelHeight - 14)
+                    .attr("text-anchor", "middle")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "9px")
+                    .attr("fill", "white")
+                    .attr("id", "whichChamp" + textName + l.toString());
+              }
+            }
+          }
         }
       }
     }
