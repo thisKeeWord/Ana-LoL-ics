@@ -119,7 +119,8 @@ class ChampBuild extends React.Component {
     }
   }
 
-  appendItems(showItems) { 
+  appendItems(showItems) {
+
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
