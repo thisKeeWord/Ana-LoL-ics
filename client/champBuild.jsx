@@ -120,6 +120,7 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
+    console.log(this.props.playerInfo1)
  
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
@@ -130,16 +131,17 @@ class ChampBuild extends React.Component {
           $(".champBuilds" + i * this.props.gamesToSee).remove();
           $(".champIcons" + i * this.props.gamesToSee).remove();
           $("allItems" + i * this.props.gamesToSee).remove();
-
+        }
+        if (document.getElementById("laneRole" + i * this.props.gamesToSee)) {
+          $("laneRole" + i * this.props.gamesToSee).remove();
         }
       
-
         // EACH PLAYER'S BUILDS
-
         for (let w = 0; w < this.props["playerInfo" + i.toString()].length; w++) {
           if (w > 4) {
             colorOfTeam = 'purple';
           }
+
           // WID=WIDTH HARDCODED FOR NOW
           let wid = 466;
           let build = this.props["playerInfo" + i.toString()][w];
@@ -187,6 +189,36 @@ class ChampBuild extends React.Component {
                 })
                 .attr("y", 40 * w + 10)
                 .style({ 'width': '24px', 'height': '24px' });
+
+            this.props["whichRole" + i.toString()].append('svg:g')
+              .attr('class', 'champRoles' + i * this.props.gamesToSee)
+              .selectAll("text")
+              .data([ this.props["playerInfo" + i.toString()][w][2], this.props["playerInfo" + i.toString()][w][3] ])
+              .enter()
+                .append("text")
+                .text((d, i) => {
+                  console.log(typeof d)
+                  if (d === "DUO_SUPPORT") {
+                    return "support";
+                  }
+                  if (d === "DUO_CARRY") {
+                    return "adcarry";
+                  }
+                  if (d === "NONE") {
+                    return;
+                  }
+                  return d.toLowerCase();
+                })
+                .attr("x", (d, i) => {
+                  return 1;
+                })
+                .attr("y", (d, i) => {
+                  return 40 * w + (((i+1) * 10) + 10);
+                })
+                .attr("font-size", "10px")
+                .attr("text-anchor", "start")
+                .style({ 'width': '20px', 'height': '20px'})
+                .attr("fill", "#cccccc");
           }
           else {
             d3.select("#whichTeamBuild" + colorOfTeam + w).remove();
@@ -228,6 +260,36 @@ class ChampBuild extends React.Component {
                 })
                 .attr("y", 40 * w + 10)
                 .style({ 'width': '24px', 'height': '24px' });
+
+            this.props["whichRole" + i.toString()].append('svg:g')
+              .attr('id', 'champRoles' + i * this.props.gamesToSee)
+              .selectAll("text")
+              .data([ this.props["playerInfo" + i.toString()][w][2], this.props["playerInfo" + i.toString()][w][3] ])
+              .enter()
+                .append("text")
+                .text((d, i) => {
+                  console.log(typeof d)
+                  if (d === "DUO_SUPPORT") {
+                    return "support";
+                  }
+                  if (d === "DUO_CARRY") {
+                    return "adcarry";
+                  }
+                  if (d === "NONE") {
+                    return;
+                  }
+                  return d.toLowerCase();
+                })
+                .attr("x", (d, i) => {
+                  return 49;
+                })
+                .attr("y", (d, i) => {
+                  return 40 * w + (((i+1) * 10) + 10);
+                })
+                .attr("font-size", "10px")
+                .attr("text-anchor", "end")
+                .style({ 'width': '20px', 'height': '20px'})
+                .attr("fill", "#cccccc");
           }
         }
       }
@@ -248,8 +310,11 @@ class ChampBuild extends React.Component {
     // GAME 1
     if (this.props.gamesToSee === 1) {
       return (
-        <div id={"builds" + 1 * this.props.gamesToSee}>
-          {items}
+        <div>
+          <div id={"builds" + 1 * this.props.gamesToSee}>
+            {items}
+          </div>
+          <div id={"roleLane" + 1 * this.props.gamesToSee} />
         </div>
       )
     }
@@ -261,8 +326,11 @@ class ChampBuild extends React.Component {
         <div>
           { arr.map(i => {
               return (
+                <div>
                   <div id={"builds" + i * this.props.gamesToSee} key={i}>
-                  {items}
+                    {items}
+                  </div>
+                  <div id={"roleLane" + i * this.props.gamesToSee} key={i+i} />
                 </div>
               )
             })
