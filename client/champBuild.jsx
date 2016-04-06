@@ -195,7 +195,6 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("text")
                 .text((d, i) => {
-                  console.log(typeof d)
                   if (d === "DUO_SUPPORT") {
                     return "support";
                   }
@@ -266,7 +265,6 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("text")
                 .text((d, i) => {
-                  console.log(typeof d)
                   if (d === "DUO_SUPPORT") {
                     return "support";
                   }

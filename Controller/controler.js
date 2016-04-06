@@ -115,8 +115,8 @@ function getMatchList(date, req, res, next) {
 					if (gamesList.games[i]["mapId"] === 11) {
 						perGameSpec.push(gamesList.games[i]["gameId"])
 						perGameSpec.push(gamesList.games[i]["championId"])
-						var date = new Date(gamesList.games[i]["createDate"])
-						perGameSpec.push(date.toLocaleString());
+						var date = new Date(gamesList.games[i]["createDate"]).toString().replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/,'');
+						perGameSpec.push(date);
 					}
 					matchHistory.push(perGameSpec);
 				}
