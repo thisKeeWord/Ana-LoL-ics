@@ -27,15 +27,15 @@ input {
 
 #matches1 {
   margin-top: 70px;
-  width: 170px;
+  width: 180px;
   right: 40;
   position: absolute;
   color: #cccccc;
 }
 
 #choices1 {
-  width: 35px;
-  right: 76;
+  width: 40px;
+  right: 82;
   position: absolute;
   color: #cccccc;
 }
@@ -122,7 +122,7 @@ input {
 
 .games1 {
   text-align: right;
-  width: 170px;
+  width: 180px;
 }
 
 
@@ -138,8 +138,8 @@ input {
 
 #matches2 {
   margin-top: 70px;
-  width: 170px;
-  left: 552px;
+  width: 180px;
+  left: 555;
   position: absolute;
   color: #cccccc;
 }
@@ -208,7 +208,7 @@ input {
 
 .games2 {
   text-align: right;
-  width: 170px;
+  width: 180px;
 }
 
 

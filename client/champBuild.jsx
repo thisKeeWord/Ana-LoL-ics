@@ -120,7 +120,6 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
-    console.log(this.props.playerInfo1)
  
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
@@ -197,7 +196,6 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("text")
                 .text((d, i) => {
-                  console.log(typeof d)
                   if (d === "DUO_SUPPORT") {
                     return "support";
                   }
@@ -268,7 +266,6 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("text")
                 .text((d, i) => {
-                  console.log(typeof d)
                   if (d === "DUO_SUPPORT") {
                     return "support";
                   }

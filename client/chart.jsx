@@ -242,7 +242,6 @@ class Chart extends React.Component {
             let wrapWord = Number(allTheNames.selectAll("#whichChamp" + textName + l.toString()).style("width").replace(/px/g,''));
 
             if (wrapWord > 52) {
-              console.log(typeof wrapWord)
               let splitName = getName[textName].split(/(?=[A-Z])/);
 
               if (splitName.length > 1) {
