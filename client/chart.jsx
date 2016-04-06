@@ -223,7 +223,7 @@ class Chart extends React.Component {
 
           for (let textName = 0; textName < getName.length; textName++) {
             allTheNames.append("g")
-              .attr("id", "splitChamp" + textName)      
+              .attr("id", "splitChamp" + l + textName.toString())      
               .selectAll("text")
               .data([getName[textName]])
               .enter()
@@ -246,7 +246,7 @@ class Chart extends React.Component {
               let splitName = getName[textName].split(/(?=[A-Z])/);
 
               if (splitName.length > 1) {
-                $("#splitChamp" + textName).remove();
+                $("#splitChamp" + l + textName.toString()).remove();
 
                 for (let appendWord = 0; appendWord < splitName.length; appendWord++) {
                   allTheNames.append("g").append("g")
@@ -269,10 +269,10 @@ class Chart extends React.Component {
               }
               
               else {
-                $("#splitChamp" + textName).remove();
+                $("#splitChamp" + l + textName.toString()).remove();
 
                 allTheNames.append("g")
-                  .attr("id", "splitChamp" + textName)
+                  .attr("id", "splitChamp" + l + textName.toString())
                   .selectAll("text")
                   .data([splitName])
                   .enter()

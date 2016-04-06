@@ -178,8 +178,10 @@ function getGameData(that, count, total, compareVersions, patchDesired, gameTime
 	        info.participants.forEach(function(i) {
 	          var pId = i.participantId;
 	          var cId = i.championId;
+	          var playerRole = i.timeline.role;
+	          var playerLane = i.timeline.lane;
 	          // PARTICIPANT-ID AND CHAMPION-ID
-	          idOfPlayer.push([pId, cId]);
+	          idOfPlayer.push([pId, cId, playerRole, playerLane]);
 
 	          // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
 	          request(url + cId + '?' + process.env.stuff2, function(error, champData) {

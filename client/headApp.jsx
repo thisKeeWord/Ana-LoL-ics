@@ -391,11 +391,20 @@ class HeadApp extends React.Component {
       if (document.getElementById("allItems1")) {
         $("#allItems1").first().remove();
       }
+      if (document.getElementById("laneRole1")) {
+        $("#laneRole1").first().remove();
+      }
       if (document.getElementById("builds2")) {
         $("#builds2").first().remove();
       }
+      if (document.getElementById("roleLane2")) {
+        $("#roleLane2").first().remove();
+      }
       if (document.getElementById("builds4")) {
         $("#builds4").first().remove();
+      }
+      if (document.getElementById("roleLane4")) {
+        $("#roleLane4").first().remove();
       }
     }
 
@@ -409,6 +418,15 @@ class HeadApp extends React.Component {
       if (document.getElementById("allItems4")) {
         $("#allItems4").first().remove();
       }
+      if (document.getElementById("laneRole1")) {
+        $("#laneRole1").first().remove();
+      }
+      if (document.getElementById("laneRole2")) {
+        $("#laneRole2").first().remove();
+      }
+      if (document.getElementById("laneRole4")) {
+        $("#laneRole4").first().remove();
+      }
     }   
 
     const w = 304,
@@ -419,10 +437,19 @@ class HeadApp extends React.Component {
               .attr("width", w)
               .attr("height", h)
               .attr("id", "allItems1");
+
+      const champRole = d3.select("#roleLane1")
+              .append("svg:svg")
+              .attr("width", 50)
+              .attr("height", h)
+              .attr("id", "laneRole1");
+
       this.setState({
-        addItems1: svg
+        addItems1: svg,
+        whichRole1: champRole
       })
     }
+
     if (this.state.gamesToSee === 2) {
       const svg = d3.select("#builds2")
               .append("svg:svg")
@@ -430,14 +457,29 @@ class HeadApp extends React.Component {
               .attr("height", h)
               .attr("id", "allItems2");
 
-      const svg2 = d3.select("#builds" + 2 * this.state.gamesToSee)
+      const svg2 = d3.select("#builds4")
               .append("svg:svg")
               .attr("width", w)
               .attr("height", h)
               .attr("id", "allItems4");
+
+      const champRole = d3.select("#roleLane2")
+              .append("svg:svg")
+              .attr("width", 50)
+              .attr("height", h)
+              .attr("id", "laneRole2");
+
+      const champRole2 = d3.select("#roleLane4")
+              .append("svg:svg")
+              .attr("width", 50)
+              .attr("height", h)
+              .attr("id", "laneRole4");
+
       this.setState({
         addItems1: svg,
-        addItems2: svg2
+        addItems2: svg2,
+        whichRole1: champRole,
+        whichRole2: champRole2
       })
     }
   }
@@ -556,7 +598,7 @@ class HeadApp extends React.Component {
           <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} />
           <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
           <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
-          <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} />
+          <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} whichRole1={this.state.whichRole1} whichRole2={this.state.whichRole2} />
           <ChampImage gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.spot} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
         </div>
       )

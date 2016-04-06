@@ -56,7 +56,7 @@ class EventDisplay extends React.Component {
 								return (
 									<div>
 										<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props.patch1 + "/img/champion/" + champFight[0] + ".png"} height={40} width={40} />
-											&nbsp;&nbsp;&nbsp; has been executed!
+											&nbsp;&nbsp;&nbsp; executed!
 									</div>
 								)
 							}

@@ -72,6 +72,14 @@ input {
 #builds1 {
   position: absolute;
   top: 670;
+  left: 80;
+  color: #cccccc;
+  margin-bottom: 20px;
+}
+
+#roleLane1 {
+  position: absolute;
+  top: 670;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
@@ -168,6 +176,14 @@ input {
 #builds2 {
   position: absolute;
   top: 585;
+  left: 82;
+  color: #cccccc;
+  margin-bottom: 20px;
+}
+
+#roleLane2 {
+  position: absolute;
+  top: 585;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
@@ -227,6 +243,14 @@ input {
 }
 
 #builds4 {
+  position: absolute;
+  top: 585;
+  right: 82;
+  color: #cccccc;
+  margin-bottom: 20px;
+}
+
+#roleLane4 {
   position: absolute;
   top: 585;
   right: 30;
