@@ -8,7 +8,7 @@ var controller = require('./../Controller/controler.js');
 var mongoURI = 'mongodb://lkee:' + process.env.stuff4 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
 mongoose.connect(mongoURI);
 
-app.set('port', (process.env.PORT || 5000))
+app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
