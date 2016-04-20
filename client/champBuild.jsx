@@ -16,6 +16,7 @@ class ChampBuild extends React.Component {
         // 10 ARRAYS, 1 PER PLAYER
         this.props["playerInfo" + i.toString()].forEach(player => {
           let itemStore = [];
+          let findTrinket = false;
 
           // AT CURRENT SPOT IN TIMELINE
           if (searchEvents[this.props.spot]) {
@@ -27,7 +28,7 @@ class ChampBuild extends React.Component {
 
                   // ITEM_PURCHASED
                   if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                    itemStore.push(findItem);
+                      itemStore.push(findItem);
                   }
 
                   // ITEM_DESTROYED
@@ -58,6 +59,29 @@ class ChampBuild extends React.Component {
                         }
                         retrieveItem--;
                       } 
+                    }
+                  }
+
+                  // DUPLICATE TRINKET
+                  if ((findItem === 3340 || findItem === 3341) && itemStore.indexOf(findItem) !== -1 && itemStore.lastIndexOf(findItem) !== itemStore.indexOf(findItem)) {
+                    itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                  }
+                }
+
+                // NO TRINKET
+                if (player[0] <= 5 && findTrinket === false && searchEvents[j][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 703, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 703, 2)) > 4184) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
+                    }
+                  }
+                }
+                if (player[0] > 5 && findTrinket === false && searchEvents[j][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 14130, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 14130, 2)) > 4204) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
                     }
                   }
                 }
@@ -120,7 +144,7 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
- 
+
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
