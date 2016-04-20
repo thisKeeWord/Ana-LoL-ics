@@ -22,18 +22,13 @@ class ChampBuild extends React.Component {
           if (searchEvents[this.props.spot]) {
 
             for (let j = 0; j <= this.props.spot; j++) {
-              // NO TRINKET OR DUPLICATE TRINKET
-              
-
               if (searchEvents[j][0].events) {
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
 
                   // ITEM_PURCHASED
                   if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                    if ((findItem === 3340 || findItem === 3341 && itemStore.indexOf(findItem) !== -1) || (findItem !== 3340 && findItem !== 3341)) {
                       itemStore.push(findItem);
-                    }
                   }
 
                   // ITEM_DESTROYED
@@ -66,21 +61,27 @@ class ChampBuild extends React.Component {
                       } 
                     }
                   }
-                  if (player[0] <= 5) {
-                    console.log(searchEvents)
-                    if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 703, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 703, 2)) > 4184) {
-                      if (findTrinket === false && (!itemStore.includes(3340) || !itemStore.includes(3341))) {
-                        itemStore.push(3340);
-                        findTrinket = true;
-                      }
+
+                  // DUPLICATE TRINKET
+                  if ((findItem === 3340 || findItem === 3341) && itemStore.indexOf(findItem) !== -1 && itemStore.lastIndexOf(findItem) !== itemStore.indexOf(findItem)) {
+                    itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                  }
+                }
+
+                // NO TRINKET
+                if (player[0] <= 5 && findTrinket === false && searchEvents[j][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 703, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 703, 2)) > 4184) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
                     }
                   }
-                  if (player[0] > 5) {
-                    if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 14130, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 14130, 2)) > 4204) {
-                      if (findTrinket === false && (!itemStore.includes(3340) || !itemStore.includes(3341))) {
-                        itemStore.push(3340);
-                        findTrinket = true;
-                      }
+                }
+                if (player[0] > 5 && findTrinket === false && searchEvents[j][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[j][0].participantFrames[player[0]].position.x - 14130, 2) + Math.pow(searchEvents[j][0].participantFrames[player[0]].position.y - 14130, 2)) > 4204) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
                     }
                   }
                 }
