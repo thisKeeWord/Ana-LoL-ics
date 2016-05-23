@@ -82,7 +82,8 @@ class HeadApp extends React.Component {
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
-          whosGames: cleanName.toUpperCase() 
+          whosGames: cleanName.toUpperCase(),
+          secondToggle: false
         })
       })
     }
@@ -95,7 +96,8 @@ class HeadApp extends React.Component {
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
-          whosGames: cleanName.toUpperCase() 
+          whosGames: cleanName.toUpperCase(),
+          secondToggle: false
         })
       })
     }
@@ -326,7 +328,7 @@ class HeadApp extends React.Component {
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
-    const w = 550;
+    const h = 400;
     if (this.state.gamesToSee === 1) {
       if (document.getElementById("chart1")) {
         $("#allStat1").first().remove();
@@ -342,8 +344,8 @@ class HeadApp extends React.Component {
 
       const svg = d3.select("#chart1")
               .append("svg:svg")
-              .attr("width", w)
-              .attr("height", 400)
+              .attr("height", h)
+              .attr("width", 400)
               .attr("id", "allStat1");
 
       if (this.state.gamesToSee === 1) {
@@ -367,14 +369,14 @@ class HeadApp extends React.Component {
 
       const svg = d3.select("#chart2")
               .append("svg:svg")
-              .attr("width", w)
-              .attr("height", 300)
+              .attr("height", h)
+              .attr("width", 400)
               .attr("id", "allStat2");
 
       const svg2 = d3.select("#chart4")
               .append("svg:svg")
-              .attr("width", w)
-              .attr("height", 300)
+              .attr("height", h)
+              .attr("width", 400)
               .attr("id", "allStat4");
 
       this.setState({
@@ -576,7 +578,7 @@ class HeadApp extends React.Component {
            League of Legends.League of Legends and Riot Games are trademarks or registered<br />
            trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
           </form>
         </div>
       )
@@ -588,7 +590,7 @@ class HeadApp extends React.Component {
       return (
         <div className="resultingInfo">
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
 
           <WhosGames summonersName={this.state.whosGames} /> 
@@ -610,7 +612,7 @@ class HeadApp extends React.Component {
       return (
         <div id="second">
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
 
           <WhosGames summonersName={this.state.whosGames} /> 

@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  min-width: 980px;
 }
 
 #welcome {
@@ -23,6 +24,18 @@ body {
 
 input {
   text-align: center;
+}
+
+input.inGameName {
+  height: 25px;
+  font-size: 15px;
+}
+
+input.username {
+  height: 25px;
+  font-size: 15px;
+  right: 5%;
+  position: absolute;
 }
 
 #matches1 {
@@ -108,9 +121,11 @@ input {
   font-weight: 30;
   color: #cccccc;
   width: 470px;
-  position: absolute;
-  left: 400;
+  /*position: absolute;*/
+  /*left: 400;*/
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #getSummonersGames {

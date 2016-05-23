@@ -18,7 +18,7 @@ function scripts() {
     debug: false,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: false
   });
   var watcher = watchify(bundler);
 

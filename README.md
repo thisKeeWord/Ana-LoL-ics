@@ -6,7 +6,7 @@ to improve their knowledge, strategy, gameplay, etc.
 ## Post-game Data Analysis
 
 This app is designed to present your post-game statistics in such a way that you can visually see your 
-improvements game-by-game (coming soon) and can compare stats to others. 
+improvements game-by-game and can compare stats to others. 
 
 ![Screenshot](/readmeImages/Analolics1.png) ![Screenshot](/readmeImages/Analolics6.png)
 
