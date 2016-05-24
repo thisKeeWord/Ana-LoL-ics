@@ -174,18 +174,25 @@ class Chart extends React.Component {
               })
               .attr("x", (d, i) => { 
                 if(whichMaxStat) {
-                  return (labelWidth - 30);
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58);
+                  }
+                  return 58;
                 }
               })
               .attr("height",  h / whichData[l-1].length - 2)
               .attr("width", (d, i) => {
                 if(whichMaxStat) {
-                  return (d / whichMaxStat) * (labelWidth - 30);
+                    return (d / whichMaxStat) * (labelWidth - 58);
                 }
               })
               .attr("x", (d, i) => {
                 if(whichMaxStat) {
-                  return (labelWidth - 30) - (d / whichMaxStat) * (labelWidth - 30); // FLIP THE BAR TO LOAD UPWARD
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58); // FLIP THE BAR TO LOAD UPWARD
+                  }
+                  console.log('wassup')
+                  return 58;
                 }
               })
               .attr("fill", d => {
@@ -210,7 +217,10 @@ class Chart extends React.Component {
               })
               .attr("x", (d, i) => {
                 if(whichMaxStat) {
-                  return (labelWidth - 30) - (d / whichMaxStat) * (labelWidth - 30) + 10;
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 20;
+                  }
+                  return (d / whichMaxStat) * (labelWidth - 58) + 25;
                 }
               })
               .attr("text-anchor", "middle")
@@ -233,61 +243,53 @@ class Chart extends React.Component {
                   return d;
                 })
                 .attr("y", y(textName) / 10 + 26)
-                .attr("x", labelWidth - 15)
-                .attr("text-anchor", "middle")
+                .attr("x", () => {
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return labelWidth - 50;
+                  }
+                  return 0;
+                })
+                .attr("text-anchor", () => {
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return "left";
+                  }
+                  return "right"
+                })
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "11px")
                 .attr("fill", "white")
                 .attr("id", "whichChamp" + textName + l.toString());
 
             let wrapWord = Number(allTheNames.selectAll("#whichChamp" + textName + l.toString()).style("width").replace(/px/g,''));
-
             if (wrapWord > 52) {
-              let splitName = getName[textName].split(/(?=[A-Z])/);
+              $("#splitChamp" + l + textName.toString()).remove();
 
-              if (splitName.length > 1) {
-                $("#splitChamp" + l + textName.toString()).remove();
-
-                for (let appendWord = 0; appendWord < splitName.length; appendWord++) {
-                  allTheNames.append("g").append("g")
-                    .attr("id", "splitChamp" + textName.toString() + appendWord)
-                    .selectAll("text")
-                    .data([splitName[appendWord]])
-                    .enter()
-                    .append("text")
-                      .text((d, i) => {
-                        return d;
-                      })
-                      .attr("y", y(textName) / 10 + 26)
-                      .attr("x", labelWidth - 15 + appendWord * 12.5)
-                      .attr("text-anchor", "middle")
-                      .attr("font-family", "sans-serif")
-                      .attr("font-size", "11px")
-                      .attr("fill", "white")
-                      .attr("id", "whichChamp" + textName + l.toString());
-                }
-              }
-              
-              else {
-                $("#splitChamp" + l + textName.toString()).remove();
-
-                allTheNames.append("g")
-                  .attr("id", "splitChamp" + l + textName.toString())
-                  .selectAll("text")
-                  .data([splitName])
-                  .enter()
-                  .append("text")
-                    .text((d, i) => {
-                      return d;
-                    })
-                    .attr("y", y(textName) / 10 + 26)
-                    .attr("x", labelWidth - 14)
-                    .attr("text-anchor", "middle")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "9px")
-                    .attr("fill", "white")
-                    .attr("id", "whichChamp" + textName + l.toString());
-              }
+              allTheNames.append("g")
+                .attr("id", "splitChamp" + l + textName.toString())
+                .selectAll("text")
+                .data([getName[textName]])
+                .enter()
+                .append("text")
+                  .text((d, i) => {
+                    return d;
+                  })
+                  .attr("y", y(textName) / 10 + 26)
+                  .attr("x", () => {
+                    if (l === 2 || this.props.gamesToSee === 1) {
+                      return labelWidth - 50;
+                    }
+                    return 0;
+                  })
+                  .attr("text-anchor", () => {
+                    if (l === 2 || this.props.gamesToSee === 1) {
+                      return "left";
+                    }
+                    return "right";
+                  })
+                  .attr("font-family", "sans-serif")
+                  .attr("font-size", "9px")
+                  .attr("fill", "white")
+                  .attr("id", "whichChamp" + textName + l.toString());
             }
           }
         }
