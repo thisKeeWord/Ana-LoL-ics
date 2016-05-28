@@ -191,7 +191,6 @@ class Chart extends React.Component {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58); // FLIP THE BAR TO LOAD UPWARD
                   }
-                  console.log('wassup')
                   return 58;
                 }
               })
@@ -247,13 +246,13 @@ class Chart extends React.Component {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return labelWidth - 50;
                   }
-                  return 0;
+                  return 50;
                 })
                 .attr("text-anchor", () => {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return "left";
                   }
-                  return "right"
+                  return "end";
                 })
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "11px")
@@ -278,13 +277,13 @@ class Chart extends React.Component {
                     if (l === 2 || this.props.gamesToSee === 1) {
                       return labelWidth - 50;
                     }
-                    return 0;
+                    return 50;
                   })
                   .attr("text-anchor", () => {
                     if (l === 2 || this.props.gamesToSee === 1) {
                       return "left";
                     }
-                    return "right";
+                    return "end";
                   })
                   .attr("font-family", "sans-serif")
                   .attr("font-size", "9px")

@@ -60,11 +60,12 @@ input.username {
 }
 
 #time1 {
-  max-width: 80px;
+  width: 23px;
   top: 605;
-  left: 440;
+  margin-left: auto;
+  margin-right: auto;
   color: #cccccc;
-  position: absolute;
+  /*position: absolute;*/
   font-size: 20px;
 }
 
@@ -141,16 +142,6 @@ input.username {
 }
 
 
-
-#time2 {
-  max-width: 80px;
-  top: 605;
-  left: 440;
-  color: #cccccc;
-  position: absolute;
-  font-size: 20px;
-}
-
 #matches2 {
   margin-top: 70px;
   width: 180px;
@@ -166,11 +157,12 @@ input.username {
 }
 
 #time2 {
-  max-width: 80px;
-  top: 545;
-  left: 608;
+  top: 514;
+  width: 80px;
+  margin-left: auto;
+  margin-right: auto;
   color: #cccccc;
-  position: absolute;
+  position: relative;
   font-size: 20px;
 }
 
@@ -206,19 +198,25 @@ input.username {
 
 #scrollAndSelect2 {
   margin-top: 10px;
-  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  width: 370px;
+  text-align: center;
 }
 
 #selections2 {
-  top: 995;
-  left: 568;
-  position: absolute;
+  /*margin-top: 10px;*/
+  top: 970;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 #scroll2 {
-  top: 463;
-  left: 443;
-  position: absolute;
+  top: 454;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .games2 {
@@ -232,15 +230,6 @@ input.username {
   position: absolute;
   margin-top: 70px;
   right: 30;
-}
-
-#time4 {
-  max-width: 80px;
-  /*top: 605;*/
-  left: 440;
-  color: #cccccc;
-  position: absolute;
-  font-size: 20px;
 }
 
 #eventDisplay4 {
