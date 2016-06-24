@@ -219,7 +219,7 @@ class Chart extends React.Component {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 20;
                   }
-                  return (d / whichMaxStat) * (labelWidth - 58) + 25;
+                  return (d / whichMaxStat) * (labelWidth - 50) + 25;
                 }
               })
               .attr("text-anchor", "middle")

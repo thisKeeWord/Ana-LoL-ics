@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import { Link } from 'react-router';
 import TimeStamp from './timeStamp.jsx';
 import EventDisplay from './eventDisplay.jsx';
 import Chart from './chart.jsx';
@@ -567,16 +568,19 @@ class HeadApp extends React.Component {
   render() {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
-      $('body').css('background-image', "url('http://www.androidnoticias.net/wp-content/uploads/2016/02/PortadaLOL.jpg')");
+      let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
       return (
         <div id="landingPage">
-          Your one stop shop to finding more than a summary but less than a replay of a game!<br />
-          To get started, enter an ign (in game name) in the search bar.
-          <br /><br /><br /><br />
-          (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
-           or opinions of Riot Games or anyone officially involved in producing or managing<br />
-           League of Legends.League of Legends and Riot Games are trademarks or registered<br />
-           trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)
+          <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
+          <Link to="/about">About</Link>
+          
+          <p>Your one stop shop to finding more than a summary but less than a replay of a game!<br />
+            To get started, enter an ign (in game name) in the search bar.
+            <br /><br /><br /><br />
+            (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
+            or opinions of Riot Games or anyone officially involved in producing or managing<br />
+            League of Legends.League of Legends and Riot Games are trademarks or registered<br />
+            trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
           </form>
