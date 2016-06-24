@@ -119,21 +119,21 @@ class Chart extends React.Component {
 
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
-    const w = 550,  
-          x = d3.scale.linear()
-                .domain([0, 1])
-                .range([0, w]),
+    const h = 400,  
           y = d3.scale.linear()
                 .domain([0, 1])
+                .range([0, h]),
+          x = d3.scale.linear()
+                .domain([0, 1])
                 .rangeRound([0, 375]),
-          xAxis = d3.svg.axis()
-                    .scale(x)
+          yAxis = d3.svg.axis()
+                    .scale(y)
                     .orient("bottom");
-    let labelHeight = 300;
+    let labelWidth = 400;
 
-    if (this.props.gamesToSee === 1) {
-      labelHeight = 400;
-    }
+    // if (this.props.gamesToSee === 1) {
+    //   labelWidth = 400;
+    // }
 
     // GAMES
     for (let l = 1; l <= this.props.gamesToSee; l++) {
@@ -150,7 +150,6 @@ class Chart extends React.Component {
         } 
 
         // CHECK IF TEXT AND BAR EXISTS, THEN REMOVE
-        
         if (document.getElementById("statInfo" + l * this.props.gamesToSee) && document.getElementById("infoStat" + l * this.props.gamesToSee) && document.getElementById("nameStat" + l * this.props.gamesToSee)) {
           $("#statInfo" + l * this.props.gamesToSee).first().remove();
           $("#infoStat" + l * this.props.gamesToSee).first().remove();
@@ -170,23 +169,29 @@ class Chart extends React.Component {
             .data(whichData[l-1])
             .enter()
             .append("rect")
-              .attr("x", (d, i) => {
-                return x(i) / 10;
-              })
-              .attr("y", (d, i) => { 
-                if(whichMaxStat) {
-                  return (labelHeight - 30);
-                }
-              })
-              .attr("width",  w / whichData[l-1].length - 2)
-              .attr("height", (d, i) => {
-                if(whichMaxStat) {
-                  return (d / whichMaxStat) * (labelHeight - 30);
-                }
-              })
               .attr("y", (d, i) => {
+                return y(i) / 10;
+              })
+              .attr("x", (d, i) => { 
                 if(whichMaxStat) {
-                  return (labelHeight - 30) - (d / whichMaxStat) * (labelHeight - 30); // FLIP THE BAR TO LOAD UPWARD
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58);
+                  }
+                  return 58;
+                }
+              })
+              .attr("height",  h / whichData[l-1].length - 2)
+              .attr("width", (d, i) => {
+                if(whichMaxStat) {
+                    return (d / whichMaxStat) * (labelWidth - 58);
+                }
+              })
+              .attr("x", (d, i) => {
+                if(whichMaxStat) {
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58); // FLIP THE BAR TO LOAD UPWARD
+                  }
+                  return 58;
                 }
               })
               .attr("fill", d => {
@@ -202,14 +207,19 @@ class Chart extends React.Component {
             .enter()
             .append("text")
               .text((d, i) => {
-                return d;
-              })
-              .attr("x", (d, i) => {
-                return x(i) / 10 + 24;
+                if (d) { 
+                  return d;
+                }
               })
               .attr("y", (d, i) => {
+                return y(i) / 10 + 24;
+              })
+              .attr("x", (d, i) => {
                 if(whichMaxStat) {
-                  return (labelHeight - 30) - (d / whichMaxStat) * (labelHeight - 30) + 10;
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 20;
+                  }
+                  return (d / whichMaxStat) * (labelWidth - 50) + 25;
                 }
               })
               .attr("text-anchor", "middle")
@@ -218,7 +228,7 @@ class Chart extends React.Component {
               .attr("fill", "black")
               .attr("id", "amount");
 
-          // ADD LABELS TO X-AXIS
+          // ADD LABELS TO Y-AXIS
           let allTheNames = whichSelData.append("g").attr("id", "nameStat" + l * this.props.gamesToSee);
 
           for (let textName = 0; textName < getName.length; textName++) {
@@ -231,62 +241,54 @@ class Chart extends React.Component {
                 .text((d, i) => {
                   return d;
                 })
-                .attr("x", x(textName) / 10 + 26)
-                .attr("y", labelHeight - 15)
-                .attr("text-anchor", "middle")
+                .attr("y", y(textName) / 10 + 26)
+                .attr("x", () => {
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return labelWidth - 50;
+                  }
+                  return 50;
+                })
+                .attr("text-anchor", () => {
+                  if (l === 2 || this.props.gamesToSee === 1) {
+                    return "left";
+                  }
+                  return "end";
+                })
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "11px")
                 .attr("fill", "white")
                 .attr("id", "whichChamp" + textName + l.toString());
 
             let wrapWord = Number(allTheNames.selectAll("#whichChamp" + textName + l.toString()).style("width").replace(/px/g,''));
-
             if (wrapWord > 52) {
-              let splitName = getName[textName].split(/(?=[A-Z])/);
+              $("#splitChamp" + l + textName.toString()).remove();
 
-              if (splitName.length > 1) {
-                $("#splitChamp" + l + textName.toString()).remove();
-
-                for (let appendWord = 0; appendWord < splitName.length; appendWord++) {
-                  allTheNames.append("g").append("g")
-                    .attr("id", "splitChamp" + textName.toString() + appendWord)
-                    .selectAll("text")
-                    .data([splitName[appendWord]])
-                    .enter()
-                    .append("text")
-                      .text((d, i) => {
-                        return d;
-                      })
-                      .attr("x", x(textName) / 10 + 26)
-                      .attr("y", labelHeight - 15 + appendWord * 12.5)
-                      .attr("text-anchor", "middle")
-                      .attr("font-family", "sans-serif")
-                      .attr("font-size", "11px")
-                      .attr("fill", "white")
-                      .attr("id", "whichChamp" + textName + l.toString());
-                }
-              }
-              
-              else {
-                $("#splitChamp" + l + textName.toString()).remove();
-
-                allTheNames.append("g")
-                  .attr("id", "splitChamp" + l + textName.toString())
-                  .selectAll("text")
-                  .data([splitName])
-                  .enter()
-                  .append("text")
-                    .text((d, i) => {
-                      return d;
-                    })
-                    .attr("x", x(textName) / 10 + 26)
-                    .attr("y", labelHeight - 14)
-                    .attr("text-anchor", "middle")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "9px")
-                    .attr("fill", "white")
-                    .attr("id", "whichChamp" + textName + l.toString());
-              }
+              allTheNames.append("g")
+                .attr("id", "splitChamp" + l + textName.toString())
+                .selectAll("text")
+                .data([getName[textName]])
+                .enter()
+                .append("text")
+                  .text((d, i) => {
+                    return d;
+                  })
+                  .attr("y", y(textName) / 10 + 26)
+                  .attr("x", () => {
+                    if (l === 2 || this.props.gamesToSee === 1) {
+                      return labelWidth - 50;
+                    }
+                    return 50;
+                  })
+                  .attr("text-anchor", () => {
+                    if (l === 2 || this.props.gamesToSee === 1) {
+                      return "left";
+                    }
+                    return "end";
+                  })
+                  .attr("font-family", "sans-serif")
+                  .attr("font-size", "9px")
+                  .attr("fill", "white")
+                  .attr("id", "whichChamp" + textName + l.toString());
             }
           }
         }

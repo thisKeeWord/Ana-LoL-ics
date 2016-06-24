@@ -25,7 +25,7 @@ class DropDownMenu extends React.Component {
   render() {
     return (
       <div id={"scrollAndSelect" + this.props.gamesToSee}>
-          <input id={"scroll" + this.props.gamesToSee} type='range' style={{ width: '370px'}} min='0' max={this.findMax()} step='1' value={this.props.spot} defaultValue='0' onChange={this.onAnotherChange.bind(this)}></input>
+        <input id={"scroll" + this.props.gamesToSee} type='range' style={{ width: '370px'}} min='0' max={this.findMax()} step='1' value={this.props.spot} defaultValue='0' onChange={this.onAnotherChange.bind(this)}></input>
         <select value={this.props.eventSelected} defaultValue='select one' onLoad={this.onLoad.bind(this)} onChange={this.onChange.bind(this)} id={"selections" + this.props.gamesToSee}>
           <option value="select one">select one</option>
           <option value="WARD_PLACED">wards placed</option>
