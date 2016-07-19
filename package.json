@@ -29,7 +29,6 @@
     "nodemon": "^1.8.0",
     "path": "^0.12.7",
     "react": "^0.14.3",
-    "react-checkbox-list": "0.0.2",
     "react-dom": "^0.14.6",
     "react-router": "^2.5.0",
     "reactify": "^1.1.1",
