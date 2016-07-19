@@ -3,6 +3,27 @@ body {
   background: #202020;
 }
 
+#about{
+  position: absolute;
+  margin: -30 0 0 0;
+  height: 19px;
+  width: 140px;
+  color: gray;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#feedback {
+  position: absolute;
+  margin: -30 0 0 85;
+  height: 19px;
+  width: 140px;
+  color: gray;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 #championBackground {
   position: absolute;
   width: 1200px;
@@ -74,6 +95,17 @@ body {
 
 p {
   margin-left: 30px;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+#feedbackForm {
+  width: 330px;
+}
+
+#feedbackForm li {
+  list-style: none;
+  line-height: 70px;
 }
 
 #formSubmit {

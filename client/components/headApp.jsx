@@ -42,6 +42,7 @@ class HeadApp extends React.Component {
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
+      emailStatus: false,
     }
   }
 
@@ -572,8 +573,9 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
-          <Link to="/about">About</Link>
-          
+          <Link to="/about" id="about">About</Link>
+          <Link to="/feedback" id="feedback">Feedback</Link>
+        
           <p>Your one stop shop to finding more than a summary but less than a replay of a game!<br />
             To get started, enter an ign (in game name) in the search bar.
             <br /><br /><br /><br />
@@ -583,6 +585,7 @@ class HeadApp extends React.Component {
             trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+            <input type="submit" value="ok" />
           </form>
         </div>
       )
