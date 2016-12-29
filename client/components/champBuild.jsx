@@ -179,7 +179,7 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("svg:image")
                 .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
-                .attr('y', w * 40)
+                .attr('y', w * 45)
                 .attr('x', 264)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px' });
 
@@ -189,7 +189,7 @@ class ChampBuild extends React.Component {
               .data([[]])
                 .enter()
                   .append("rect")
-                    .attr('y', w * 40)
+                    .attr('y', w * 45)
                     .attr('x', 264)
                     .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
                     .attr('height', 39)
@@ -210,7 +210,7 @@ class ChampBuild extends React.Component {
                 .attr("x", (d, i) => {
                   return 240 - 24 * i;
                 })
-                .attr("y", 40 * w + 10)
+                .attr("y", 45 * w + 10)
                 .style({ 'width': '24px', 'height': '24px' });
 
             this.props["whichRole" + i.toString()].append('svg:g')
@@ -235,7 +235,7 @@ class ChampBuild extends React.Component {
                   return 1;
                 })
                 .attr("y", (d, i) => {
-                  return 40 * w + (((i+1) * 10) + 10);
+                  return 45 * w + (((i+1) * 10) + 10);
                 })
                 .attr("font-size", "10px")
                 .attr("text-anchor", "start")
@@ -251,7 +251,7 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("svg:image")
                 .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
-                .attr('y', w * 40)
+                .attr('y', w * 45)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px', 'float': 'right'});
 
             this.props["addItems" + i.toString()].append('svg:g')
@@ -260,7 +260,7 @@ class ChampBuild extends React.Component {
               .data([[]])
                 .enter()
                   .append("rect")
-                    .attr('y', w * 40)
+                    .attr('y', w * 45)
                     .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
                     .attr('height', 39)
                     .attr('width', 39)
@@ -280,7 +280,7 @@ class ChampBuild extends React.Component {
                 .attr("x", (d, i) => {
                   return 24 * i + 40;
                 })
-                .attr("y", 40 * w + 10)
+                .attr("y", 45 * w + 10)
                 .style({ 'width': '24px', 'height': '24px' });
 
             this.props["whichRole" + i.toString()].append('svg:g')
@@ -305,7 +305,7 @@ class ChampBuild extends React.Component {
                   return 49;
                 })
                 .attr("y", (d, i) => {
-                  return 40 * w + (((i+1) * 10) + 10);
+                  return 45 * w + (((i+1) * 10) + 10);
                 })
                 .attr("font-size", "10px")
                 .attr("text-anchor", "end")

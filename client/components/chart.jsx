@@ -224,7 +224,7 @@ class Chart extends React.Component {
               })
               .attr("text-anchor", "middle")
               .attr("font-family", "sans-serif")
-              .attr("font-size", "11px")
+              .attr("font-size", "13px")
               .attr("fill", "black")
               .attr("id", "amount");
 
@@ -255,7 +255,7 @@ class Chart extends React.Component {
                   return "end";
                 })
                 .attr("font-family", "sans-serif")
-                .attr("font-size", "11px")
+                .attr("font-size", "13px")
                 .attr("fill", "white")
                 .attr("id", "whichChamp" + textName + l.toString());
 
@@ -286,7 +286,7 @@ class Chart extends React.Component {
                     return "end";
                   })
                   .attr("font-family", "sans-serif")
-                  .attr("font-size", "9px")
+                  .attr("font-size", "10px")
                   .attr("fill", "white")
                   .attr("id", "whichChamp" + textName + l.toString());
             }

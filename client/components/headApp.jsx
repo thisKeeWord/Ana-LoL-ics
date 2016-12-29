@@ -433,7 +433,7 @@ class HeadApp extends React.Component {
     }   
 
     const w = 304,
-          h = 400;
+          h = 450;
     if (this.state.gamesToSee === 1) {
       const svg = d3.select("#builds1")
               .append("svg:svg")
@@ -583,6 +583,7 @@ class HeadApp extends React.Component {
             trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
           <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+            <button type="submit" id="findStats" val>Find Stats</button>
           </form>
         </div>
       )
