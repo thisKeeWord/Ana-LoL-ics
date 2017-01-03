@@ -12,6 +12,10 @@ a:hover {
   color: white;
 }
 
+.champBuilds1, .champBuilds2 {
+  z-index: -100;
+}
+
 #championBackground {
   position: absolute;
   width: 1200px;
