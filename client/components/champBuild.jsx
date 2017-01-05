@@ -23,8 +23,10 @@ class ChampBuild extends React.Component {
             // health potion is 2003
 
             for (let j = 0; j <= this.props.spot; j++) {
+
               if (searchEvents[j][0].events) {
                 potions = 0, biscuits = 0, controlWards = 0;
+
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
 
@@ -52,15 +54,15 @@ class ChampBuild extends React.Component {
                     if (searchEvents[j][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                       // IF PLAYER PURCHASES POTION AND UNDO'S THE PURCHASE
-                      if (checkItemEvent === 2003) {
-                        potions--;
-                      }
-                      if (checkItemEvent === 2010) {
-                        biscuits--;
-                      }
-                      if (checkItemEvent === 2055) {
-                        controlWards--;
-                      }
+                      // if (checkItemEvent === 2003) {
+                      //   potions--;
+                      // }
+                      // if (checkItemEvent === 2010) {
+                      //   biscuits--;
+                      // }
+                      // if (checkItemEvent === 2055) {
+                      //   controlWards--;
+                      // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
                       while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
@@ -78,15 +80,15 @@ class ChampBuild extends React.Component {
                   if ((findItem === 3340 || findItem === 3341 || findItem === 3363 || findItem === 3364) && itemStore.indexOf(findItem) !== -1 && itemStore.lastIndexOf(findItem) !== itemStore.indexOf(findItem)) {
                     itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                   }
-                  if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    potions++;
-                  }
-                  if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    biscuits++;
-                  }
-                  if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    controlWards++;
-                  }
+                  // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   potions++;
+                  // }
+                  // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   biscuits++;
+                  // }
+                  // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   controlWards++;
+                  // }
                 }
 
                 // NO TRINKET
@@ -107,7 +109,27 @@ class ChampBuild extends React.Component {
                   }
                 }
               }
-
+              if (itemStore.includes(2003)) {
+                for (let countPotions = itemStore.indexOf(2003); countPotions <= itemStore.lastIndexOf(2003); countPotions++) {
+                  if (itemStore[countPotions] === 2003) {
+                    potions++;
+                  }
+                }
+              }
+              if (itemStore.includes(2010)) {
+                for (let countBiscuits = itemStore.indexOf(2010); countBiscuits <= itemStore.lastIndexOf(2010); countBiscuits++) {
+                  if (itemStore[countBiscuits] === 2010) {
+                    biscuits++;
+                  }
+                }
+              }
+              if (itemStore.includes(2055)) {
+                for (let countControlWards = itemStore.indexOf(2055); countControlWards <= itemStore.lastIndexOf(2055); countControlWards++) {
+                  if (itemStore[countControlWards] === 2055) {
+                    controlWards++;
+                  }
+                }
+              }
             }
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
@@ -115,14 +137,24 @@ class ChampBuild extends React.Component {
           // IF SCROLL EXCEEDS GAME LENGTH
           if (!searchEvents[this.props.spot]) {
             for (let z = 0; z < searchEvents.length; z++) {
-              if (searchEvents[z][0].events) {
                 potions = 0, biscuits = 0, controlWards = 0;
+
+              if (searchEvents[z][0].events) {
                 for (let k = 0; k < searchEvents[z][0].events.length; k++) {
                   let findItem = searchEvents[z][0].events[k].itemId;
 
                   // ITEM_PURCHASED
                   if (searchEvents[z][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     itemStore.push(findItem);
+                    // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   potions++;
+                    // }
+                    // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   biscuits++;
+                    // }
+                    // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   controlWards++;
+                    // }
                   }
 
                   // ITEM_DESTROYED
@@ -144,15 +176,15 @@ class ChampBuild extends React.Component {
                     if (searchEvents[z][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
                       // potions and control wards
-                      if (checkItemEvent === 2003) {
-                        potions--;
-                      }
-                      if (checkItemEvent === 2010) {
-                        biscuits--;
-                      }
-                      if (checkItemEvent === 2055) {
-                        controlWards--;
-                      }
+                      // if (checkItemEvent === 2003) {
+                      //   potions--;
+                      // }
+                      // if (checkItemEvent === 2010) {
+                      //   biscuits--;
+                      // }
+                      // if (checkItemEvent === 2055) {
+                      //   controlWards--;
+                      // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
                       while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
@@ -165,15 +197,28 @@ class ChampBuild extends React.Component {
                       } 
                     }
                   }
-                  if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    potions++;
-                  }
-                  if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    biscuits++;
-                  }
-                  if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
-                    controlWards++;
-                  }
+                  
+                }
+              }
+            }
+            if (itemStore.includes(2003)) {
+              for (let countPotions = itemStore.indexOf(2003); countPotions <= itemStore.lastIndexOf(2003); countPotions++) {
+                if (itemStore[countPotions] === 2003) {
+                  potions++;
+                }
+              }
+            }
+            if (itemStore.includes(2010)) {
+              for (let countBiscuits = itemStore.indexOf(2010); countBiscuits <= itemStore.lastIndexOf(2010); countBiscuits++) {
+                if (itemStore[countBiscuits] === 2010) {
+                  biscuits++;
+                }
+              }
+            }
+            if (itemStore.includes(2055)) {
+              for (let countControlWards = itemStore.indexOf(2055); countControlWards <= itemStore.lastIndexOf(2055); countControlWards++) {
+                if (itemStore[countControlWards] === 2055) {
+                  controlWards++;
                 }
               }
             }
@@ -202,6 +247,9 @@ class ChampBuild extends React.Component {
         }
         if (document.getElementById("laneRole" + i * this.props.gamesToSee)) {
           $("laneRole" + i * this.props.gamesToSee).remove();
+        }
+        if (document.getElementsByClassName("consumableCount" + i * this.props.gamesToSee)) {
+          $(".consumableCount" + i * this.props.gamesToSee). remove();
         }
       
         // EACH PLAYER'S BUILDS
