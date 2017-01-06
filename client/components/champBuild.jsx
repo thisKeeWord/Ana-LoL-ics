@@ -110,27 +110,39 @@ class ChampBuild extends React.Component {
                 }
               }
               if (itemStore.includes(2003)) {
-                for (let countPotions = itemStore.indexOf(2003); countPotions <= itemStore.lastIndexOf(2003); countPotions++) {
+                for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
                   if (itemStore[countPotions] === 2003) {
                     potions++;
+                    if (countPotions !== itemStore.indexOf(2003)) {
+                      delete itemStore[countPotions];
+                    }
                   }
                 }
               }
               if (itemStore.includes(2010)) {
-                for (let countBiscuits = itemStore.indexOf(2010); countBiscuits <= itemStore.lastIndexOf(2010); countBiscuits++) {
+                for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
                   if (itemStore[countBiscuits] === 2010) {
                     biscuits++;
+                    if (countBiscuits !== itemStore.indexOf(2010)) {
+                      delete itemStore[countBiscuits];
+                    }
                   }
                 }
               }
               if (itemStore.includes(2055)) {
-                for (let countControlWards = itemStore.indexOf(2055); countControlWards <= itemStore.lastIndexOf(2055); countControlWards++) {
+                for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
                   if (itemStore[countControlWards] === 2055) {
                     controlWards++;
+                    if (controlWards !== itemStore.indexOf(2055)) {
+                      delete itemStore[controlWards];
+                    }
                   }
                 }
               }
             }
+            itemStore = itemStore.filter(element => {
+             return element !== undefined;
+            });
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
 
@@ -202,26 +214,38 @@ class ChampBuild extends React.Component {
               }
             }
             if (itemStore.includes(2003)) {
-              for (let countPotions = itemStore.indexOf(2003); countPotions <= itemStore.lastIndexOf(2003); countPotions++) {
+              for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
                 if (itemStore[countPotions] === 2003) {
                   potions++;
+                  if (countPotions !== itemStore.indexOf(2003)) {
+                    delete itemStore[countPotions];
+                  }
                 }
               }
             }
             if (itemStore.includes(2010)) {
-              for (let countBiscuits = itemStore.indexOf(2010); countBiscuits <= itemStore.lastIndexOf(2010); countBiscuits++) {
+              for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
                 if (itemStore[countBiscuits] === 2010) {
                   biscuits++;
+                  if (countBiscuits !== itemStore.indexOf(2010)) {
+                    delete itemStore[countBiscuits];
+                  }
                 }
               }
             }
             if (itemStore.includes(2055)) {
-              for (let countControlWards = itemStore.indexOf(2055); countControlWards <= itemStore.lastIndexOf(2055); countControlWards++) {
+              for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
                 if (itemStore[countControlWards] === 2055) {
                   controlWards++;
+                  if (controlWards !== itemStore.indexOf(2055)) {
+                    delete itemStore[controlWards];
+                  }
                 }
               }
             }
+            itemStore = itemStore.filter(element => {
+             return element !== undefined;
+            });
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
           console.log(itemStore, consumables);
