@@ -288,7 +288,8 @@ class ChampBuild extends React.Component {
                     .attr('height', 39)
                     .attr('width', 39)
                     .attr("fill", "transparent");
-          
+
+            // item images
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
               .selectAll("image")
@@ -297,16 +298,34 @@ class ChampBuild extends React.Component {
                 .append("svg:image")
                 .attr('xlink:href', d => {
                   if (d) {
-          // 
                     return ("http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/item/" + d + ".png");
                   }
                 })
                 .attr("x", (d, i) => {
-                  return 300 - 30 * i;
+                  return 232 - 30 * i;
                 })
                 .attr("y", 45 * w + 10)
                 .style({ 'width': '30px', 'height': '30px' });
 
+            // consumable counts
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumableCount' + i * this.props.gamesToSee)
+                .selectAll("text")
+                .data(showItems[i-1][w][0])
+                .enter()
+                  .append("text")
+                    .text(d => {                    
+                      if (showItems[i-1][w][1][0][d] > 0) {
+                        return showItems[i-1][w][1][0][d];
+                      }
+                    })
+                    .attr("x", (d, i) => {
+                      return 232 - 30 * i;
+                    })
+                    .attr("y", 45 * w + 15)
+                    .style({ 'font-size': '15px' });
+
+            // player role on team
             this.props["whichRole" + i.toString()].append('svg:g')
               .attr('class', 'champRoles' + i * this.props.gamesToSee)
               .selectAll("text")
@@ -360,6 +379,7 @@ class ChampBuild extends React.Component {
                     .attr('width', 39)
                     .attr("fill", "transparent");
           
+            // item images
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
               .selectAll("image")
@@ -367,7 +387,6 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("svg:image")
                 .attr('xlink:href', d => {
-                  console.log("ORDER 1");
                   if (d) {
                     return ("http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/item/" + d + ".png");
                   }
@@ -378,17 +397,14 @@ class ChampBuild extends React.Component {
                 .attr("y", 45 * w + 10)
                 .style({ 'width': '30px', 'height': '30px' });
 
-
-                      // append consumables
+            // append consumables
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'consumableCount' + i * this.props.gamesToSee)
                 .selectAll("text")
                 .data(showItems[i-1][w][0])
                 .enter()
                   .append("text")
-                    .text(d => {
-                      
-                      console.log("ORDER 222")
+                    .text(d => {                    
                       if (showItems[i-1][w][1][0][d] > 0) {
                         return showItems[i-1][w][1][0][d];
                       }
@@ -399,6 +415,7 @@ class ChampBuild extends React.Component {
                     .attr("y", 45 * w + 15)
                     .style({ 'font-size': '15px' });
 
+            // player role on team
             this.props["whichRole" + i.toString()].append('svg:g')
               .attr('id', 'champRoles' + i * this.props.gamesToSee)
               .selectAll("text")
