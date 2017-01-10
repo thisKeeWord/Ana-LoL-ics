@@ -268,6 +268,8 @@ class ChampBuild extends React.Component {
           $(".champBuilds" + i * this.props.gamesToSee).remove();
           $(".champIcons" + i * this.props.gamesToSee).remove();
           $("allItems" + i * this.props.gamesToSee).remove();
+          $('.consumeableBackground' + i * this.props.gamesToSee).remove();
+
         }
         if (document.getElementById("laneRole" + i * this.props.gamesToSee)) {
           $("laneRole" + i * this.props.gamesToSee).remove();
@@ -331,6 +333,28 @@ class ChampBuild extends React.Component {
                 .attr("y", 45 * w + 10)
                 .style({ 'width': '30px', 'height': '30px' });
 
+            // add rectangle frame for consumable count background
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumeableBackground' + i * this.props.gamesToSee)
+              .selectAll('rect')
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("rect")
+                  .attr("x", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 229 - 30 * el;
+                    }
+                  })
+                  .attr("y", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 45 * w + 10;
+                    }
+                  })
+                  .style({'stroke-width': 1, 'stroke': 'black' })
+                  .attr("height", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("width", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("fill", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? "grey" : "white" });
+
             // consumable counts
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'consumableCount' + i * this.props.gamesToSee)
@@ -344,9 +368,9 @@ class ChampBuild extends React.Component {
                       }
                     })
                     .attr("x", (d, i) => {
-                      return 232 - 30 * i;
+                      return 233 - 30 * i;
                     })
-                    .attr("y", 45 * w + 15)
+                    .attr("y", 45 * w + 24)
                     .style({ 'font-size': '15px' });
 
             // player role on team
@@ -421,6 +445,29 @@ class ChampBuild extends React.Component {
                 .attr("y", 45 * w + 10)
                 .style({ 'width': '30px', 'height': '30px' });
 
+            // add rectangle frame for consumable count background
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumeableBackground' + i * this.props.gamesToSee)
+              .selectAll('rect')
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("rect")
+                  .attr("x", (d, el) => {
+                    console.log(d)
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 30 * el + 53;
+                    }
+                  })
+                  .attr("y", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 45 * w + 10;
+                    }
+                  })
+                  .style({'stroke-width': 1, 'stroke': 'black' })
+                  .attr("height", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("width", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("fill", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? "grey" : "white" });
+
             // append consumables
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'consumableCount' + i * this.props.gamesToSee)
@@ -434,9 +481,9 @@ class ChampBuild extends React.Component {
                       }
                     })
                     .attr("x", (d, i) => {
-                      return 30 * i + 40;
+                      return 30 * i + 57;
                     })
-                    .attr("y", 45 * w + 15)
+                    .attr("y", 45 * w + 24)
                     .style({ 'font-size': '15px' });
 
             // player role on team
