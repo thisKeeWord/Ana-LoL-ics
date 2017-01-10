@@ -119,7 +119,7 @@ class Chart extends React.Component {
 
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
-    const h = 400,  
+    const h = 450,  
           y = d3.scale.linear()
                 .domain([0, 1])
                 .range([0, h]),

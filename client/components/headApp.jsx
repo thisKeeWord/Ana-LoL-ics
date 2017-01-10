@@ -329,7 +329,7 @@ class HeadApp extends React.Component {
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
-    const h = 400;
+    const h = 450;
     if (this.state.gamesToSee === 1) {
       if (document.getElementById("chart1")) {
         $("#allStat1").first().remove();
@@ -346,7 +346,7 @@ class HeadApp extends React.Component {
       const svg = d3.select("#chart1")
               .append("svg:svg")
               .attr("height", h)
-              .attr("width", 400)
+              .attr("width", 450)
               .attr("id", "allStat1");
 
       if (this.state.gamesToSee === 1) {
