@@ -248,7 +248,7 @@ class ChampBuild extends React.Component {
             });
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
-          console.log(itemStore, consumables);
+          // console.log(itemStore, consumables);
           eachPlayersItems.push([itemStore, consumables]);
         })
         itemsPerGame.push(eachPlayersItems);  
@@ -258,7 +258,7 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
-    console.log(showItems, "showItems");
+    // console.log(showItems, "showItems");
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
@@ -453,7 +453,7 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("rect")
                   .attr("x", (d, el) => {
-                    console.log(d)
+                    // console.log(d)
                     if (showItems[i-1][w][1][0][d] > 0) {
                       return 30 * el + 53;
                     }
