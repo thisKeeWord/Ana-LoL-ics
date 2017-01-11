@@ -334,3 +334,7 @@ input.username {
   color: #cccccc;
   margin-bottom: 20px;
 }
+
+#champKiller, #champVictim {
+  display: inline-block;
+}
