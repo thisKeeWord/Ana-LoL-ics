@@ -12,17 +12,21 @@ class ChampBuild extends React.Component {
         let itemStorage = this.props["itemStorage" + i.toString()];
         let eachPlayersItems = [];
 
-
         // 10 ARRAYS, 1 PER PLAYER
         this.props["playerInfo" + i.toString()].forEach(player => {
           let itemStore = [];
           let findTrinket = false;
+          let potions, biscuits, controlWards, consumables = [];
 
           // AT CURRENT SPOT IN TIMELINE
           if (searchEvents[this.props.spot]) {
+            // health potion is 2003
 
             for (let j = 0; j <= this.props.spot; j++) {
+
               if (searchEvents[j][0].events) {
+                potions = 0, biscuits = 0, controlWards = 0;
+
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
 
@@ -49,6 +53,16 @@ class ChampBuild extends React.Component {
                   if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (searchEvents[j][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
+                      // IF PLAYER PURCHASES POTION AND UNDO'S THE PURCHASE
+                      // if (checkItemEvent === 2003) {
+                      //   potions--;
+                      // }
+                      // if (checkItemEvent === 2010) {
+                      //   biscuits--;
+                      // }
+                      // if (checkItemEvent === 2055) {
+                      //   controlWards--;
+                      // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
                       while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
@@ -66,6 +80,15 @@ class ChampBuild extends React.Component {
                   if ((findItem === 3340 || findItem === 3341 || findItem === 3363 || findItem === 3364) && itemStore.indexOf(findItem) !== -1 && itemStore.lastIndexOf(findItem) !== itemStore.indexOf(findItem)) {
                     itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                   }
+                  // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   potions++;
+                  // }
+                  // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   biscuits++;
+                  // }
+                  // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
+                  //   controlWards++;
+                  // }
                 }
 
                 // NO TRINKET
@@ -86,12 +109,48 @@ class ChampBuild extends React.Component {
                   }
                 }
               }
+              if (itemStore.includes(2003)) {
+                for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
+                  if (itemStore[countPotions] === 2003) {
+                    potions++;
+                    if (countPotions !== itemStore.indexOf(2003)) {
+                      delete itemStore[countPotions];
+                    }
+                  }
+                }
+              }
+              if (itemStore.includes(2010)) {
+                for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
+                  if (itemStore[countBiscuits] === 2010) {
+                    biscuits++;
+                    if (countBiscuits !== itemStore.indexOf(2010)) {
+                      delete itemStore[countBiscuits];
+                    }
+                  }
+                }
+              }
+              if (itemStore.includes(2055)) {
+                for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
+                  if (itemStore[countControlWards] === 2055) {
+                    controlWards++;
+                    if (controlWards !== itemStore.indexOf(2055)) {
+                      delete itemStore[controlWards];
+                    }
+                  }
+                }
+              }
             }
+            itemStore = itemStore.filter(element => {
+             return element !== undefined;
+            });
+            consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
 
           // IF SCROLL EXCEEDS GAME LENGTH
           if (!searchEvents[this.props.spot]) {
             for (let z = 0; z < searchEvents.length; z++) {
+                potions = 0, biscuits = 0, controlWards = 0;
+
               if (searchEvents[z][0].events) {
                 for (let k = 0; k < searchEvents[z][0].events.length; k++) {
                   let findItem = searchEvents[z][0].events[k].itemId;
@@ -99,6 +158,15 @@ class ChampBuild extends React.Component {
                   // ITEM_PURCHASED
                   if (searchEvents[z][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     itemStore.push(findItem);
+                    // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   potions++;
+                    // }
+                    // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   biscuits++;
+                    // }
+                    // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    //   controlWards++;
+                    // }
                   }
 
                   // ITEM_DESTROYED
@@ -119,6 +187,16 @@ class ChampBuild extends React.Component {
                   if (searchEvents[z][0].events[k].eventType === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (searchEvents[z][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
+                      // potions and control wards
+                      // if (checkItemEvent === 2003) {
+                      //   potions--;
+                      // }
+                      // if (checkItemEvent === 2010) {
+                      //   biscuits--;
+                      // }
+                      // if (checkItemEvent === 2055) {
+                      //   controlWards--;
+                      // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
                       while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
@@ -131,11 +209,47 @@ class ChampBuild extends React.Component {
                       } 
                     }
                   }
+                  
                 }
               }
             }
+            if (itemStore.includes(2003)) {
+              for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
+                if (itemStore[countPotions] === 2003) {
+                  potions++;
+                  if (countPotions !== itemStore.indexOf(2003)) {
+                    delete itemStore[countPotions];
+                  }
+                }
+              }
+            }
+            if (itemStore.includes(2010)) {
+              for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
+                if (itemStore[countBiscuits] === 2010) {
+                  biscuits++;
+                  if (countBiscuits !== itemStore.indexOf(2010)) {
+                    delete itemStore[countBiscuits];
+                  }
+                }
+              }
+            }
+            if (itemStore.includes(2055)) {
+              for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
+                if (itemStore[countControlWards] === 2055) {
+                  controlWards++;
+                  if (controlWards !== itemStore.indexOf(2055)) {
+                    delete itemStore[controlWards];
+                  }
+                }
+              }
+            }
+            itemStore = itemStore.filter(element => {
+             return element !== undefined;
+            });
+            consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
-          eachPlayersItems.push([itemStore])
+          // console.log(itemStore, consumables);
+          eachPlayersItems.push([itemStore, consumables]);
         })
         itemsPerGame.push(eachPlayersItems);  
       }
@@ -144,7 +258,7 @@ class ChampBuild extends React.Component {
   }
 
   appendItems(showItems) {
-
+    // console.log(showItems, "showItems");
     // REMOVE CONSTANT CREATIONS OF ICONS AND BUILD IMAGES
     if ((this.props.addItems1 && this.props.gamesToSee === 1) || (this.props.addItems2 && this.props.gamesToSee === 2)) {
       for (let i = 1; i <= this.props.gamesToSee; i++) {
@@ -154,9 +268,14 @@ class ChampBuild extends React.Component {
           $(".champBuilds" + i * this.props.gamesToSee).remove();
           $(".champIcons" + i * this.props.gamesToSee).remove();
           $("allItems" + i * this.props.gamesToSee).remove();
+          $('.consumeableBackground' + i * this.props.gamesToSee).remove();
+
         }
         if (document.getElementById("laneRole" + i * this.props.gamesToSee)) {
           $("laneRole" + i * this.props.gamesToSee).remove();
+        }
+        if (document.getElementsByClassName("consumableCount" + i * this.props.gamesToSee)) {
+          $(".consumableCount" + i * this.props.gamesToSee). remove();
         }
       
         // EACH PLAYER'S BUILDS
@@ -179,7 +298,7 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("svg:image")
                 .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
-                .attr('y', w * 40)
+                .attr('y', w * 45)
                 .attr('x', 264)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px' });
 
@@ -189,13 +308,14 @@ class ChampBuild extends React.Component {
               .data([[]])
                 .enter()
                   .append("rect")
-                    .attr('y', w * 40)
+                    .attr('y', w * 45)
                     .attr('x', 264)
                     .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
                     .attr('height', 39)
                     .attr('width', 39)
                     .attr("fill", "transparent");
-          
+
+            // item images
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
               .selectAll("image")
@@ -208,11 +328,52 @@ class ChampBuild extends React.Component {
                   }
                 })
                 .attr("x", (d, i) => {
-                  return 240 - 24 * i;
+                  return 232 - 30 * i;
                 })
-                .attr("y", 40 * w + 10)
-                .style({ 'width': '24px', 'height': '24px' });
+                .attr("y", 45 * w + 10)
+                .style({ 'width': '30px', 'height': '30px' });
 
+            // add rectangle frame for consumable count background
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumeableBackground' + i * this.props.gamesToSee)
+              .selectAll('rect')
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("rect")
+                  .attr("x", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 229 - 30 * el;
+                    }
+                  })
+                  .attr("y", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 45 * w + 10;
+                    }
+                  })
+                  .style({'stroke-width': 1, 'stroke': 'black' })
+                  .attr("height", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("width", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("fill", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? "grey" : "white" });
+
+            // consumable counts
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumableCount' + i * this.props.gamesToSee)
+                .selectAll("text")
+                .data(showItems[i-1][w][0])
+                .enter()
+                  .append("text")
+                    .text(d => {                    
+                      if (showItems[i-1][w][1][0][d] > 0) {
+                        return showItems[i-1][w][1][0][d];
+                      }
+                    })
+                    .attr("x", (d, i) => {
+                      return 233 - 30 * i;
+                    })
+                    .attr("y", 45 * w + 24)
+                    .style({ 'font-size': '15px' });
+
+            // player role on team
             this.props["whichRole" + i.toString()].append('svg:g')
               .attr('class', 'champRoles' + i * this.props.gamesToSee)
               .selectAll("text")
@@ -235,7 +396,7 @@ class ChampBuild extends React.Component {
                   return 1;
                 })
                 .attr("y", (d, i) => {
-                  return 40 * w + (((i+1) * 10) + 10);
+                  return 45 * w + (((i+1) * 10) + 10);
                 })
                 .attr("font-size", "10px")
                 .attr("text-anchor", "start")
@@ -251,7 +412,7 @@ class ChampBuild extends React.Component {
               .enter()
                 .append("svg:image")
                 .attr('xlink:href', 'http://ddragon.leagueoflegends.com/cdn/' + this.props["patch" + i.toString()] +'/img/champion/' + this.props["champName" + i.toString()][build[1]] + '.png')
-                .attr('y', w * 40)
+                .attr('y', w * 45)
                 .style({ 'width': '40px', 'height': '40px', 'marginBottom': '3px', 'float': 'right'});
 
             this.props["addItems" + i.toString()].append('svg:g')
@@ -260,12 +421,13 @@ class ChampBuild extends React.Component {
               .data([[]])
                 .enter()
                   .append("rect")
-                    .attr('y', w * 40)
+                    .attr('y', w * 45)
                     .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
                     .attr('height', 39)
                     .attr('width', 39)
                     .attr("fill", "transparent");
           
+            // item images
             this.props["addItems" + i.toString()].append('svg:g')
               .attr('class', 'champBuilds' + i * this.props.gamesToSee)
               .selectAll("image")
@@ -278,11 +440,53 @@ class ChampBuild extends React.Component {
                   }
                 })
                 .attr("x", (d, i) => {
-                  return 24 * i + 40;
+                  return 30 * i + 40;
                 })
-                .attr("y", 40 * w + 10)
-                .style({ 'width': '24px', 'height': '24px' });
+                .attr("y", 45 * w + 10)
+                .style({ 'width': '30px', 'height': '30px' });
 
+            // add rectangle frame for consumable count background
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumeableBackground' + i * this.props.gamesToSee)
+              .selectAll('rect')
+              .data(showItems[i-1][w][0])
+              .enter()
+                .append("rect")
+                  .attr("x", (d, el) => {
+                    // console.log(d)
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 30 * el + 53;
+                    }
+                  })
+                  .attr("y", (d, el) => {
+                    if (showItems[i-1][w][1][0][d] > 0) {
+                      return 45 * w + 10;
+                    }
+                  })
+                  .style({'stroke-width': 1, 'stroke': 'black' })
+                  .attr("height", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("width", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? 17 : 0 })
+                  .attr("fill", (d, el) => { return showItems[i-1][w][1][0][d] > 0 ? "grey" : "white" });
+
+            // append consumables
+            this.props["addItems" + i.toString()].append('svg:g')
+              .attr('class', 'consumableCount' + i * this.props.gamesToSee)
+                .selectAll("text")
+                .data(showItems[i-1][w][0])
+                .enter()
+                  .append("text")
+                    .text(d => {                    
+                      if (showItems[i-1][w][1][0][d] > 0) {
+                        return showItems[i-1][w][1][0][d];
+                      }
+                    })
+                    .attr("x", (d, i) => {
+                      return 30 * i + 57;
+                    })
+                    .attr("y", 45 * w + 24)
+                    .style({ 'font-size': '15px' });
+
+            // player role on team
             this.props["whichRole" + i.toString()].append('svg:g')
               .attr('id', 'champRoles' + i * this.props.gamesToSee)
               .selectAll("text")
@@ -305,7 +509,7 @@ class ChampBuild extends React.Component {
                   return 49;
                 })
                 .attr("y", (d, i) => {
-                  return 40 * w + (((i+1) * 10) + 10);
+                  return 45 * w + (((i+1) * 10) + 10);
                 })
                 .attr("font-size", "10px")
                 .attr("text-anchor", "end")
@@ -325,7 +529,7 @@ class ChampBuild extends React.Component {
       )
     }
 
-    let items = this.appendItems(showItems)
+    let items = this.appendItems(showItems);
 
     // ARRAY MAY HAVE NUMBER, SO FIND IT AND GET CHAMP IMG
     // GAME 1
