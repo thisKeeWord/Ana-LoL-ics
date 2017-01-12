@@ -26,7 +26,6 @@ app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
 
-
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
