@@ -119,7 +119,7 @@ class Chart extends React.Component {
 
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
-    const h = 400,  
+    const h = 450,  
           y = d3.scale.linear()
                 .domain([0, 1])
                 .range([0, h]),
@@ -130,10 +130,6 @@ class Chart extends React.Component {
                     .scale(y)
                     .orient("bottom");
     let labelWidth = 400;
-
-    // if (this.props.gamesToSee === 1) {
-    //   labelWidth = 400;
-    // }
 
     // GAMES
     for (let l = 1; l <= this.props.gamesToSee; l++) {
@@ -217,14 +213,14 @@ class Chart extends React.Component {
               .attr("x", (d, i) => {
                 if(whichMaxStat) {
                   if (l === 2 || this.props.gamesToSee === 1) {
-                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 20;
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 26;
                   }
                   return (d / whichMaxStat) * (labelWidth - 50) + 25;
                 }
               })
               .attr("text-anchor", "middle")
               .attr("font-family", "sans-serif")
-              .attr("font-size", "11px")
+              .attr("font-size", "13px")
               .attr("fill", "black")
               .attr("id", "amount");
 
@@ -255,7 +251,7 @@ class Chart extends React.Component {
                   return "end";
                 })
                 .attr("font-family", "sans-serif")
-                .attr("font-size", "11px")
+                .attr("font-size", "13px")
                 .attr("fill", "white")
                 .attr("id", "whichChamp" + textName + l.toString());
 
@@ -286,7 +282,7 @@ class Chart extends React.Component {
                     return "end";
                   })
                   .attr("font-family", "sans-serif")
-                  .attr("font-size", "9px")
+                  .attr("font-size", "10px")
                   .attr("fill", "white")
                   .attr("id", "whichChamp" + textName + l.toString());
             }

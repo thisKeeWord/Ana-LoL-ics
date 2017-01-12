@@ -1,4 +1,4 @@
-# LeagueAlytics
+# Analolics
 
 When playing League of Legends or any other videogame for that matter that has a ranking system, players generally seek
 to improve their knowledge, strategy, gameplay, etc.
@@ -8,7 +8,6 @@ to improve their knowledge, strategy, gameplay, etc.
 This app is designed to present your post-game statistics in such a way that you can visually see your 
 improvements game-by-game and can compare stats to others. 
 
-![Screenshot](/readmeImages/Analolics1.png) ![Screenshot](/readmeImages/Analolics6.png)
 
 ### Effects
 

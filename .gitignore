@@ -15,3 +15,6 @@ npm-debug.log
 
 # readmeImages
 readmeImages
+
+# bundle
+client/build/

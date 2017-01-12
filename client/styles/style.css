@@ -1,6 +1,22 @@
 body {
   font-family: sans-serif;
   background: #202020;
+  width: auto !important;  /* Firefox will set width as auto */
+  min-width: 1350px;
+  position: relative;
+}
+
+a {
+  text-decoration: none;
+  color: #778899;
+}
+
+a:hover {
+  color: white;
+}
+
+.champBuilds1, .champBuilds2 {
+  z-index: -100;
 }
 
 #about{
@@ -108,8 +124,17 @@ p {
   line-height: 70px;
 }
 
+#legalStuff {
+  top: 500;
+  position: absolute;
+}
+
 #formSubmit {
   margin-top: 50px;
+}
+
+button {
+  margin-left: 30px;
 }
 
 input {
@@ -162,8 +187,12 @@ input.username {
 
 #eventDisplay1 {
   margin-top: 100px;
-  left: 600;
   position: absolute;
+  width: 190px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   color: #cccccc;
 }
 
@@ -191,14 +220,14 @@ input.username {
 }
 
 #scrollAndSelect1 {
-  top: 680;
+  top: 650;
   text-align: center;
-  width: 1050px;
-  min-width: 950px;
+  width: 1250px;
+  min-width: 1160px;
   position: absolute;
   left: 0;
   right: 0;
-  margin: 0 auto;
+  margin: 0 0 0 90px;
 }
 
 #selections1 {
@@ -209,6 +238,7 @@ input.username {
 #scroll1 {
   float: left;
   position: relative;
+  /*margin-left: -130px;*/
 }
 
 #whichSummoner {
@@ -238,9 +268,12 @@ input.username {
 #matches2 {
   margin-top: 100px;
   width: 180px;
-  left: 555;
+  left: 0;
+  right: 0;
   position: absolute;
   color: #cccccc;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #map2 {
@@ -267,7 +300,7 @@ input.username {
 }
 
 #chart2 svg {
-  top: 1120;
+  top: 1160;
   left: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -298,7 +331,7 @@ input.username {
 }
 
 #selections2 {
-  top: 960;
+  top: 1000;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -332,7 +365,7 @@ input.username {
 }
 
 #chart4 svg {
-  top: 1120;
+  top: 1160;
   right: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -352,4 +385,17 @@ input.username {
   right: 30;
   color: #cccccc;
   margin-bottom: 20px;
+}
+
+#champKiller, #champVictim {
+  display: inline-block;
+}
+
+#champKiller1, #champVictim1 {
+  display: inline-block;
+}
+
+#champKiller2, #champVictim2 {
+  display: inline-block;
+  right: 0;
 }

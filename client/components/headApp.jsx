@@ -42,7 +42,6 @@ class HeadApp extends React.Component {
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
-      emailStatus: false,
     }
   }
 
@@ -156,6 +155,7 @@ class HeadApp extends React.Component {
             that.addStatChoice();
             that.move();
             that.addItemVisuals();
+            that.champEventDisplay();
           })
         }
       })
@@ -330,7 +330,7 @@ class HeadApp extends React.Component {
 
   // BACKGROUND FOR THE BAR GRAPH
   addStatChoice() {
-    const h = 400;
+    const h = 450;
     if (this.state.gamesToSee === 1) {
       if (document.getElementById("chart1")) {
         $("#allStat1").first().remove();
@@ -347,7 +347,7 @@ class HeadApp extends React.Component {
       const svg = d3.select("#chart1")
               .append("svg:svg")
               .attr("height", h)
-              .attr("width", 400)
+              .attr("width", 415)
               .attr("id", "allStat1");
 
       if (this.state.gamesToSee === 1) {
@@ -434,7 +434,7 @@ class HeadApp extends React.Component {
     }   
 
     const w = 304,
-          h = 400;
+          h = 450;
     if (this.state.gamesToSee === 1) {
       const svg = d3.select("#builds1")
               .append("svg:svg")
@@ -484,6 +484,65 @@ class HeadApp extends React.Component {
         addItems2: svg2,
         whichRole1: champRole,
         whichRole2: champRole2
+      })
+    }
+  }
+
+  champEventDisplay() {
+    const h = 500;
+    if (this.state.gamesToSee === 1) {
+      if (document.getElementById("eventDisplay1")) {
+        $("#event1").first().remove();
+      }
+      if (document.getElementById("eventDisplay2")) {
+        $("#eventDisplay2").remove();
+        $("#event2").remove();
+      }
+      if (document.getElementById("eventDisplay4")) {
+        $("#eventDisplay4").remove();
+        $("#event4").remove();
+      }
+
+      const champEvent = d3.select("#eventDisplay1")
+              .append("svg:svg")
+              .attr("height", h)
+              .attr("width", 450)
+              .attr("id", "event1");
+
+      if (this.state.gamesToSee === 1) {
+        this.setState({
+          eventDisplay1: champEvent
+        })
+      }
+    }
+
+    if (this.state.gamesToSee === 2) {
+      if (document.getElementById("eventDisplay1") || document.getElementById("event1")) {
+        $("#eventDisplay1").remove();
+        $("#event1").remove();
+      }
+      if (document.getElementById("eventDisplay2")) {
+        $("#event2").first().remove();
+      }
+      if (document.getElementById("eventDisplay4")) {
+        $("#event4").first().remove();
+      }
+
+      const champEvent = d3.select("#eventDisplay2")
+              .append("svg:svg")
+              .attr("height", h)
+              .attr("width", 165)
+              .attr("id", "allStat2");
+
+      const champEvent2 = d3.select("#eventDisplay4")
+              .append("svg:svg")
+              .attr("height", h)
+              .attr("width", 165)
+              .attr("id", "allStat4");
+
+      this.setState({
+        eventDisplay1: champEvent,
+        eventDisplay2: champEvent2
       })
     }
   }
@@ -573,20 +632,22 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
-          <Link to="/about" id="about">About</Link>
-          <Link to="/feedback" id="feedback">Feedback</Link>
-        
-          <p>Your one stop shop to finding more than a summary but less than a replay of a game!<br />
-            To get started, enter an ign (in game name) in the search bar.
+          <Link to="/about">About</Link>
+          
+            <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
+            To get started, enter an ign (in game name) in the search bar.</p>
+
+            <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+              <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+              <button type="submit" id="findStats" val>Find Stats</button>
+            </form>
             <br /><br /><br /><br />
-            (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
+
+            <p id="legalStuff">(Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
             or opinions of Riot Games or anyone officially involved in producing or managing<br />
-            League of Legends.League of Legends and Riot Games are trademarks or registered<br />
-            trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
-            <input type="submit" value="ok" />
-          </form>
+            League of Legends.League of Legends and Riot Games are trademarks or<br />
+            registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
+          
         </div>
       )
     }
@@ -605,7 +666,7 @@ class HeadApp extends React.Component {
           <GameMap gamesToSee={this.state.gamesToSee} />
           <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} />
           <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} />
-          <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
+          <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} eventDisplay1={this.state.eventDisplay1} eventDisplay2={this.state.eventDisplay2} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
           <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
           <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} whichRole1={this.state.whichRole1} whichRole2={this.state.whichRole2} />
           <ChampImage gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.spot} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
