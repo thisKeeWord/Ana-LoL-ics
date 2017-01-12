@@ -36,36 +36,6 @@ class EventDisplay extends React.Component {
 		}
 	}
 
-	displayEvent(stat) {
-		if((this.props.eventDisplay1 && this.props.gamesToSee === 1) || (this.props.eventDisplay2 && this.props.gamesToSee === 2)) {
-      let whichGameBorder = '';
-			for (let i = 0; i < this.props.gamesToSee; i++) {
-				let colorOfTeam = "blue";
-				if (i === 2) {
-	      	whichGameBorder = '0';
-	      }
-				for (let j = 0; w < stat.length; w++) {
-	        if (j > 4) {
-	          colorOfTeam = 'purple';
-	        }
-					this.props["eventDisplay" + i.toString()].append('svg:g')
-						.attr("id", "whichTeam" + colorOfTeam + i + whichGameBorder)
-						.selectAll("rect")
-						.data(stat[j])
-						.enter()
-	            .append("rect")
-	              .attr('x', d => { if (d) console.log(d, "D HERE") }) 
-	              // .attr('y', d => { return yScale(d[1]) })
-	              // .style({ 'stroke-width': 2, 'stroke': colorOfTeam.toString() })
-	              // .attr('height', 23)
-	              // .attr('width', 23)
-	              // .attr("fill", "transparent");
-        }
-      }
-		}
-		// console.log(stat, "STAT")
-	}
-
 	render() {
 		let stat = this.log();
 		// let event = this.displayEvent(stat);
@@ -95,8 +65,6 @@ class EventDisplay extends React.Component {
 			return (
 				<div id={"eventDisplay" + 1 * this.props.gamesToSee}>
 					{ stat[0].map(champFight => {
-										console.log([champFight[0][0]], "LOGGING")
-
 							if (!champFight[1]) {
 								return (
 									<div>
@@ -143,11 +111,11 @@ class EventDisplay extends React.Component {
 											}
 											return (
 												<div id="playerKPlayer">
-													<div id="champKiller" style={{ 'border': '1px solid ' + colorOfTeam[champFight[0][0]], "height": "30px", "width": "30px"}}>
+													<div id={"champKiller" + i.toString()} style={{ 'border': '1px solid ' + colorOfTeam[champFight[0][0]], "height": "30px", "width": "30px"}}>
 														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" + this.props["champImg" + i.toString()][champFight[0][1]] + ".png"} height={30} width={30} />
 													</div>
 													&nbsp;&nbsp;&nbsp; has slain &nbsp;&nbsp;&nbsp;
-													<div id="champVictim" style={{ 'border': '1px solid ' + colorOfTeam[champFight[1][0]], "height": "30px", "width": "30px"}}>
+													<div id={"champVictim" + i.toString()} style={{ 'border': '1px solid ' + colorOfTeam[champFight[1][0]], "height": "30px", "width": "30px"}}>
 														<img src={"http://ddragon.leagueoflegends.com/cdn/" + this.props["patch" + i.toString()] + "/img/champion/" +  this.props["champImg" + i.toString()][champFight[1][1]] + ".png"} height={30} width={30} />
 													</div>
 												</div>

@@ -347,7 +347,7 @@ class HeadApp extends React.Component {
       const svg = d3.select("#chart1")
               .append("svg:svg")
               .attr("height", h)
-              .attr("width", 450)
+              .attr("width", 415)
               .attr("id", "allStat1");
 
       if (this.state.gamesToSee === 1) {
@@ -531,13 +531,13 @@ class HeadApp extends React.Component {
       const champEvent = d3.select("#eventDisplay2")
               .append("svg:svg")
               .attr("height", h)
-              .attr("width", 400)
+              .attr("width", 165)
               .attr("id", "allStat2");
 
       const champEvent2 = d3.select("#eventDisplay4")
               .append("svg:svg")
               .attr("height", h)
-              .attr("width", 400)
+              .attr("width", 165)
               .attr("id", "allStat4");
 
       this.setState({
@@ -634,17 +634,20 @@ class HeadApp extends React.Component {
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
           <Link to="/about">About</Link>
           
-          <p>Your one stop shop to finding more than a summary but less than a replay of a game!<br />
-            To get started, enter an ign (in game name) in the search bar.
+            <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
+            To get started, enter an ign (in game name) in the search bar.</p>
+
+            <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
+              <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+              <button type="submit" id="findStats" val>Find Stats</button>
+            </form>
             <br /><br /><br /><br />
-            (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
+
+            <p id="legalStuff">(Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views<br />
             or opinions of Riot Games or anyone officially involved in producing or managing<br />
-            League of Legends.League of Legends and Riot Games are trademarks or registered<br />
-            trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
-          <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
-            <button type="submit" id="findStats" val>Find Stats</button>
-          </form>
+            League of Legends.League of Legends and Riot Games are trademarks or<br />
+            registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.)</p>
+          
         </div>
       )
     }

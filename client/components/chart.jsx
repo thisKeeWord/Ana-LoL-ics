@@ -131,10 +131,6 @@ class Chart extends React.Component {
                     .orient("bottom");
     let labelWidth = 400;
 
-    // if (this.props.gamesToSee === 1) {
-    //   labelWidth = 400;
-    // }
-
     // GAMES
     for (let l = 1; l <= this.props.gamesToSee; l++) {
       let getName = [];
@@ -217,7 +213,7 @@ class Chart extends React.Component {
               .attr("x", (d, i) => {
                 if(whichMaxStat) {
                   if (l === 2 || this.props.gamesToSee === 1) {
-                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 20;
+                    return (labelWidth - 58) - (d / whichMaxStat) * (labelWidth - 58) + 26;
                   }
                   return (d / whichMaxStat) * (labelWidth - 50) + 25;
                 }

@@ -18,7 +18,7 @@ class About extends React.Component {
 
 
           <p>*The site is still undergoing changes. Thank you for your patience.*</p>
-          <p>*For the optimal view, please use the site in as full a window as possible.*</p>
+          <p>*For the optimal view, please use a desktop browser to use the site in as full a window as possible.*</p>
         
           <div className="icons">
             <a href="https://www.linkedin.com/in/thiskeeword">
