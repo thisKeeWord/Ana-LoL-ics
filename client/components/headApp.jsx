@@ -42,6 +42,7 @@ class HeadApp extends React.Component {
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
+      region: ''
     }
   }
 
@@ -50,7 +51,7 @@ class HeadApp extends React.Component {
     return $.ajax({
       type: 'POST',
       url: data.url.yooRL,
-      data: JSON.stringify(data.username),
+      data: JSON.stringify(data),
       contentType: 'application/json'
     })
   }
@@ -79,6 +80,7 @@ class HeadApp extends React.Component {
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
+      newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
@@ -92,6 +94,7 @@ class HeadApp extends React.Component {
     // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
+      newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
         that.setState({
@@ -112,7 +115,7 @@ class HeadApp extends React.Component {
     // let count = this.state.gamesToSee;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
-      this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
+      this.postForGame({ region: this.state.region, data: this.state.clicksForGame[this.state.clicksForGame.length - 1] }).done(gotGameOne => {
 
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
@@ -231,6 +234,7 @@ class HeadApp extends React.Component {
       // GET THE 10 IMAGES FROM URL
       for (let z = 0; z < this.state.playerID1.length; z++) {
         const checking = this.state.playerID1[z][1];
+        console.log(checking, "CHECKING!!")
 
         // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
         svg.append('svg:g').attr("id", "champIcon" + 1 * this.state.gamesToSee).selectAll("image")
@@ -625,7 +629,13 @@ class HeadApp extends React.Component {
     this.state.gamesToSee = parseInt(e.target.value, 10);
   }
 
+  updateRegion(e) {
+    e.preventDefault();
+    this.setState({ region: e.target.value });
+  }
+
   render() {
+    let that = this;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
@@ -639,6 +649,19 @@ class HeadApp extends React.Component {
 
             <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
               <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+              <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions">
+                <option value="BR">Brazil</option>
+                <option value="EUNE">Europe Nordic & East</option>
+                <option value="EUW">Europe West</option>
+                <option value="JP">Japan</option>
+                <option value="KR">Korea</option>
+                <option value="LAN">Latin America North</option>
+                <option value="LAS">Latin America South</option>
+                <option value="NA">North America</option>
+                <option value="OCE">Oceania</option>
+                <option value="RU">Russia</option>
+                <option value="TR">Turkey</option>
+              </select>
               <button type="submit" id="findStats" val>Find Stats</button>
             </form>
             <br /><br /><br /><br />
@@ -661,15 +684,15 @@ class HeadApp extends React.Component {
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
 
-          <WhosGames summonersName={this.state.whosGames} /> 
-          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
-          <GameMap gamesToSee={this.state.gamesToSee} />
-          <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} />
-          <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} />
-          <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} eventDisplay1={this.state.eventDisplay1} eventDisplay2={this.state.eventDisplay2} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
-          <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} />
-          <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} whichRole1={this.state.whichRole1} whichRole2={this.state.whichRole2} />
-          <ChampImage gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.spot} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} />
+          <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
+          <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
+          <GameMap gamesToSee={this.state.gamesToSee} region={this.state.region} />
+          <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} region={this.state.region} />
+          <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} region={this.state.region} />
+          <EventDisplay gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} eventDisplay1={this.state.eventDisplay1} eventDisplay2={this.state.eventDisplay2} playerInfo1={this.state.playerID1} champImg1={this.state.champImg1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champImg2={this.state.champImg2} patch2={this.state.patch2} region={this.state.region} />
+          <Chart gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} selData1={this.state.selData1} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} maxForStat1={this.state.maxForStat1} timeline2={this.state.allowScroll2} selData2={this.state.selData2} playerInfo2={this.state.playerID2} eventSelected={this.state.eventSelected} champName2={this.state.champImg2} maxForStat2={this.state.maxForStat2} region={this.state.region} />
+          <ChampBuild gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} spot={this.state.spot} playerInfo1={this.state.playerID1} champName1={this.state.champImg1} itemStorage1={this.state.itemStorage1} addItems1={this.state.addItems1} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} champName2={this.state.champImg2} itemStorage2={this.state.itemStorage2} addItems2={this.state.addItems2} patch2={this.state.patch2} whichRole1={this.state.whichRole1} whichRole2={this.state.whichRole2} region={this.state.region} />
+          <ChampImage gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} playerInfo1={this.state.playerID1} png1={this.state.png1} champImg1={this.state.champImg1} spot={this.state.spot} patch1={this.state.patch1} timeline2={this.state.allowScroll2} playerInfo2={this.state.playerID2} png2={this.state.png2} champImg2={this.state.champImg2} patch2={this.state.patch2} region={this.state.region} />
         </div>
       )
     }

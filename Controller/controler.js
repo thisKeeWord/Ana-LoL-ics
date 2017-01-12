@@ -1,10 +1,10 @@
 var request = require('request');
 var ThrottleCalls = require('./throttleCalls.js');
-var summonerUrl = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
-var matchHistoryList = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/";
-var champImageUrl = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/";
-var url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/";
-var matchUrl = "https://na.api.pvp.net/api/lol/na/v2.2/match/";
+var summonerUrl = ".api.pvp.net/api/lol/";
+var matchHistoryList = ".api.pvp.net/api/lol/";
+var champImageUrl = "https://global.api.pvp.net/api/lol/static-data/";
+var url = "https://global.api.pvp.net/api/lol/static-data/";
+var matchUrl = ".api.pvp.net/api/lol/";
 var version = "https://ddragon.leagueoflegends.com/api/versions.json";
 var versionNumber;
 
@@ -18,8 +18,9 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	var date = Date.now();
-	if (isNaN(req.body.userName) === false) {
-		req.summonerId = req.body.userName;
+	if (isNaN(req.body.username.userName) === false) {
+		req.summonerId = req.body.username.userName;
+		req.region = req.body.region.region.toLowerCase();
 		return next();
 	}
 	else {
@@ -93,13 +94,19 @@ function getData(req, res) {
 }
 
 function usersInfo(date, req, res, next) {
-	ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.userName }, function(error, throttling) {
-	  request(summonerUrl + req.body.userName + "?" + process.env.stuff1, (error, resp) => {
+	console.log(req.body.region.region.toLowerCase(), "REQ")
+
+	ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.username.userName }, function(error, throttling) {
+	  request("https://" + req.body.region.region.toLowerCase() + summonerUrl + req.body.region.region.toLowerCase() + "/v1.4/summoner/by-name/" + encodeURI(req.body.username.userName) + "?" + process.env.stuff1, (error, resp) => {
 			if (error) return console.error("we cannot find the summoner or " + error);
+			console.log(resp.statusCode, "here's the code")
 			if (resp.statusCode === 200) {
 				var userId = JSON.parse(resp.body);
-				var result = userId[req.body.userName]["id"];
+				console.log(userId, "USER")
+				var result = userId[req.body.username.userName]["id"];
+				console.log('this result', result);
 				req.summonerId = result;
+				req.region = req.body.region.region.toLowerCase();
 			}
 			return next();
 		})
@@ -109,12 +116,15 @@ function usersInfo(date, req, res, next) {
 // can split nested requests
 function getMatchList(date, req, res, next) {
 	request(version, (error, results) => {
+		console.log(req.body.region.region, req.body, "REQ BODY HERE")
 		results = JSON.parse(results.body);
 		ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 			var count = 0;
 			var matchHistory = [];
-			request(matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
-				if (error) return console.error(error);
+			console.log("https://" + req.body.region.region.toLowerCase() + matchHistoryList + req.body.region.region.toLowerCase() + "/v1.3/game/by-summoner/" + req.summonerId + "/recent?" + process.env.stuff2)
+			request("https://" + req.body.region.region.toLowerCase() + matchHistoryList + req.body.region.region.toLowerCase() + "/v1.3/game/by-summoner/" + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
+				if (error) return console.error(error, "here");
+				console.log(response.statusCode, "CODE")
 				if (response.statusCode === 200) {
 					var gamesList = JSON.parse(response.body);
 					for (var i = 0; i < gamesList.games.length; i++) {
@@ -129,7 +139,7 @@ function getMatchList(date, req, res, next) {
 					}
 
 					matchHistory.forEach(function(i) {
-						request(champImageUrl + i[1] + "?" + process.env.stuff2, function(error, good) {
+						request(champImageUrl + req.body.region.region.toLowerCase() + "/v1.2/champion/" + i[1] + "?" + process.env.stuff2, function(error, good) {
 							good = JSON.parse(good.body);
 							i[1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + good.key + '.png';
 							count++;
@@ -148,7 +158,8 @@ function getMatchList(date, req, res, next) {
 }
 
 function getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
-  request(matchUrl + Object.keys(req.body)[0] + "?includeTimeline=true&" + process.env.stuff3, function(error, newData) {
+	console.log("https://" + req.body.region.toLowerCase() + matchUrl + req.body.region.toLowerCase() + "/v2.2/match/" + Object.keys(req.body.data) + "?includeTimeline=true&" + process.env.stuff3, "here req")
+  request("https://" + req.body.region.toLowerCase() + matchUrl + req.body.region.toLowerCase() + "/v2.2/match/" + Object.keys(req.body.data)[0] + "?includeTimeline=true&" + process.env.stuff3, function(error, newData) {
     if (error) return console.error(error);
     if (newData.statusCode === 429 && (!newData.headers["X-Rate-Limit-Type"] || newData.headers["X-Rate-Limit-Type"] === "service") && keepTrackOf429 < 15) {
     	setTimeout(getGameData(keepTrackOf429 + 1, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res), 10);
@@ -202,7 +213,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, compar
         idOfPlayer.push([pId, cId, playerRole, playerLane]);
 
         // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-        request(url + cId + '?' + process.env.stuff2, function(error, champData) {
+        request(url + req.body.region.region.toLowerCase() + "v1.2/champion/" + cId + '?' + process.env.stuff2, function(error, champData) {
         	champData = JSON.parse(champData.body);
 
         	if (error) return console.error(error);
