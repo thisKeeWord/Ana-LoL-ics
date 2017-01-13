@@ -20,8 +20,6 @@ class EventDisplay extends React.Component {
 								}
 								else {
 									interaction.push([ this.props["playerInfo" + i.toString()][searchEvents[j].killerId - 1], this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1] ]);
-										// this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].killerId - 1][1]], this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] 
-									// console.log(this.props["playerInfo" + i.toString()][searchEvents[j].killerId], this.props["playerInfo" + i.toString()][searchEvents[j].victimId], "ID")
 								}
 							}
 						}
@@ -38,7 +36,6 @@ class EventDisplay extends React.Component {
 
 	render() {
 		let stat = this.log();
-		// let event = this.displayEvent(stat);
 
 		// DOESN'T EXIST INITIALLY
 		if (!stat) {

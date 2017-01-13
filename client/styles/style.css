@@ -19,6 +19,17 @@ a:hover {
   z-index: -100;
 }
 
+#about {
+  position: absolute;
+  margin: -30 0 0 0;
+  height: 19px;
+  width: 140px;
+  color: gray;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+}
+
 #championBackground {
   position: absolute;
   width: 1200px;
@@ -368,4 +379,25 @@ input.username {
 #champKiller2, #champVictim2 {
   display: inline-block;
   right: 0;
+}
+
+#regions1 {
+  right: 5%;
+  top: 80;
+  position: absolute;
+}
+
+#regions2 {
+  width: 150px;
+  margin-top: 85px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  color: #cccccc;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#regions {
+  margin-left: 10px;
 }

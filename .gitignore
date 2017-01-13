@@ -5,14 +5,10 @@ bower_components
 node_modules
 
 # stuff
-stuff.js
 config.env
 
 # demo html
 demoData.html
-
-# trials and stuff
-options.txt
 
 # npm debug log
 npm-debug.log
