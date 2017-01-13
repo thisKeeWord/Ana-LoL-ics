@@ -105,15 +105,6 @@ p {
   line-height: 28px;
 }
 
-#feedbackForm {
-  width: 330px;
-}
-
-#feedbackForm li {
-  list-style: none;
-  line-height: 70px;
-}
-
 #legalStuff {
   top: 500;
   position: absolute;
