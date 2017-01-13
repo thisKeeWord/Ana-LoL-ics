@@ -115,7 +115,7 @@ class HeadApp extends React.Component {
     // let count = this.state.gamesToSee;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
-      this.postForGame({ region: this.state.region, data: this.state.clicksForGame[this.state.clicksForGame.length - 1] }).done(gotGameOne => {
+      this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
 
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
@@ -234,7 +234,6 @@ class HeadApp extends React.Component {
       // GET THE 10 IMAGES FROM URL
       for (let z = 0; z < this.state.playerID1.length; z++) {
         const checking = this.state.playerID1[z][1];
-        console.log(checking, "CHECKING!!")
 
         // INITIAL RENDERING OF POSITION AT FRAME 0 FOR SIMPLICITY
         svg.append('svg:g').attr("id", "champIcon" + 1 * this.state.gamesToSee).selectAll("image")
@@ -684,6 +683,20 @@ class HeadApp extends React.Component {
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
 
+          <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
+            <option value="BR">Brazil</option>
+            <option value="EUNE">Europe Nordic & East</option>
+            <option value="EUW">Europe West</option>
+            <option value="JP">Japan</option>
+            <option value="KR">Korea</option>
+            <option value="LAN">Latin America North</option>
+            <option value="LAS">Latin America South</option>
+            <option value="NA">North America</option>
+            <option value="OCE">Oceania</option>
+            <option value="RU">Russia</option>
+            <option value="TR">Turkey</option>
+          </select>
+
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
           <GameMap gamesToSee={this.state.gamesToSee} region={this.state.region} />
@@ -705,6 +718,20 @@ class HeadApp extends React.Component {
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
+
+          <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">
+            <option value="BR">Brazil</option>
+            <option value="EUNE">Europe Nordic & East</option>
+            <option value="EUW">Europe West</option>
+            <option value="JP">Japan</option>
+            <option value="KR">Korea</option>
+            <option value="LAN">Latin America North</option>
+            <option value="LAS">Latin America South</option>
+            <option value="NA">North America</option>
+            <option value="OCE">Oceania</option>
+            <option value="RU">Russia</option>
+            <option value="TR">Turkey</option>
+          </select>
 
           <WhosGames summonersName={this.state.whosGames} /> 
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />

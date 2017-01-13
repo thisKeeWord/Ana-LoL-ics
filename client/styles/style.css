@@ -389,3 +389,24 @@ input.username {
   display: inline-block;
   right: 0;
 }
+
+#regions1 {
+  right: 5%;
+  top: 80;
+  position: absolute;
+}
+
+#regions2 {
+  width: 150px;
+  margin-top: 85px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  color: #cccccc;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#regions {
+  margin-left: 10px;
+}
