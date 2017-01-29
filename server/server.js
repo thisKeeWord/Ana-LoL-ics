@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var fallback = require('express-history-api-fallback');
 var controller = require('./../Controller/controler.js');
+var seasonStats = require('./../Controller/leagueHistoryController.js');
 var mongoURI = 'mongodb://lkee:' + process.env.stuff4 + '@ds011439.mlab.com:11439/heroku_wk47xfd5';
 mongoose.connect(mongoURI);
 
@@ -25,6 +26,9 @@ app.get('/', function(req, res) {
 app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
+
+app.post('/season_stats', controller.userInformation, seasonStats.results);
+
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));

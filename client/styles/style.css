@@ -2,7 +2,6 @@ body {
   font-family: sans-serif;
   background: #202020;
   width: auto !important;  /* Firefox will set width as auto */
-  min-width: 1350px;
   position: relative;
 }
 
@@ -28,6 +27,11 @@ a:hover {
   text-decoration: none;
   font-weight: bold;
   font-size: 15px;
+}
+
+#second, .resultingInfo {
+  min-width: 1350px;
+  position: relative;
 }
 
 #championBackground {
@@ -99,7 +103,7 @@ a:hover {
   left: 40;
 }
 
-p {
+#quickSumm {
   margin-left: 30px;
   font-size: 18px;
   line-height: 28px;
@@ -409,8 +413,8 @@ input.username {
   margin-left: auto;
   margin-right: auto;
   margin-top: 5px;
-  max-height: 500px;
-  line-height: 7px;
+  max-height: 600px;
+  /*line-height: 7px;*/
 }
 
 #header {
@@ -429,4 +433,32 @@ input.username {
 
 #league-form input[type="text"] {
   color: black;
+}
+
+/*.list-group-item {
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+}*/
+
+.list-group {
+  padding-left: 0;
+  margin-bottom: 20px;
+  border-radius:0;
+  position: relative;
+}
+
+.list-group-item {
+    /*position: relative;*/
+    display: block;
+    /*padding: 10px 15px;*/
+    margin-bottom: -1px;
+    background-color: #FFF;
+    /*border: 1px solid #DDD;*/
+  /*font-size: 20px;*/
+    /*font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;*/
+    /*font-weight: 20;*/
+    line-height: 3px;
+  
 }
