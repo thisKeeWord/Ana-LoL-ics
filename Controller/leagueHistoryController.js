@@ -187,7 +187,7 @@ function getStats(req, champDatum, infos, res) {
           //   if(error) return console.error('in champ.create', error);
             // return res.send(champSaved);
           // });
-        return res.send(desiredChamp);
+        return res.send([ req.summonerId, desiredChamp ]);
 
         }
       }

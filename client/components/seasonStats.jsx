@@ -46,13 +46,14 @@ class OutForm extends React.Component {
       data.username = { userName: cleanName };
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
+        console.log('i got the info', gotTheInfo);
         localStorage[cleanName] = gotTheInfo[0];
       })
     }
     
     this.post(data).done(res => {
-      console.log(res, 'res')
-      that.props.update(res);
+      console.log(res[1], 'res')
+      that.props.update(res[1]);
     });
   }
 
