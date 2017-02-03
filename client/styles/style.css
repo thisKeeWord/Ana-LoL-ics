@@ -59,6 +59,9 @@ a:hover {
 
 #backHome {
   margin-left: 33px;
+  width: 50px;
+  position: absolute;
+
 }
 
 .icons {
@@ -406,6 +409,12 @@ input.username {
   margin-left: 10px;
 }
 
+/*.getChamps {
+  top: 100;
+  position: absolute;
+  left: 50%;
+}*/
+
 #RtoD {
   border: 2px solid black;
   width: 30%;
@@ -446,7 +455,13 @@ input.username {
   padding-left: 0;
   margin-bottom: 20px;
   border-radius:0;
-  position: relative;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+
+}
+
+.getChamps#getHome {
 }
 
 .list-group-item {
@@ -459,6 +474,5 @@ input.username {
   /*font-size: 20px;*/
     /*font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;*/
     /*font-weight: 20;*/
-    line-height: 3px;
-  
+    line-height: 3px;  
 }

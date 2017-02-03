@@ -7,6 +7,7 @@ class SeasonStats extends React.Component {
   render() {
     return (
       <div className="getChamps">
+        <div id="backHome"><Link to="/">Home</Link></div>
         <DbResults />
       </div>
     );
@@ -66,7 +67,6 @@ class OutForm extends React.Component {
     let that = this;
     return (
       <div>
-        <div id="backHome"><Link to="/">Home</Link></div>
         <form id="league-form" onSubmit={this.handle.bind(that)}>
 
           IGN: <input type="text" name="userName" ref="userName" required /><br />
