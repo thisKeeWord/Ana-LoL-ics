@@ -7,10 +7,10 @@ class About extends React.Component {
     return (
       <div id="aboutMe">
         <div id="backHome">
-          <li className="linkToPages">
-            <ul className="goHome"><Link to="/">Home</Link></ul>
-            <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
-          </li>
+          <ul className="linkToPages">
+            <li className="goHome"><Link to="/">Home</Link></li>
+            <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+          </ul>
         </div>
 
         <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Kennen_4.jpg)"}} />

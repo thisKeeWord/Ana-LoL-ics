@@ -8,10 +8,10 @@ class SeasonStats extends React.Component {
     return (
       <div className="getChamps">
         <div id="backHome">
-          <li className="linkToPages">
-            <ul className="goHome"><Link to="/">Home</Link></ul>
-            <ul className="goAbout"><Link to="/about">About</Link></ul>
-          </li>
+          <ul className="linkToPages">
+            <li className="goHome"><Link to="/">Home</Link></li>
+            <li className="goAbout"><Link to="/about">About</Link></li>
+          </ul>
         </div>
         <DbResults />
       </div>

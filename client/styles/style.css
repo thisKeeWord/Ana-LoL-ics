@@ -18,15 +18,21 @@ a:hover {
   z-index: -100;
 }
 
-#about {
+.linkToPages {
+  padding-left: 4px;
+  font-size: 15px;
+}
+
+#aboutMe {
   position: absolute;
-  margin: -30 0 0 0;
-  height: 19px;
-  width: 140px;
+  margin: 65 0 0 0;
+  height: 100%;
+  width: 100%;
   color: gray;
   text-decoration: none;
-  font-weight: bold;
+  /*font-weight: bold;*/
   font-size: 15px;
+  min-width: 900px;
 }
 
 #second, .resultingInfo {
@@ -43,24 +49,20 @@ a:hover {
   z-index: -1;
 }
 
-#aboutMe {
-  top: 130;
-  position: absolute;
-}
-
 #description {
+  position: relative;
   width: 550px;
   height: 450px;
   left: 50%;
   color: #F8F8F8;
-  padding-top: 100px;
-  position: relative;
+  margin: 100 0 0 -225;
 }
 
 #backHome {
-  margin-left: 33px;
-  width: 50px;
-  position: absolute;
+  /*position: absolute;*/
+  width: 205px;
+  height: 20px;
+  padding-left: 38px;
 
 }
 
@@ -78,8 +80,17 @@ a:hover {
   transition: all 0.5s ease;
 }
 
-.li {
+li {
   color: #0077b5;
+  display: inline;
+}
+
+.goSeasonStats {
+  padding-left: 30px;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .gh {
@@ -97,23 +108,28 @@ a:hover {
   font-size: 30px;
   position: absolute;
   left: 40;
+  min-width: 500px;
 }
 
 #landingPage {
   color: #cccccc;
-  top: 130;
+  margin: 65 0 0 0;
   position: absolute;
-  left: 40;
+  left: 35;
+  height: 600px;
+  width: 100%;
 }
 
 #quickSumm {
   margin-left: 30px;
+  margin-top: 80px;
   font-size: 18px;
   line-height: 28px;
 }
 
 #legalStuff {
   top: 500;
+  left: 30;
   position: absolute;
 }
 
@@ -465,14 +481,14 @@ input.username {
 }
 
 .list-group-item {
-    /*position: relative;*/
-    display: block;
-    /*padding: 10px 15px;*/
-    margin-bottom: -1px;
-    background-color: #FFF;
-    /*border: 1px solid #DDD;*/
-  /*font-size: 20px;*/
-    /*font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;*/
-    /*font-weight: 20;*/
-    line-height: 3px;  
+  /*position: relative;*/
+  display: block;
+  /*padding: 10px 15px;*/
+  margin-bottom: -1px;
+  background-color: #FFF;
+  /*border: 1px solid #DDD;*/
+/*font-size: 20px;*/
+  /*font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;*/
+  /*font-weight: 20;*/
+  line-height: 3px;  
 }

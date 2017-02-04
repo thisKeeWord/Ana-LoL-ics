@@ -641,8 +641,10 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
-          <Link to="/about">About</Link>
-          <Link to="/season_stats">Season Stats</Link>
+          <ul className="linkToPages">
+            <li className="goAbout"><Link to="/about">About</Link></li>
+            <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+          </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
             To get started, enter an ign (in game name) in the search bar.</p>
@@ -681,10 +683,10 @@ class HeadApp extends React.Component {
       return (
         <div className="resultingInfo">
           <div id="backHome">
-            <li className="linkToPages">
-              <ul className="goAbout"><Link to="/about">About</Link></ul>
-              <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
-            </li>
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+              <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+            </ul>
           </div>
 
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
@@ -724,10 +726,10 @@ class HeadApp extends React.Component {
       return (
         <div id="second">
           <div id="backHome">
-            <li className="linkToPages">
-              <ul className="goAbout"><Link to="/about">About</Link></ul>
-              <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
-            </li>
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+              <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+            </ul>
           </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
