@@ -680,6 +680,13 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
+          <div id="backHome">
+            <li className="linkToPages">
+              <ul className="goAbout"><Link to="/about">About</Link></ul>
+              <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
+            </li>
+          </div>
+
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>
@@ -716,6 +723,12 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div id="second">
+          <div id="backHome">
+            <li className="linkToPages">
+              <ul className="goAbout"><Link to="/about">About</Link></ul>
+              <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
+            </li>
+          </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
             <input type="text" className="userName" ref="userName" placeholder="enter username" required />
           </form>

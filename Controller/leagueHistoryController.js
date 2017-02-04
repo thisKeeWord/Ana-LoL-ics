@@ -68,7 +68,6 @@ function results(req, res, next) {
   };
 
   request(allChampInfo + toCheck.region + '/v1.2/champion?' + process.env.stuff2, function(err, champDatas) {
-    console.log(JSON.parse(champDatas.body), "body of champ static data");
     var champDatum = JSON.parse(champDatas.body).data;
 
 
@@ -135,24 +134,16 @@ function champStuff(req, champDatum, infos, res) {
 
 function getStats(req, champDatum, infos, res) {
   var desiredChamp = {};
-  console.log(req.summonerId, 'id found here')
-  console.log('url here', 'https://' + infos.region + champUrl  + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1)
   // if (!search || search.season !== infos.season || (!infos.championId && !infos.season)) {
     request('https://' + infos.region + champUrl + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1, function(error, champStat) {
-      console.log(error, "HEREERER")
       if (error) return res.redirect('/');
-      console.log(JSON.parse(champStat.body), "CHAMPBOYD")
       var champStatis = JSON.parse(champStat.body).champions;
       var champNameCheck = Object.keys(champDatum);
       for (var i = 0; i < champNameCheck.length; i++) {
         champNameCheck[i] = champNameCheck[i].toLowerCase();
       }
-      console.log(champNameCheck, "checking name")
-      console.log(champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id, 'asdfjasdofpauseoiquwepojf')
       var champName = champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
-      console.log('yooooo', champStatis.length)
       for (var i = 0; i < champStatis.length; i++) {
-        console.log(champStatis[i].id, 'getting id of champ')
         if (champStatis[i].id === champName) {
           desiredChamp = {
             userName: infos.userName,

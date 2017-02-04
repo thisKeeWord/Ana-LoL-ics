@@ -6,7 +6,12 @@ class About extends React.Component {
   render() {
     return (
       <div id="aboutMe">
-        <div id="backHome"><Link to="/">Home</Link></div>
+        <div id="backHome">
+          <li className="linkToPages">
+            <ul className="goHome"><Link to="/">Home</Link></ul>
+            <ul className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></ul>
+          </li>
+        </div>
 
         <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Kennen_4.jpg)"}} />
         <div id="description">

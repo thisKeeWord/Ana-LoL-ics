@@ -7,7 +7,12 @@ class SeasonStats extends React.Component {
   render() {
     return (
       <div className="getChamps">
-        <div id="backHome"><Link to="/">Home</Link></div>
+        <div id="backHome">
+          <li className="linkToPages">
+            <ul className="goHome"><Link to="/">Home</Link></ul>
+            <ul className="goAbout"><Link to="/about">About</Link></ul>
+          </li>
+        </div>
         <DbResults />
       </div>
     );
