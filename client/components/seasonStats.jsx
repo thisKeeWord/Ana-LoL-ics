@@ -6,11 +6,11 @@ import { Link } from 'react-router';
 class SeasonStats extends React.Component {
   render() {
     return (
-      <div className="getChamps">
+      <div id="getSeasonStats">
         <div id="backHome">
           <ul className="linkToPages">
             <li className="goHome"><Link to="/">Home</Link></li>
-            <li className="goAbout"><Link to="/about">About</Link></li>
+            <li className="goAboutPage"><Link to="/about">About</Link></li>
           </ul>
         </div>
         <DbResults />
