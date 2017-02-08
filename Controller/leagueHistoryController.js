@@ -134,62 +134,51 @@ function champStuff(req, champDatum, infos, res) {
 
 function getStats(req, champDatum, infos, res) {
   var desiredChamp = {};
-  // if (!search || search.season !== infos.season || (!infos.championId && !infos.season)) {
-    request('https://' + infos.region + champUrl + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1, function(error, champStat) {
-      if (error) return res.redirect('/');
-      var champStatis = JSON.parse(champStat.body).champions;
-      var champNameCheck = Object.keys(champDatum);
-      for (var i = 0; i < champNameCheck.length; i++) {
-        champNameCheck[i] = champNameCheck[i].toLowerCase();
-      }
-      var champName = champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
-      for (var i = 0; i < champStatis.length; i++) {
-        if (champStatis[i].id === champName) {
-          desiredChamp = {
-            userName: infos.userName,
-            champion: champName,
-            championId: champStatis[i].id,
-            season: infos.season,
-            totalDeathsPerSession: champStatis[i].stats["totalDeathsPerSession"],
-            totalSessionsPlayed: champStatis[i].stats["totalSessionsPlayed"],
-            totalDamageTaken: champStatis[i].stats["totalDamageTaken"],
-            totalQuadraKills: champStatis[i].stats["totalQuadraKills"],
-            totalTripleKills: champStatis[i].stats["totalTripleKills"],
-            totalMinionKills: champStatis[i].stats["totalMinionKills"],
-            maxChampionsKilled: champStatis[i].stats["maxChampionsKilled"],
-            totalDoubleKills: champStatis[i].stats["totalDoubleKills"],
-            totalPhysicalDamageDealt: champStatis[i].stats["totalPhysicalDamageDealt"],
-            totalChampionKills: champStatis[i].stats["totalChampionKills"],
-            totalAssists: champStatis[i].stats["totalAssists"],
-            mostChampionKillsPerSession: champStatis[i].stats["mostChampionKillsPerSession"],
-            totalDamageDealt: champStatis[i].stats["totalDamageDealt"],
-            totalFirstBlood: champStatis[i].stats["totalFirstBlood"],
-            totalSessionsLost: champStatis[i].stats["totalSessionsLost"],
-            totalSessionsWon: champStatis[i].stats["totalSessionsWon"],
-            totalMagicDamageDealt: champStatis[i].stats["totalMagicDamageDealt"],
-            totalGoldEarned: champStatis[i].stats["totalGoldEarned"],
-            totalPentaKills: champStatis[i].stats["totalPentaKills"],
-            totalTurretsKilled: champStatis[i].stats["totalTurretsKilled"],
-            mostSpellsCast: champStatis[i].stats["mostSpellsCast"],
-            maxNumDeaths: champStatis[i].stats["maxNumDeaths"],
-            totalUnrealKills: champStatis[i].stats["totalUnrealKills"]
-          }
-          // }, function(error, champSaved) {
-          //   if(error) return console.error('in champ.create', error);
-            // return res.send(champSaved);
-          // });
-        return res.send([ req.summonerId, desiredChamp ]);
-
+  request('https://' + infos.region + champUrl + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1, function(error, champStat) {
+    if (error) return res.redirect('/');
+    var champStatis = JSON.parse(champStat.body).champions;
+    var champNameCheck = Object.keys(champDatum);
+    for (var i = 0; i < champNameCheck.length; i++) {
+      champNameCheck[i] = champNameCheck[i].toLowerCase();
+    }
+    var champName = champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
+    for (var i = 0; i < champStatis.length; i++) {
+      if (champStatis[i].id === champName) {
+        desiredChamp = {
+          userName: infos.userName,
+          champion: champName,
+          championId: champStatis[i].id,
+          season: infos.season,
+          totalDeathsPerSession: champStatis[i].stats["totalDeathsPerSession"],
+          totalSessionsPlayed: champStatis[i].stats["totalSessionsPlayed"],
+          totalDamageTaken: champStatis[i].stats["totalDamageTaken"],
+          totalQuadraKills: champStatis[i].stats["totalQuadraKills"],
+          totalTripleKills: champStatis[i].stats["totalTripleKills"],
+          totalMinionKills: champStatis[i].stats["totalMinionKills"],
+          maxChampionsKilled: champStatis[i].stats["maxChampionsKilled"],
+          totalDoubleKills: champStatis[i].stats["totalDoubleKills"],
+          totalPhysicalDamageDealt: champStatis[i].stats["totalPhysicalDamageDealt"],
+          totalChampionKills: champStatis[i].stats["totalChampionKills"],
+          totalAssists: champStatis[i].stats["totalAssists"],
+          mostChampionKillsPerSession: champStatis[i].stats["mostChampionKillsPerSession"],
+          totalDamageDealt: champStatis[i].stats["totalDamageDealt"],
+          totalFirstBlood: champStatis[i].stats["totalFirstBlood"],
+          totalSessionsLost: champStatis[i].stats["totalSessionsLost"],
+          totalSessionsWon: champStatis[i].stats["totalSessionsWon"],
+          totalMagicDamageDealt: champStatis[i].stats["totalMagicDamageDealt"],
+          totalGoldEarned: champStatis[i].stats["totalGoldEarned"],
+          totalPentaKills: champStatis[i].stats["totalPentaKills"],
+          totalTurretsKilled: champStatis[i].stats["totalTurretsKilled"],
+          mostSpellsCast: champStatis[i].stats["mostSpellsCast"],
+          maxNumDeaths: champStatis[i].stats["maxNumDeaths"],
+          totalUnrealKills: champStatis[i].stats["totalUnrealKills"]
         }
+      
+      return res.send([ req.summonerId, desiredChamp ]);
+
       }
-    });
-  // }
-  // else if (search.season === infos.season && search.champion === infos.champion) {
-  //   return res.send(search);
-  // }
-  // else {
-  //   return res.send("You haven't played this champ for the season specified");
-  // }
+    }
+  });
 }
 
 

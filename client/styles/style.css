@@ -54,7 +54,7 @@ a:hover {
   margin: -75px 0 0 0;
   height: 717px;
   box-shadow: 0 0 100px 100px #202020 inset;
-  z-index: -1;
+  z-index: -10;
 }
 
 #description {
@@ -70,7 +70,12 @@ a:hover {
   position: absolute;
   margin: 80 0 0 -2;
   height: 100%;
+  min-width: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
   width: 100%;
+  box-shadow: 0 0 170px 170px #202020 inset;
 }
 
 #backHome {
@@ -445,13 +450,12 @@ input.username {
 
 #RtoD {
   border: 2px solid black;
-  width: 30%;
+  width: 400px;
   min-width: 300px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 5px;
   max-height: 600px;
-  /*line-height: 7px;*/
 }
 
 #header {
@@ -459,50 +463,54 @@ input.username {
   font-weight: bold;
 }
 
+#seasonSpecifics {
+  margin: 0 auto;
+}
+
 #league-form {
   position: relative;
-  width: 30%;
+  width: 100%;
   margin-top: 4px;
   margin-left: auto;
   margin-right: auto;
   color: white;
+  text-align: center;
+  padding-top: 15px;
 }
 
 #league-form input[type="text"] {
   color: black;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*.list-group-item {
-  display: block;
-  padding: 10px 15px;
-  margin-bottom: -1px;
-  background-color: #fff;
-}*/
+.ign, .seasonNumber, .championsName, #regionInSeason {
+  padding-bottom: 7px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+}
 
 .list-group {
   padding-left: 0;
   margin-bottom: 20px;
   border-radius:0;
   position: absolute;
-  top: 100px;
+  top: 65;
   left: 50%;
-
-}
-
-.getChamps#getHome {
+  margin-left: -213.75px;
 }
 
 .list-group-item {
-  /*position: relative;*/
   display: block;
-  /*padding: 10px 15px;*/
   margin-bottom: -1px;
   background-color: #FFF;
-  /*border: 1px solid #DDD;*/
-/*font-size: 20px;*/
-  /*font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;*/
-  /*font-weight: 20;*/
   line-height: 3px;  
+}
+
+.seasonalData {
+  color: black;
+  padding-left: 15px;
 }
 
 #content.loading {
