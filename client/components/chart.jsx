@@ -20,7 +20,7 @@ class Chart extends React.Component {
               for (let j = 0; j <= this.props.spot; j++) {
                 if (searchEvents[j][0].events) {
                   for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                    if (searchEvents[j][0].events[k].eventType === eventChosen && (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
+                    if ((searchEvents[j][0].events[k].eventType === eventChosen && searchEvents[j][0].events[k].wardType !== "UNDEFINED") && (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
                       count++;
                     }
                   }
