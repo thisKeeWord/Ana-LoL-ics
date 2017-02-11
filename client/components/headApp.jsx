@@ -58,6 +58,7 @@ class HeadApp extends React.Component {
 
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
+    $('#content').addClass('loading');
     return $.ajax({
       type: 'POST',
       url: '/getGameData',
@@ -112,7 +113,6 @@ class HeadApp extends React.Component {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
     const that = this;
-    // let count = this.state.gamesToSee;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
@@ -130,9 +130,10 @@ class HeadApp extends React.Component {
         that.state.secondToggle = true;
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
-
         if (this.state.gamesToSee === 1) {
           // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
+          $('#content').removeClass('loading');
+
           that.move();
           that.addStatChoice();
           that.move();
@@ -141,6 +142,7 @@ class HeadApp extends React.Component {
       }).then(() => {
         if (that.state.clicksForGame.length === 1) {
           that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
+          $('#content').removeClass('loading');
 
             // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
             that.state.patch2 = gotGameOne[0];
@@ -641,13 +643,16 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
-          <Link to="/about">About</Link>
+          <ul className="linkToPages">
+            <li className="goAbout"><Link to="/about">About</Link></li>
+            <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
+          </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
             To get started, enter an ign (in game name) in the search bar.</p>
 
             <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-              <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+              <input type="text" className="inGameName" ref="userName" placeholder="enter summoner name" required />
               <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions">
                 <option value="BR">Brazil</option>
                 <option value="EUNE">Europe Nordic & East</option>
@@ -679,8 +684,15 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
+          <div id="backHome">
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
+            </ul>
+          </div>
+
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
@@ -715,8 +727,14 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div id="second">
+          <div id="backHome">
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
+            </ul>
+          </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">

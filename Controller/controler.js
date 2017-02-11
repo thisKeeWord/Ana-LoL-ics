@@ -19,6 +19,7 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	regionName = req.body.region.region.toLowerCase();
+
 	var date = Date.now();
 	if (isNaN(req.body.username.userName) === false) {
 		req.summonerId = req.body.username.userName;
