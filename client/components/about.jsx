@@ -9,7 +9,7 @@ class About extends React.Component {
         <div id="backHome">
           <ul className="linkToPages">
             <li className="goHome"><Link to="/">Home</Link></li>
-            <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+            <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
           </ul>
         </div>
 

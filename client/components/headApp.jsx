@@ -645,7 +645,7 @@ class HeadApp extends React.Component {
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
           <ul className="linkToPages">
             <li className="goAbout"><Link to="/about">About</Link></li>
-            <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+            <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
           </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
@@ -687,7 +687,7 @@ class HeadApp extends React.Component {
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
 
@@ -730,7 +730,7 @@ class HeadApp extends React.Component {
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season_stats">Season Stats</Link></li>
+              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>

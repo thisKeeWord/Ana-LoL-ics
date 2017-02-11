@@ -513,6 +513,15 @@ input.username {
   padding-left: 15px;
 }
 
+#ranked {
+  position: absolute;
+  font-size: 25px;
+  color: white;
+  width: 151px;
+  left: 50%;
+  margin-left: -76.5px;
+}
+
 #content.loading {
   display: block;
   width: 100%;

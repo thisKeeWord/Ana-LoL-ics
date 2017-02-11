@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
+import $ from 'jquery';
 
 
 class SeasonStats extends React.Component {
@@ -8,6 +9,7 @@ class SeasonStats extends React.Component {
     let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
     return (
       <div id="getSeasonStats" style= {{ backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)" }}>
+        <p id="ranked">Ranked Stats</p>
         <div id="backHome">
           <ul className="linkToPages">
             <li className="goHome"><Link to="/">Home</Link></li>
@@ -24,7 +26,7 @@ class OutForm extends React.Component {
   post(data) {
     return $.ajax({
       type: 'POST',
-      url: '/season_stats',
+      url: '/season-stats',
       data: JSON.stringify(data),
       contentType: 'application/json'
     });
@@ -44,7 +46,7 @@ class OutForm extends React.Component {
       data.username = { userName: localStorage[cleanName] };
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
-        console.log('success')
+        console.log('success');
       })
     }
 
@@ -53,13 +55,11 @@ class OutForm extends React.Component {
       data.username = { userName: cleanName };
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
-        console.log('i got the info', gotTheInfo);
         localStorage[cleanName] = gotTheInfo[0];
       })
     }
     
     this.post(data).done(res => {
-      console.log(res[1], 'res')
       that.props.update(res[1]);
     });
   }
@@ -75,13 +75,13 @@ class OutForm extends React.Component {
       <div id="seasonSpecifics">
         <form id="league-form" onSubmit={this.handle.bind(that)}>
           <div className="ign">
-            IGN: <input type="text" name="userName" ref="userName" required /><br />
+            Summoner name: <input type="text" name="userName" ref="userName" required /><br />
           </div>
           <div className="championsName">
             Champion name: <input type="text" name="champion" ref="champion" required />
           </div>
           <div className="seasonNumber">
-            Season: <input type="text" name="season" ref="season" placeholder="enter 2017 not 7" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required />
+            Season: <input type="text" name="season" ref="season" placeholder="ex: input 2017 not 7" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required />
           </div>
           <div id="regionInSeason">
             <select value={that.props.region} defaultValue='select one' onChange={that.updatingRegion.bind(that)}>
@@ -99,7 +99,6 @@ class OutForm extends React.Component {
             </select>
           </div>
           <input type="submit" className="seasonSearch" />
-
         </form>
       </div>
     );
@@ -122,13 +121,12 @@ class DbResults extends React.Component {
   }
 
   append(data) {
-    // let cData = this.state.champData;
     this.setState({ champData: data });
   }
 
   getData() {
     let that = this;
-    $.get('/season_stats').done(function(data) {
+    $.get('/season-stats').done(function(data) {
       that.setState({ champData: data })
     });
   }

@@ -16,18 +16,18 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, './../client/')));
 app.use('/bower_components',  express.static( path.join(__dirname + './../bower_components')));
-app.use(fallback('index.html', { root: __dirname + './../client/' }))
+app.use(fallback('index.html', { root: __dirname + './../client/' }));
 
 
 app.get('/', function(req, res) {
-  res.sendFile('index.html')
+  res.sendFile('index.html');
 });
 
 app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
 
-app.post('/season_stats', controller.userInformation, seasonStats.results);
+app.post('/season-stats', controller.userInformation, seasonStats.results);
 
 
 app.listen(app.get('port'), function() {
