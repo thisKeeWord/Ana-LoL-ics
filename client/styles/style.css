@@ -66,9 +66,13 @@ a:hover {
   margin: 100 0 0 -225;
 }
 
-#getSeasonStats {
+.seasonalStats {
+  padding-top: 80px;
+}
+
+#championBackground.getSeasonStats {
   position: absolute;
-  margin: 80 0 0 -2;
+  margin: 10 0 0 -2;
   height: 100%;
   min-width: 500px;
   background-position: center;
@@ -76,6 +80,7 @@ a:hover {
   position: absolute;
   width: 100%;
   box-shadow: 0 0 170px 170px #202020 inset;
+  z-index: -10;
 }
 
 #backHome {
@@ -496,7 +501,7 @@ input.username {
   margin-bottom: 20px;
   border-radius:0;
   position: absolute;
-  top: 65;
+  top: 145;
   left: 50%;
   margin-left: -213.75px;
 }
@@ -519,7 +524,7 @@ input.username {
   color: white;
   width: 151px;
   left: 50%;
-  margin-left: -76.5px;
+  margin-left: -85px;
 }
 
 #content.loading {

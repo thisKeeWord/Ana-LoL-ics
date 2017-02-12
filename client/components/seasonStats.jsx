@@ -8,7 +8,8 @@ class SeasonStats extends React.Component {
   render() {
     let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
     return (
-      <div id="getSeasonStats" style= {{ backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)" }}>
+      <div className="seasonalStats">
+        <div id="championBackground" className="getSeasonStats" style= {{ backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)" }} />
         <p id="ranked">Ranked Stats</p>
         <div id="backHome">
           <ul className="linkToPages">
