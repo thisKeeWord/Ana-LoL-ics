@@ -9,9 +9,10 @@ var History = {
 
 // champion data query and save
 function results(req, res, next) {
+  console.log('checking userName', req.body, req.summonerId)
   var champCheck = {};
   var toCheck = {
-    userName: req.body.userName,
+    userName: req.summonerId,
     champion: req.body.champion,
     season: req.body.season,
     region: req.body.region.region.toLowerCase()
@@ -46,6 +47,7 @@ function champStuff(req, champDatum, infos, res) {
 }
 
 function getStats(req, champDatum, infos, res) {
+  console.log(infos, 'i"m infos guys!!');
   var desiredChamp = {};
   request('https://' + infos.region + champUrl + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1, function(error, champStat) {
     if (error) return console.error(error);
@@ -57,9 +59,11 @@ function getStats(req, champDatum, infos, res) {
     var champName = champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
     for (var i = 0; i < champStatis.length; i++) {
       if (champStatis[i].id === champName) {
+        var capitalizeFirstLetter = infos.champion.substr(0, 1);
+        capitalizeFirstLetter = capitalizeFirstLetter.toUpperCase() + infos.champion.substr(1, infos.champion.length - 1);
         desiredChamp = {
           userName: infos.userName,
-          champion: champStatis[i].name,
+          champion: capitalizeFirstLetter,
           championId: champStatis[i].id,
           season: infos.season,
           totalDeathsPerSession: champStatis[i].stats["totalDeathsPerSession"],

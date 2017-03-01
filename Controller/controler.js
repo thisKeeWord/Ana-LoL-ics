@@ -102,6 +102,7 @@ function usersInfo(date, req, res, next) {
 			if (error) return console.error("we cannot find the summoner or " + error);
 			if (resp.statusCode === 200) {
 				var userId = JSON.parse(resp.body);
+				console.log(userId, 'checking for name');
 				var result = userId[req.body.username.userName]["id"];
 				req.summonerId = result;
 				req.region = req.body.region.region.toLowerCase();

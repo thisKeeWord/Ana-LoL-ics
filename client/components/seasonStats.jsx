@@ -48,7 +48,7 @@ class OutForm extends React.Component {
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
         console.log('success');
-      })
+      });
     }
 
     // IF DATA ISN'T IN LOCAL STORAGE
@@ -57,7 +57,7 @@ class OutForm extends React.Component {
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
-      })
+      });
     }
     
     this.post(data).done(res => {
