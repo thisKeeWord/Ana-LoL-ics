@@ -9,10 +9,9 @@ var History = {
 
 // champion data query and save
 function results(req, res, next) {
-  console.log('checking userName', req.body, req.summonerId)
   var champCheck = {};
   var toCheck = {
-    userName: req.summonerId,
+    userName: req.body.summonerName.summoner,
     champion: req.body.champion,
     season: req.body.season,
     region: req.body.region.region.toLowerCase()
@@ -47,7 +46,6 @@ function champStuff(req, champDatum, infos, res) {
 }
 
 function getStats(req, champDatum, infos, res) {
-  console.log(infos, 'i"m infos guys!!');
   var desiredChamp = {};
   request('https://' + infos.region + champUrl + infos.region + '/v1.3/stats/by-summoner/' + req.summonerId + '/ranked?season=SEASON' + infos.season + '&' + process.env.stuff1, function(error, champStat) {
     if (error) return console.error(error);

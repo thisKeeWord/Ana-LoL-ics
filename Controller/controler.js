@@ -23,6 +23,7 @@ function userInformation(req, res, next) {
 	var date = Date.now();
 	if (isNaN(req.body.username.userName) === false) {
 		req.summonerId = req.body.username.userName;
+		req.summoner = req.body.summonerName.summoner;
 		req.region = req.body.region.region.toLowerCase();
 		return next();
 	}
@@ -96,15 +97,15 @@ function getData(req, res) {
 	})
 }
 
-function usersInfo(date, req, res, next) {
+function usersInfo(date, req, res, next) {	
 	ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.username.userName }, function(error, throttling) {
 	  request("https://" + req.body.region.region.toLowerCase() + summonerUrl + req.body.region.region.toLowerCase() + "/v1.4/summoner/by-name/" + encodeURI(req.body.username.userName) + "?" + process.env.stuff1, (error, resp) => {
 			if (error) return console.error("we cannot find the summoner or " + error);
 			if (resp.statusCode === 200) {
 				var userId = JSON.parse(resp.body);
-				console.log(userId, 'checking for name');
 				var result = userId[req.body.username.userName]["id"];
 				req.summonerId = result;
+				req.userName = req.body.summonerName.summoner;
 				req.region = req.body.region.region.toLowerCase();
 			}
 			return next();
