@@ -81,6 +81,7 @@ class HeadApp extends React.Component {
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
@@ -95,6 +96,7 @@ class HeadApp extends React.Component {
     // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
