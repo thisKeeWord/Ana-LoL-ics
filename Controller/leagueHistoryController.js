@@ -11,7 +11,7 @@ var History = {
 function results(req, res, next) {
   var champCheck = {};
   var toCheck = {
-    userName: req.body.userName,
+    userName: req.body.summonerName.summoner,
     champion: req.body.champion,
     season: req.body.season,
     region: req.body.region.region.toLowerCase()
@@ -57,9 +57,11 @@ function getStats(req, champDatum, infos, res) {
     var champName = champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
     for (var i = 0; i < champStatis.length; i++) {
       if (champStatis[i].id === champName) {
+        var capitalizeFirstLetter = infos.champion.substr(0, 1);
+        capitalizeFirstLetter = capitalizeFirstLetter.toUpperCase() + infos.champion.substr(1, infos.champion.length - 1);
         desiredChamp = {
           userName: infos.userName,
-          champion: champStatis[i].name,
+          champion: capitalizeFirstLetter,
           championId: champStatis[i].id,
           season: infos.season,
           totalDeathsPerSession: champStatis[i].stats["totalDeathsPerSession"],

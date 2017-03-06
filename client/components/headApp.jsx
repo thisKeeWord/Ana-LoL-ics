@@ -68,7 +68,7 @@ class HeadApp extends React.Component {
 
   // HANDLE IGN SUBMIT FORM
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault();    
     const that = this;
     const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
     const cleanName = inGameName.toLowerCase().replace(/ /g, '')
@@ -81,6 +81,7 @@ class HeadApp extends React.Component {
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
@@ -95,6 +96,7 @@ class HeadApp extends React.Component {
     // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
@@ -131,9 +133,9 @@ class HeadApp extends React.Component {
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
         if (this.state.gamesToSee === 1) {
-          // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           $('#content').removeClass('loading');
-
+          
+          // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
           that.addStatChoice();
           that.move();

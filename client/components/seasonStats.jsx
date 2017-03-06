@@ -45,19 +45,21 @@ class OutForm extends React.Component {
     const cleanName = inGameName.toLowerCase().replace(/ /g, '');
     if (localStorage && localStorage[cleanName]) {
       data.username = { userName: localStorage[cleanName] };
+      data.summonerName = { summoner: cleanName };
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
         console.log('success');
-      })
+      });
     }
 
     // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       data.username = { userName: cleanName };
+      data.summonerName = { summonersName: cleanName };
       data.region = { region: that.props.region };
       this.post(data).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
-      })
+      });
     }
     
     this.post(data).done(res => {
@@ -177,7 +179,7 @@ class ResToDisp extends React.Component {
         <p className="statForChamp">
           <span className="seasonalData">total Physical Damage Dealt: </span>{this.props.data.totalPhysicalDamageDealt}</p>
         <p className="statForChamp">
-          <span className="seasonalData">total Champion Kills:</span>{this.props.data.totalChampionKills}</p>
+          <span className="seasonalData">total Champion Kills: </span>{this.props.data.totalChampionKills}</p>
         <p className="statForChamp">
           <span className="seasonalData">total Assists: </span>{this.props.data.totalAssists}</p>
         <p className="statForChamp">
