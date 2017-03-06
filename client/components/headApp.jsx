@@ -68,7 +68,7 @@ class HeadApp extends React.Component {
 
   // HANDLE IGN SUBMIT FORM
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault();    
     const that = this;
     const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
     const cleanName = inGameName.toLowerCase().replace(/ /g, '')
@@ -133,9 +133,9 @@ class HeadApp extends React.Component {
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
         if (this.state.gamesToSee === 1) {
-          // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           $('#content').removeClass('loading');
-
+          
+          // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
           that.addStatChoice();
           that.move();
