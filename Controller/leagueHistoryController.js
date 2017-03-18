@@ -33,8 +33,8 @@ function champStuff(req, champDatum, infos, res) {
         ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
           if (error) return console.error(error);
           getStats(req, champDatum, infos, res);
-        })
-      })
+        });
+      });
     }
     else if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
       ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
