@@ -197,7 +197,7 @@ class HeadApp extends React.Component {
       .domain([domain.min.y, domain.max.y])
       .range([height, 0]);
 
-    // SEEMS 10 MAPS ARE RENDERED --> WILL EDIT THIS WEEKEND
+    // SEEMS 10 MAPS ARE RENDERED
     if (this.state.gamesToSee === 1) {
       if (document.getElementById("backdrop1")) {
         $("#backdrop1").first().remove();
@@ -376,21 +376,21 @@ class HeadApp extends React.Component {
         $("#allStat4").first().remove();
       }
 
-      const svg = d3.select("#chart2")
+      const svg2 = d3.select("#chart2")
               .append("svg:svg")
               .attr("height", h)
               .attr("width", 400)
               .attr("id", "allStat2");
 
-      const svg2 = d3.select("#chart4")
+      const svg4 = d3.select("#chart4")
               .append("svg:svg")
               .attr("height", h)
               .attr("width", 400)
               .attr("id", "allStat4");
 
       this.setState({
-        selData1: svg,
-        selData2: svg2
+        selData1: svg2,
+        selData2: svg4
       })
     }
   }
@@ -569,7 +569,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
+                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
                   statCount++;
                 }
               }
@@ -616,14 +616,14 @@ class HeadApp extends React.Component {
       this.setState({
         eventSelected: eventPicked.target.value,
         maxForStat1: Math.max(...eventsForGames[0])
-      })
+      });
     }
     if (this.state.gamesToSee === 2) {
       this.setState({
         eventSelected: eventPicked.target.value,
         maxForStat1: Math.max(...eventsForGames[0]),
         maxForStat2: Math.max(...eventsForGames[1])
-      })
+      });
     }
   }
 
