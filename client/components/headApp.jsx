@@ -177,7 +177,8 @@ class HeadApp extends React.Component {
           },
 
           // NEWEST VERSION OF SUMMONER'S RIFT
-          nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
+          nSR = "https://s3-us-west-1.amazonaws.com/riot-developer-portal/docs/minimap-ig.png";
+          // link not working "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
       // SCALING MAP DOWN
       let width = 400,
