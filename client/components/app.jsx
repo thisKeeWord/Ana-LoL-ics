@@ -11,7 +11,6 @@ class App extends React.Component {
       <Router history={browserHistory}>
         <Route path="/" component={HeadApp} />
         <Route path="/about" component={About} />
-        <Route path="/season-stats" component={SeasonStats}/>
       </Router>
     )
   }

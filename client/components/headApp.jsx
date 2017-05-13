@@ -83,6 +83,7 @@ class HeadApp extends React.Component {
       newCleanName.username = { userName: localStorage[cleanName] };
       newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
+      console.log('asdfasd')
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
           res: gotTheInfo[1],
@@ -648,7 +649,6 @@ class HeadApp extends React.Component {
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
           <ul className="linkToPages">
             <li className="goAbout"><Link to="/about">About</Link></li>
-            <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
           </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
@@ -657,17 +657,17 @@ class HeadApp extends React.Component {
             <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
               <input type="text" className="inGameName" ref="userName" placeholder="enter summoner name" required />
               <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions">
-                <option value="BR">Brazil</option>
-                <option value="EUNE">Europe Nordic & East</option>
-                <option value="EUW">Europe West</option>
-                <option value="JP">Japan</option>
+                <option value="BR1">Brazil</option>
+                <option value="EUN1">Europe Nordic & East</option>
+                <option value="EUW1">Europe West</option>
+                <option value="JP1">Japan</option>
                 <option value="KR">Korea</option>
-                <option value="LAN">Latin America North</option>
-                <option value="LAS">Latin America South</option>
-                <option value="NA">North America</option>
-                <option value="OCE">Oceania</option>
+                <option value="LA1">Latin America North</option>
+                <option value="LA2">Latin America South</option>
+                <option value="NA1">North America</option>
+                <option value="OC1">Oceania</option>
                 <option value="RU">Russia</option>
-                <option value="TR">Turkey</option>
+                <option value="TR1">Turkey</option>
               </select>
               <button type="submit" id="findStats" val>Find Stats</button>
             </form>
@@ -690,7 +690,6 @@ class HeadApp extends React.Component {
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
 
@@ -699,17 +698,17 @@ class HeadApp extends React.Component {
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
@@ -727,13 +726,12 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
-      $('body').css('background', '#292929');
+      $('body').css('background', '#292929');      
       return (
         <div id="second">
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
@@ -741,17 +739,17 @@ class HeadApp extends React.Component {
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} /> 

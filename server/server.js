@@ -27,7 +27,7 @@ app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
 
-app.post('/season-stats', controller.userInformation, seasonStats.results);
+// app.post('/season-stats', controller.userInformation, seasonStats.results);
 
 
 app.listen(app.get('port'), function() {

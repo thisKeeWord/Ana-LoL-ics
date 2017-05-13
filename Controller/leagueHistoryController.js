@@ -1,6 +1,6 @@
 var request = require('request');
 var champUrl = '.api.pvp.net/api/lol/';
-var allChampInfo = 'https://global.api.pvp.net/api/lol/static-data/';
+var allChampInfo = '.api.riotgames.com/lol/static-data/v3/champions?dataById=true&api_key=';
 var ThrottleCalls = require('./throttleCalls.js');
 
 var History = {
@@ -17,7 +17,7 @@ function results(req, res, next) {
     region: req.body.region.region.toLowerCase()
   };
 
-  request(allChampInfo + toCheck.region + '/v1.2/champion?' + process.env.stuff2, function(err, champDatas) {
+  request("https://" + toCheck.region + allChampInfo + process.env.stuff2, function(err, champDatas) {
     var champDatum = JSON.parse(champDatas.body).data;
     champStuff(req, champDatum, toCheck, res);
   });
