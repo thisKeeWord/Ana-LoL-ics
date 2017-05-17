@@ -29,7 +29,7 @@ class ChampBuild extends React.Component {
 
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
-
+                  
                   // ITEM_PURCHASED
                   if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
                       itemStore.push(findItem);
