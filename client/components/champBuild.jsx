@@ -31,26 +31,26 @@ class ChampBuild extends React.Component {
                   let findItem = searchEvents[j][0].events[k].itemId;
 
                   // ITEM_PURCHASED
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
                       itemStore.push(findItem);
                   }
 
                   // ITEM_DESTROYED
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_SOLD
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (searchEvents[j][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
                       // IF PLAYER PURCHASES POTION AND UNDO'S THE PURCHASE
@@ -65,9 +65,9 @@ class ChampBuild extends React.Component {
                       // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
-                      while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                      while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
-                          if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
+                          if (searchEvents[j][0].events[retrieveItem].type === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
                             itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
                           }
                         }
@@ -156,7 +156,7 @@ class ChampBuild extends React.Component {
                   let findItem = searchEvents[z][0].events[k].itemId;
 
                   // ITEM_PURCHASED
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].type === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     itemStore.push(findItem);
                     // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
                     //   potions++;
@@ -170,21 +170,21 @@ class ChampBuild extends React.Component {
                   }
 
                   // ITEM_DESTROYED
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].type === "ITEM_DESTROYED" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_SOLD
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_SOLD" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].type === "ITEM_SOLD" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[k].type === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
                     if (searchEvents[z][0].events[k].itemAfter === 0) {
                       let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
                       // potions and control wards
@@ -199,9 +199,9 @@ class ChampBuild extends React.Component {
                       // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
                       let retrieveItem = k;
-                      while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                      while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
-                          if (searchEvents[z][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[z][0].events[retrieveItem].itemId.toString())) {
+                          if (searchEvents[z][0].events[retrieveItem].type === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[z][0].events[retrieveItem].itemId.toString())) {
                             itemStore.push(searchEvents[z][0].events[retrieveItem].itemId);
                           }
                         }
