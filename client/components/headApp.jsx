@@ -119,7 +119,7 @@ class HeadApp extends React.Component {
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
-
+        console.log(gotGameOne)
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
         that.state.eventSelected = 'select one';
