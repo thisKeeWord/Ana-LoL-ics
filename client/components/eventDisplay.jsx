@@ -14,7 +14,7 @@ class EventDisplay extends React.Component {
 						let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
 
 						for (let j = 0; j < searchEvents.length; j++) {
-							if (searchEvents[j].eventType === "CHAMPION_KILL") {
+							if (searchEvents[j].event === "CHAMPION_KILL") {
 								if (searchEvents[j].killerId === 0) {
 									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ])
 								}

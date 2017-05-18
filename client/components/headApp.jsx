@@ -85,6 +85,7 @@ class HeadApp extends React.Component {
       newCleanName.region = { region: that.state.region };
       console.log('asdfasd')
       this.post(newCleanName).done(gotTheInfo => {
+        console.log(gotTheInfo[1])
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
