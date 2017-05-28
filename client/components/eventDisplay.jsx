@@ -8,13 +8,11 @@ class EventDisplay extends React.Component {
 			let eventPerGame = [];
 			for (let i = 1; i <= this.props.gamesToSee; i++) {
 				let interaction = [];
-				
 				if (this.props["timeline" + i.toString()][this.props.spot]) {
 					if (this.props["timeline" + i.toString()][this.props.spot][0].events) {
 						let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
-
 						for (let j = 0; j < searchEvents.length; j++) {
-							if (searchEvents[j].event === "CHAMPION_KILL") {
+							if (searchEvents[j].type === "CHAMPION_KILL") {
 								if (searchEvents[j].killerId === 0) {
 									interaction.push([ this.props["champImg" + i.toString()][this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]] ])
 								}

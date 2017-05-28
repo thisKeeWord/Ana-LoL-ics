@@ -83,9 +83,7 @@ class HeadApp extends React.Component {
       newCleanName.username = { userName: localStorage[cleanName] };
       newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
-      console.log('asdfasd')
       this.post(newCleanName).done(gotTheInfo => {
-        console.log(gotTheInfo[1])
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
@@ -120,7 +118,6 @@ class HeadApp extends React.Component {
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
-        console.log(gotGameOne)
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
         that.state.eventSelected = 'select one';
@@ -572,7 +569,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
+                if (searchEvents[j][0].events[k].type === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
                   statCount++;
                 }
               }
@@ -583,7 +580,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                if (searchEvents[j][0].events[k].type === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
                     if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state["playerID" + t.toString()][i][0]) {
                       statCount++;
