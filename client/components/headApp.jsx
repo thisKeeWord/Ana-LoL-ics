@@ -180,8 +180,8 @@ class HeadApp extends React.Component {
           // link not working "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
       // SCALING MAP DOWN
-      let width = 400,
-          height = 400;
+      let width = 468,
+          height = 468;
 
       if (this.state.gamesToSee === 1) {
         width = 500;

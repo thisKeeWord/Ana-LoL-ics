@@ -9,8 +9,8 @@ class ChampImage extends React.Component {
           };
 
         // SCALING MAP DOWN
-    let width = 400,
-        height = 400;
+    let width = 468,
+        height = 468;
 
     if (this.props.gamesToSee === 1) {
       width = 500;

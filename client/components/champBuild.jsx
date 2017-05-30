@@ -21,18 +21,16 @@ class ChampBuild extends React.Component {
           // AT CURRENT SPOT IN TIMELINE
           if (searchEvents[this.props.spot]) {
             // health potion is 2003
-
             for (let j = 0; j <= this.props.spot; j++) {
 
               if (searchEvents[j][0].events) {
                 potions = 0, biscuits = 0, controlWards = 0;
-
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
 
                   // ITEM_PURCHASED
                   if (searchEvents[j][0].events[k].type === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                      itemStore.push(findItem);
+                    itemStore.push(findItem);
                   }
 
                   // ITEM_DESTROYED
@@ -51,8 +49,8 @@ class ChampBuild extends React.Component {
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
                   if (searchEvents[j][0].events[k].type === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
-                    if (searchEvents[j][0].events[k].itemAfter === 0) {
-                      let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
+                    if (searchEvents[j][0].events[k].afterId === 0) {
+                      let checkItemEvent = searchEvents[j][0].events[k].beforeId;
                       // IF PLAYER PURCHASES POTION AND UNDO'S THE PURCHASE
                       // if (checkItemEvent === 2003) {
                       //   potions--;
@@ -63,7 +61,7 @@ class ChampBuild extends React.Component {
                       // if (checkItemEvent === 2055) {
                       //   controlWards--;
                       // }
-                      itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].beforeId), 1);
                       let retrieveItem = k;
                       while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
@@ -185,8 +183,8 @@ class ChampBuild extends React.Component {
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
                   if (searchEvents[z][0].events[k].type === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
-                    if (searchEvents[z][0].events[k].itemAfter === 0) {
-                      let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
+                    if (searchEvents[z][0].events[k].afterId === 0) {
+                      let checkItemEvent = searchEvents[z][0].events[k].beforeId;
                       // potions and control wards
                       // if (checkItemEvent === 2003) {
                       //   potions--;
@@ -197,7 +195,8 @@ class ChampBuild extends React.Component {
                       // if (checkItemEvent === 2055) {
                       //   controlWards--;
                       // }
-                      itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].beforeId), 1);
+                      console.log(itemStore, player[0]);
                       let retrieveItem = k;
                       while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
@@ -248,11 +247,12 @@ class ChampBuild extends React.Component {
             });
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
+          // console.log(itemStore, 'checking for warwick', player[0]);
+
           eachPlayersItems.push([itemStore, consumables]);
         })
         itemsPerGame.push(eachPlayersItems);  
       }
-      console.log(itemsPerGame)
       return itemsPerGame;
     }
   }
