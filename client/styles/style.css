@@ -313,7 +313,7 @@ input.username {
 }
 
 #time2 {
-  top: 500;
+  top: 570;
   width: 80px;
   margin-left: auto;
   margin-right: auto;
@@ -323,14 +323,14 @@ input.username {
 }
 
 #eventDisplay2 {
-  top: 620;
+  top: 650;
   left: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart2 svg {
-  top: 1135;
+  top: 1165;
   left: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -338,7 +338,7 @@ input.username {
 
 #builds2 {
   position: absolute;
-  top: 620;
+  top: 650;
   left: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -346,14 +346,14 @@ input.username {
 
 #roleLane2 {
   position: absolute;
-  top: 620;
+  top: 650;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect2 {
-  margin-top: 30px;
+  margin-top: 40px;
   margin-left: auto;
   margin-right: auto;
   width: 370px;
@@ -368,7 +368,7 @@ input.username {
 }
 
 #scroll2 {
-  top: 500;
+  top: 530;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -388,14 +388,14 @@ input.username {
 }
 
 #eventDisplay4 {
-  top: 620;
+  top: 650;
   right: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart4 svg {
-  top: 1135;
+  top: 1165;
   right: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -403,7 +403,7 @@ input.username {
 
 #builds4 {
   position: absolute;
-  top: 620;
+  top: 650;
   right: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -411,7 +411,7 @@ input.username {
 
 #roleLane4 {
   position: absolute;
-  top: 620;
+  top: 650;
   right: 30;
   color: #cccccc;
   margin-bottom: 20px;
