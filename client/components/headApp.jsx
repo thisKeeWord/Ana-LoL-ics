@@ -58,6 +58,7 @@ class HeadApp extends React.Component {
 
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
+    $('#content').addClass('loading');
     return $.ajax({
       type: 'POST',
       url: '/getGameData',
@@ -67,7 +68,7 @@ class HeadApp extends React.Component {
 
   // HANDLE IGN SUBMIT FORM
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault();    
     const that = this;
     const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
     const cleanName = inGameName.toLowerCase().replace(/ /g, '')
@@ -80,6 +81,7 @@ class HeadApp extends React.Component {
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         that.setState({
@@ -94,6 +96,7 @@ class HeadApp extends React.Component {
     // IF DATA ISN'T IN LOCAL STORAGE
     if (localStorage && !localStorage[cleanName]) {
       newCleanName.username = { userName: cleanName };
+      newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
@@ -112,11 +115,9 @@ class HeadApp extends React.Component {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
     const that = this;
-    // let count = this.state.gamesToSee;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
-
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
         that.state.eventSelected = 'select one';
@@ -130,8 +131,9 @@ class HeadApp extends React.Component {
         that.state.secondToggle = true;
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
-
         if (this.state.gamesToSee === 1) {
+          $('#content').removeClass('loading');
+          
           // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
           that.addStatChoice();
@@ -141,6 +143,7 @@ class HeadApp extends React.Component {
       }).then(() => {
         if (that.state.clicksForGame.length === 1) {
           that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
+          $('#content').removeClass('loading');
 
             // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
             that.state.patch2 = gotGameOne[0];
@@ -173,11 +176,12 @@ class HeadApp extends React.Component {
           },
 
           // NEWEST VERSION OF SUMMONER'S RIFT
-          nSR = "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
+          nSR = "https://s3-us-west-1.amazonaws.com/riot-developer-portal/docs/minimap-ig.png";
+          // link not working "https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png";
 
       // SCALING MAP DOWN
-      let width = 400,
-          height = 400;
+      let width = 468,
+          height = 468;
 
       if (this.state.gamesToSee === 1) {
         width = 500;
@@ -193,7 +197,7 @@ class HeadApp extends React.Component {
       .domain([domain.min.y, domain.max.y])
       .range([height, 0]);
 
-    // SEEMS 10 MAPS ARE RENDERED --> WILL EDIT THIS WEEKEND
+    // SEEMS 10 MAPS ARE RENDERED
     if (this.state.gamesToSee === 1) {
       if (document.getElementById("backdrop1")) {
         $("#backdrop1").first().remove();
@@ -372,21 +376,21 @@ class HeadApp extends React.Component {
         $("#allStat4").first().remove();
       }
 
-      const svg = d3.select("#chart2")
+      const svg2 = d3.select("#chart2")
               .append("svg:svg")
               .attr("height", h)
               .attr("width", 400)
               .attr("id", "allStat2");
 
-      const svg2 = d3.select("#chart4")
+      const svg4 = d3.select("#chart4")
               .append("svg:svg")
               .attr("height", h)
               .attr("width", 400)
               .attr("id", "allStat4");
 
       this.setState({
-        selData1: svg,
-        selData2: svg2
+        selData1: svg2,
+        selData2: svg4
       })
     }
   }
@@ -565,7 +569,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
+                if (searchEvents[j][0].events[k].type === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
                   statCount++;
                 }
               }
@@ -576,7 +580,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                if (searchEvents[j][0].events[k].type === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
                     if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state["playerID" + t.toString()][i][0]) {
                       statCount++;
@@ -612,14 +616,14 @@ class HeadApp extends React.Component {
       this.setState({
         eventSelected: eventPicked.target.value,
         maxForStat1: Math.max(...eventsForGames[0])
-      })
+      });
     }
     if (this.state.gamesToSee === 2) {
       this.setState({
         eventSelected: eventPicked.target.value,
         maxForStat1: Math.max(...eventsForGames[0]),
         maxForStat2: Math.max(...eventsForGames[1])
-      })
+      });
     }
   }
 
@@ -641,25 +645,27 @@ class HeadApp extends React.Component {
       return (
         <div id="landingPage">
           <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
-          <Link to="/about">About</Link>
+          <ul className="linkToPages">
+            <li className="goAbout"><Link to="/about">About</Link></li>
+          </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
             To get started, enter an ign (in game name) in the search bar.</p>
 
             <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
-              <input type="text" className="inGameName" ref="userName" placeholder="enter username" required />
+              <input type="text" className="inGameName" ref="userName" placeholder="enter summoner name" required />
               <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions">
-                <option value="BR">Brazil</option>
-                <option value="EUNE">Europe Nordic & East</option>
-                <option value="EUW">Europe West</option>
-                <option value="JP">Japan</option>
+                <option value="BR1">Brazil</option>
+                <option value="EUN1">Europe Nordic & East</option>
+                <option value="EUW1">Europe West</option>
+                <option value="JP1">Japan</option>
                 <option value="KR">Korea</option>
-                <option value="LAN">Latin America North</option>
-                <option value="LAS">Latin America South</option>
-                <option value="NA">North America</option>
-                <option value="OCE">Oceania</option>
+                <option value="LA1">Latin America North</option>
+                <option value="LA2">Latin America South</option>
+                <option value="NA1">North America</option>
+                <option value="OC1">Oceania</option>
                 <option value="RU">Russia</option>
-                <option value="TR">Turkey</option>
+                <option value="TR1">Turkey</option>
               </select>
               <button type="submit" id="findStats" val>Find Stats</button>
             </form>
@@ -679,22 +685,28 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
+          <div id="backHome">
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+            </ul>
+          </div>
+
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
@@ -712,25 +724,30 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
-      $('body').css('background', '#292929');
+      $('body').css('background', '#292929');      
       return (
         <div id="second">
+          <div id="backHome">
+            <ul className="linkToPages">
+              <li className="goAbout"><Link to="/about">About</Link></li>
+            </ul>
+          </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter username" required />
+            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} /> 

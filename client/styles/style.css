@@ -2,7 +2,6 @@ body {
   font-family: sans-serif;
   background: #202020;
   width: auto !important;  /* Firefox will set width as auto */
-  min-width: 1350px;
   position: relative;
 }
 
@@ -19,15 +18,30 @@ a:hover {
   z-index: -100;
 }
 
-#about {
+.linkToPages {
+  padding-left: 4px;
+  font-size: 15px;
+  margin: 0;
+}
+
+#aboutMe {
   position: absolute;
-  margin: -30 0 0 0;
-  height: 19px;
-  width: 140px;
+  margin: 80 0 0 -2;
+  height: 100%;
+  width: 100%;
   color: gray;
   text-decoration: none;
-  font-weight: bold;
   font-size: 15px;
+  min-width: 900px;
+}
+
+#second, .resultingInfo {
+  min-width: 1350px;
+  /*position: relative;*/
+  position: absolute;
+  margin: 80 0 0 -2;
+  height: 100%;
+  width: 100%;
 }
 
 #championBackground {
@@ -36,25 +50,44 @@ a:hover {
   margin: -75px 0 0 0;
   height: 717px;
   box-shadow: 0 0 100px 100px #202020 inset;
-  z-index: -1;
-}
-
-#aboutMe {
-  top: 130;
-  position: absolute;
+  z-index: -10;
 }
 
 #description {
+  position: relative;
   width: 550px;
   height: 450px;
   left: 50%;
   color: #F8F8F8;
-  padding-top: 100px;
-  position: relative;
+  margin: 100 0 0 -225;
+}
+
+.seasonalStats {
+  padding-top: 80px;
+}
+
+#championBackground.getSeasonStats {
+  position: absolute;
+  margin: 10 0 0 -2;
+  height: 100%;
+  min-width: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100%;
+  box-shadow: 0 0 170px 170px #202020 inset;
+  z-index: -10;
 }
 
 #backHome {
-  margin-left: 33px;
+  width: 170px;
+  height: 20px;
+  padding-left: 38px;
+  position: absolute;
+}
+
+.goAboutPage {
+  padding-left: 70px;
 }
 
 .icons {
@@ -71,8 +104,17 @@ a:hover {
   transition: all 0.5s ease;
 }
 
-.li {
+li {
   color: #0077b5;
+  display: inline;
+}
+
+.goSeasonStats {
+  padding-left: 30px;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .gh {
@@ -90,23 +132,28 @@ a:hover {
   font-size: 30px;
   position: absolute;
   left: 40;
+  min-width: 500px;
 }
 
 #landingPage {
   color: #cccccc;
-  top: 130;
+  margin: 80 0 0 1;
   position: absolute;
-  left: 40;
+  left: 35;
+  height: 600px;
+  width: 100%;
 }
 
-p {
+#quickSumm {
   margin-left: 30px;
+  margin-top: 80px;
   font-size: 18px;
   line-height: 28px;
 }
 
 #legalStuff {
   top: 500;
+  left: 30;
   position: absolute;
 }
 
@@ -136,7 +183,7 @@ input.username {
 }
 
 #matches1 {
-  margin-top: 100px;
+  margin-top: 55px;
   width: 180px;
   right: 40;
   position: absolute;
@@ -152,13 +199,13 @@ input.username {
 
 #map1 {
   position: absolute;
-  margin-top: 100px;
+  margin-top: 50px;
   margin-left: 30px;
 }
 
 #time1 {
   width: 80px;
-  top: 700;
+  top: 625;
   color: #cccccc;
   left: 50%;
   margin-left: -45px;
@@ -167,7 +214,7 @@ input.username {
 }
 
 #eventDisplay1 {
-  margin-top: 100px;
+  margin-top: 50px;
   position: absolute;
   width: 190px;
   left: 0;
@@ -178,7 +225,7 @@ input.username {
 }
 
 #chart1 svg {
-  top: 720;
+  top: 675;
   right: 40;
   position: absolute;
   margin-bottom: 20px;
@@ -186,7 +233,7 @@ input.username {
 
 #builds1 {
   position: absolute;
-  top: 720;
+  top: 675;
   left: 80;
   color: #cccccc;
   margin-bottom: 20px;
@@ -194,31 +241,33 @@ input.username {
 
 #roleLane1 {
   position: absolute;
-  top: 720;
+  top: 675;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect1 {
-  top: 650;
+  top: 615;
   text-align: center;
   width: 1250px;
   min-width: 1160px;
   position: absolute;
   left: 0;
   right: 0;
-  margin: 0 0 0 90px;
+  margin: -10px 0 0 90px;
 }
 
 #selections1 {
   float: right;
   position: relative;
+  margin-top: -10px;
 }
 
 #scroll1 {
   float: left;
   position: relative;
+  margin-top: -10px
   /*margin-left: -130px;*/
 }
 
@@ -228,13 +277,13 @@ input.username {
   font-weight: 30;
   color: #cccccc;
   width: 470px;
-  margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: -10px;
 }
 
 #getSummonersGames {
-  margin-top: 50px;
+  margin-top: -10px;
   width: 131px;
   position: absolute;
   right: 40;
@@ -247,7 +296,7 @@ input.username {
 
 
 #matches2 {
-  margin-top: 100px;
+  margin-top: 85px;
   width: 180px;
   left: 0;
   right: 0;
@@ -259,12 +308,12 @@ input.username {
 
 #map2 {
   position: absolute;
-  margin-top: 100px;
+  margin-top: 90px;
   left: 30;
 }
 
 #time2 {
-  top: 514;
+  top: 570;
   width: 80px;
   margin-left: auto;
   margin-right: auto;
@@ -274,14 +323,14 @@ input.username {
 }
 
 #eventDisplay2 {
-  top: 645;
+  top: 650;
   left: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart2 svg {
-  top: 1160;
+  top: 1165;
   left: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -289,7 +338,7 @@ input.username {
 
 #builds2 {
   position: absolute;
-  top: 645;
+  top: 650;
   left: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -297,7 +346,7 @@ input.username {
 
 #roleLane2 {
   position: absolute;
-  top: 645;
+  top: 650;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
@@ -312,14 +361,14 @@ input.username {
 }
 
 #selections2 {
-  top: 1000;
+  top: 1040;
   margin-left: auto;
   margin-right: auto;
   position: relative;
 }
 
 #scroll2 {
-  top: 484;
+  top: 530;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -334,19 +383,19 @@ input.username {
 
 #map4 {
   position: absolute;
-  margin-top: 100px;
+  margin-top: 90px;
   right: 30;
 }
 
 #eventDisplay4 {
-  top: 645;
+  top: 650;
   right: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart4 svg {
-  top: 1160;
+  top: 1165;
   right: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -354,7 +403,7 @@ input.username {
 
 #builds4 {
   position: absolute;
-  top: 645;
+  top: 650;
   right: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -362,7 +411,7 @@ input.username {
 
 #roleLane4 {
   position: absolute;
-  top: 645;
+  top: 650;
   right: 30;
   color: #cccccc;
   margin-bottom: 20px;
@@ -383,21 +432,104 @@ input.username {
 
 #regions1 {
   right: 5%;
-  top: 80;
+  top: 20;
   position: absolute;
 }
 
 #regions2 {
   width: 150px;
-  margin-top: 85px;
-  left: 0;
-  right: 0;
+  margin-top: 20px;
+  right: 4%;
   position: absolute;
   color: #cccccc;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #regions {
   margin-left: 10px;
+  margin-top: -50px;
+}
+
+#RtoD {
+  border: 2px solid black;
+  width: 400px;
+  min-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+}
+
+#header {
+  line-height: 5px;
+  font-weight: bold;
+}
+
+#seasonSpecifics {
+  margin: 0 auto;
+}
+
+#league-form {
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  text-align: center;
+  padding-top: 15px;
+}
+
+#league-form input[type="text"] {
+  color: black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ign, .seasonNumber, .championsName, #regionInSeason {
+  padding-bottom: 7px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 175px;
+}
+
+.list-group {
+  padding-left: 0;
+  margin-bottom: 20px;
+  border-radius:0;
+  position: absolute;
+  top: 145;
+  left: 50%;
+  margin-left: -213.75px;
+}
+
+.list-group-item {
+  display: block;
+  margin-bottom: -1px;
+  background-color: #FFF;
+  line-height: 3px;  
+}
+
+.seasonalData {
+  color: black;
+  padding-left: 15px;
+}
+
+#ranked {
+  position: absolute;
+  font-size: 25px;
+  color: white;
+  width: 151px;
+  left: 50%;
+  margin-left: -85px;
+}
+
+#content.loading {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1000;/*puts on top ofeverything*/
+  background-image: url('https://media.giphy.com/media/i3pHUtmHiLd28/giphy.gif');
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
