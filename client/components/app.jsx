@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 import HeadApp from './headApp.jsx';
 import About from './about.jsx';
-
+import SeasonStats from './seasonStats.jsx';
 
 class App extends React.Component {
   render() {
