@@ -11,6 +11,7 @@ import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
 import WhosGames from './whosGames.jsx';
+import GameDescription from './gameDescription.jsx';
 
 
 class HeadApp extends React.Component {
@@ -42,7 +43,8 @@ class HeadApp extends React.Component {
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
-      region: ''
+      region: '',
+      gameSummary: []
     }
   }
 
@@ -114,6 +116,8 @@ class HeadApp extends React.Component {
   handleClick(e) {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
+    this.state.gameSummary.push(e.target.key);
+
     const that = this;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
@@ -711,6 +715,7 @@ class HeadApp extends React.Component {
 
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
+          <GameDescription gameSumm={this.state.gameSummary} />
           <GameMap gamesToSee={this.state.gamesToSee} region={this.state.region} />
           <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} region={this.state.region} />
           <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} region={this.state.region} />
