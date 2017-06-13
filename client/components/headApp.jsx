@@ -116,7 +116,8 @@ class HeadApp extends React.Component {
   handleClick(e) {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
-    this.state.gameSummary.push(e.target.key);
+    console.log(e.target.name)
+    this.state.gameSummary.push(e.target.name);
 
     const that = this;
 

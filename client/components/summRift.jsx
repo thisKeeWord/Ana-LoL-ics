@@ -20,9 +20,9 @@ class GamesOnSR extends React.Component {
           <option value="2">2</option>
         </select> 
         from list: <br/>
-        { this.props.res.map((matchList, index) => {
+        { this.props.res.map(matchList => {
             return (
-              <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} key={matchList[3] + "break" + matchList[4] + "break" + matchList[5] + "break" + matchList[6] + "break" + index} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
+              <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} name={matchList[3] + "break" + matchList[4] + "break" + matchList[5] + "break" + matchList[6]} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
             )
           })
         }
