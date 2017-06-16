@@ -116,8 +116,11 @@ class HeadApp extends React.Component {
   handleClick(e) {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
-    console.log(e.target.name)
+    if (this.state.gameSummary.length >= this.state.gamesToSee) {
+      this.state.gameSummary = [];
+    }
     this.state.gameSummary.push(e.target.name);
+    this.state.gameSummaryDelete = this.state.gameSummary;
 
     const that = this;
 
@@ -634,6 +637,7 @@ class HeadApp extends React.Component {
   numGamesSee(e) {
     e.preventDefault();
     this.state.gamesToSee = parseInt(e.target.value, 10);
+    this.state.gameSummary = [];
   }
 
   updateRegion(e) {

@@ -15,12 +15,10 @@ class GameDescription extends React.Component {
     }
     return rows;
   }
-  
+
   render() {
-    // console.log(this.props.gameSumm)
     if (this.props.gameSumm) {
       let gameInfo = this.getGameDescription();
-      console.log('asdfasdf')
       return (
         <div className="gameDescription">
           <div className="row">
@@ -32,7 +30,6 @@ class GameDescription extends React.Component {
                </table>
             </div>
           </div>
-          yolo
         </div>
       )
     }

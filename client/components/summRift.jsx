@@ -1,7 +1,6 @@
 import React from 'react';
 
 class GamesOnSR extends React.Component {
-
   handleClick(e) {
     this.props.onClick(e);
   }
