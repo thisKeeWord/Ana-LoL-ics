@@ -119,7 +119,7 @@ class HeadApp extends React.Component {
     if (this.state.gameSummary.length >= this.state.gamesToSee) {
       this.state.gameSummary = [];
     }
-    this.state.gameSummary.push(e.target.name);
+    this.state.gameSummary.push([e.target.id, e.target.name]);
     this.state.gameSummaryDelete = this.state.gameSummary;
 
     const that = this;

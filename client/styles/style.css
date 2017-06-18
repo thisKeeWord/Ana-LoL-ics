@@ -533,3 +533,7 @@ input.username {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.table {
+  display: table;
+}
