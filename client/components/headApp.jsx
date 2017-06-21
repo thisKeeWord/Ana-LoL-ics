@@ -719,7 +719,7 @@ class HeadApp extends React.Component {
 
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
-          <GameDescription gameSumm={this.state.gameSummary} />
+          <GameDescription gameSumm={this.state.gameSummary} gamesToSee={this.state.gamesToSee} />
           <GameMap gamesToSee={this.state.gamesToSee} region={this.state.region} />
           <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} region={this.state.region} />
           <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} region={this.state.region} />

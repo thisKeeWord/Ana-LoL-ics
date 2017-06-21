@@ -535,5 +535,6 @@ input.username {
 }
 
 .table {
-  display: table;
+  display: inline-flex;
 }
+
