@@ -535,6 +535,23 @@ input.username {
 }
 
 .table {
-  display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
 }
 
+#simple-board0 {
+  float: left;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
+
+#simple-board1 {
+  float: right;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
