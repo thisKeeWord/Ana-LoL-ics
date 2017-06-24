@@ -304,6 +304,7 @@ input.username {
   color: #cccccc;
   margin-left: auto;
   margin-right: auto;
+  z-index: 20;
 }
 
 #map2 {
@@ -534,7 +535,7 @@ input.username {
   background-repeat: no-repeat;
 }
 
-.table {
+#gameDescription1 {
   position: absolute;
   width: 700px;
   margin: 0 auto;
@@ -543,7 +544,25 @@ input.username {
   top: 100;
 }
 
-#simple-board0 {
+#gameDescription2 {
+  position: absolute;
+  width: 700px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  top: 100;
+}
+
+#simple-board01 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
+
+#simple-board02 {
   float: left;
   width: 175px;
   border: 1px solid white;
@@ -551,7 +570,7 @@ input.username {
   color: #cccccc;
 }
 
-#simple-board1 {
+#simple-board12 {
   float: right;
   width: 175px;
   border: 1px solid white;

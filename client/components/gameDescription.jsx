@@ -16,7 +16,7 @@ class GameDescription extends React.Component {
         rows.push(<tr key={i + j + this.props.gameSumm[i][0]} id={"data" + i + j + this.props.gameSumm[i][0]}>{description}</tr>);
       }
       tables.push(
-        <table id={"simple-board" + i}>
+        <table id={"simple-board" + i + this.props.gamesToSee}>
           <tbody>
             {rows}
           </tbody>
@@ -30,7 +30,7 @@ class GameDescription extends React.Component {
     if (this.props.gameSumm) {
       let gameInfo = this.getGameDescription();
       return (
-        <div className="table" id="gameDescription">
+        <div className="table" id={"gameDescription" + this.props.gamesToSee}>
           {gameInfo}
         </div>
       )
