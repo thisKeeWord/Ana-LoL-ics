@@ -205,7 +205,7 @@ input.username {
 
 #time1 {
   width: 80px;
-  top: 625;
+  top: 595;
   color: #cccccc;
   left: 50%;
   margin-left: -45px;
@@ -214,7 +214,7 @@ input.username {
 }
 
 #eventDisplay1 {
-  margin-top: 50px;
+  margin-top: 670px;
   position: absolute;
   width: 190px;
   left: 0;
@@ -541,7 +541,7 @@ input.username {
   margin: 0 auto;
   right: 0;
   left: 0;
-  top: 100;
+  top: 0;
 }
 
 #gameDescription2 {
@@ -550,7 +550,7 @@ input.username {
   margin: 0 auto;
   right: 0;
   left: 0;
-  top: 100;
+  top: 65;
 }
 
 #simple-board01 {
