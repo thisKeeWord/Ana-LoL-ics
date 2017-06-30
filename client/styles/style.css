@@ -188,6 +188,7 @@ input.username {
   right: 40;
   position: absolute;
   color: #cccccc;
+  text-align: center;
 }
 
 #choices1 {
@@ -305,6 +306,7 @@ input.username {
   margin-left: auto;
   margin-right: auto;
   z-index: 20;
+  text-align: center;
 }
 
 #map2 {
@@ -581,6 +583,8 @@ input.username {
 .dropdown {
   position: relative;
   display: inline-block;
+  text-shadow: 0.5px 0.5px #F8F8FF;
+  font-size: 20;
 }
 
 .dropdown-content {
@@ -596,7 +600,8 @@ input.username {
     display: block;
 }
 
-.hoverHere {
+span.hoverHere {
   width: 130px;
   margin-top: 10px;
+  color: ;
 }

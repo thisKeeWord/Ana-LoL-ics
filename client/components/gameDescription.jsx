@@ -12,8 +12,12 @@ class GameDescription extends React.Component {
         let description = [],
         subData = infoByGame[j],
         categories = breakDown[j];
-        description.push(<td className="textInfo" key={subData} id={subData}>{categories}{subData}</td>)
-        rows.push(<tr key={i + j + this.props.gameSumm[i][0]} id={"data" + i + j + this.props.gameSumm[i][0]}>{description}</tr>);
+        rows.push(
+          <tr key={i + j + this.props.gameSumm[i][0]} id={"data" + i + j + this.props.gameSumm[i][0]}>
+            <th className="textInfo" key={subData + "th"} id={subData}>{categories}</th>
+            <td className="textInfo" key={subData + "td"} id={subData}>{subData}</td>
+          </tr>
+        );
       }
       tables.push(
         <table id={"simple-board" + i + this.props.gamesToSee}>
