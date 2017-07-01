@@ -206,7 +206,7 @@ input.username {
 
 #time1 {
   width: 80px;
-  top: 665;
+  top: 590;
   color: #cccccc;
   left: 50%;
   margin-left: -45px;
@@ -215,7 +215,7 @@ input.username {
 }
 
 #eventDisplay1 {
-  margin-top: 670px;
+  margin-top: 660px;
   position: absolute;
   width: 190px;
   left: 0;
@@ -226,7 +226,7 @@ input.username {
 }
 
 #chart1 svg {
-  top: 780;
+  top: 670;
   right: 40;
   position: absolute;
   margin-bottom: 20px;
@@ -234,7 +234,7 @@ input.username {
 
 #builds1 {
   position: absolute;
-  top: 780;
+  top: 670;
   left: 80;
   color: #cccccc;
   margin-bottom: 20px;
@@ -242,14 +242,14 @@ input.username {
 
 #roleLane1 {
   position: absolute;
-  top: 780;
+  top: 670;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect1 {
-  top: 615;
+  top: 600;
   text-align: center;
   width: 1250px;
   min-width: 1160px;
@@ -262,7 +262,7 @@ input.username {
 #selections1 {
   float: right;
   position: relative;
-  margin-top: 140px;
+  /*margin-top: 140px;*/
 
 }
 
@@ -585,14 +585,15 @@ input.username {
   display: inline-block;
   text-shadow: 0.5px 0.5px #F8F8FF;
   font-size: 20;
+  width: 180px;
 }
 
 .dropdown-content {
   display: none;
   /*background-color: #f9f9f9;*/
-  width: 50px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
+  /*width: 200px;*/
+  /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+  /*padding: 12px 16px;*/
   z-index: 1;
 }
 
@@ -601,7 +602,6 @@ input.username {
 }
 
 span.hoverHere {
-  width: 130px;
+  width: 185px;
   margin-top: 10px;
-  color: ;
 }
