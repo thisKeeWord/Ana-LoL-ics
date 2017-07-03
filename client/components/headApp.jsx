@@ -18,6 +18,7 @@ class HeadApp extends React.Component {
   constructor() {
     super();
     this.state = {
+      backgroundImg: ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"][Math.floor(Math.random() * 12)],
       playerID1: [],
       pos1: [],
       champImg1: {},
@@ -50,6 +51,8 @@ class HeadApp extends React.Component {
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
+        $('.loading').css('display', 'block');
+    $('#content').append("<div className='loading'>hello world</div>");
     return $.ajax({
       type: 'POST',
       url: data.url.yooRL,
@@ -60,7 +63,7 @@ class HeadApp extends React.Component {
 
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
-    $('#content').addClass('loading');
+    $('.loading').css('display', 'block');
     return $.ajax({
       type: 'POST',
       url: '/getGameData',
@@ -86,6 +89,7 @@ class HeadApp extends React.Component {
       newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
+        $('.loading').css('display', 'none');
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
@@ -102,6 +106,8 @@ class HeadApp extends React.Component {
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
+        $('.loading').css('display', 'none');
+
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
@@ -140,7 +146,7 @@ class HeadApp extends React.Component {
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
         if (this.state.gamesToSee === 1) {
-          $('#content').removeClass('loading');
+          $('.loading').css('display', 'none');
           
           // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
@@ -151,7 +157,7 @@ class HeadApp extends React.Component {
       }).then(() => {
         if (that.state.clicksForGame.length === 1) {
           that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
-          $('#content').removeClass('loading');
+          $('.loading').css('display', 'none');
 
             // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
             that.state.patch2 = gotGameOne[0];
@@ -649,10 +655,10 @@ class HeadApp extends React.Component {
     let that = this;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
-      let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
       return (
         <div id="landingPage">
-          <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
+          <div className="loading"></div>
+          <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + this.state.backgroundImg + ".jpg)"}} />
           <ul className="linkToPages">
             <li className="goAbout"><Link to="/about">About</Link></li>
           </ul>
@@ -693,6 +699,7 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
+          <div className="loading"></div>
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
@@ -736,6 +743,7 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');      
       return (
         <div id="second">
+          <div className="loading"></div>
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
