@@ -195,7 +195,6 @@ class ChampBuild extends React.Component {
                       //   controlWards--;
                       // }
                       itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[w].beforeId), 1);
-                      console.log(itemStore, player[0]);
                       let retrieveItem = w;
                       while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
@@ -276,7 +275,6 @@ class ChampBuild extends React.Component {
             });
             consumables.push({ 2003: potions, 2010: biscuits, 2055: controlWards });
           }
-          // console.log(itemStore, 'checking for warwick', player[0]);
           eachPlayersItems.push([itemStore, consumables]);
         })
         itemsPerGame.push(eachPlayersItems);  

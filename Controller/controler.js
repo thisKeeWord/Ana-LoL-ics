@@ -129,6 +129,11 @@ function getMatchList(date, req, res, next) {
 							perGameSpec.push(gamesList.matches[i]["champion"]);
 							var needDate = new Date(gamesList.matches[i]["timestamp"]).toString().replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/,'');
 							perGameSpec.push(needDate);
+							perGameSpec.push(gamesList.matches[i]["lane"]);
+            	perGameSpec.push(gamesList.matches[i]["platformId"]);
+            	perGameSpec.push(gamesList.matches[i]["queue"]);
+            	perGameSpec.push(gamesList.matches[i]["role"]);
+	            perGameSpec.push(gamesList.matches[i]["season"]);
 						}
 						matchHistory.push(perGameSpec);
 					}

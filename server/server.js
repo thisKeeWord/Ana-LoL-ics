@@ -1,4 +1,4 @@
-var dotenv = require('dotenv').config({ path: 'config.env' });
+// var dotenv = require('dotenv').config({ path: 'config.env' });
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -21,6 +21,10 @@ app.use(fallback('index.html', { root: __dirname + './../client/' }));
 
 app.get('/', function(req, res) {
   res.sendFile('index.html');
+});
+
+app.get('/riot.txt', function(req, res) {
+	res.sendFile('riot.txt');
 });
 
 app.post('/', controller.userInformation, controller.matchList);
