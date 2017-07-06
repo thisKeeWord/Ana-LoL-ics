@@ -51,8 +51,7 @@ class HeadApp extends React.Component {
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
-        $('.loading').css('display', 'block');
-    $('#content').append("<div className='loading'>hello world</div>");
+    $('.loading').css('display', 'block');
     return $.ajax({
       type: 'POST',
       url: data.url.yooRL,
