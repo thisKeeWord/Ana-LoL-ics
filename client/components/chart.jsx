@@ -6,7 +6,6 @@ class Chart extends React.Component {
   diff() {
     // FIND SELECTION --> WARD PLACEMENT OR DELETIONS
     const allEvents = [];
-
     if ((this.props.timeline1 && this.props.gamesToSee === 1) || (this.props.timeline2 && this.props.gamesToSee === 2)) {
       for (let l = 1; l <= this.props.gamesToSee; l++) {
         let eventSpecific = [];
@@ -20,7 +19,7 @@ class Chart extends React.Component {
               for (let j = 0; j <= this.props.spot; j++) {
                 if (searchEvents[j][0].events) {
                   for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                    if ((searchEvents[j][0].events[k].eventType === eventChosen && searchEvents[j][0].events[k].wardType !== "UNDEFINED") && (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
+                    if ((searchEvents[j][0].events[k].type === eventChosen && searchEvents[j][0].events[k].wardType !== "UNDEFINED") && (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
                       count++;
                     }
                   }
@@ -31,7 +30,7 @@ class Chart extends React.Component {
               for (let j = 0; j < searchEvents.length; j++) {
                 if (searchEvents[j][0].events) {
                   for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                    if ((searchEvents[j][0].events[k].eventType === eventChosen && searchEvents[j][0].events[k].wardType !== "UNDEFINED")&& (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
+                    if ((searchEvents[j][0].events[k].type === eventChosen && searchEvents[j][0].events[k].wardType !== "UNDEFINED")&& (searchEvents[j][0].events[k].creatorId === this.props["playerInfo" + l.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.props["playerInfo" + l.toString()][i][0])) {
                       count++;
                     }
                   }
@@ -44,7 +43,7 @@ class Chart extends React.Component {
               for (let j = 0; j <= this.props.spot; j++) {
                 if (searchEvents[j][0].events) {
                   for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                    if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                    if (searchEvents[j][0].events[k].type === 'CHAMPION_KILL') {
                       if (eventChosen === 'killerId' || eventChosen === 'victimId') {
                         if (searchEvents[j][0].events[k][eventChosen] === this.props["playerInfo" + l.toString()][i][0]) {
                           count++;
@@ -66,7 +65,7 @@ class Chart extends React.Component {
               for (let j = 0; j < searchEvents.length; j++) {
                 if (searchEvents[j][0].events) {
                   for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                    if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                    if (searchEvents[j][0].events[k].type === 'CHAMPION_KILL') {
                       if (eventChosen === 'killerId' || eventChosen === 'victimId') {
                         if (searchEvents[j][0].events[k][eventChosen] === this.props["playerInfo" + l.toString()][i][0]) {
                           count++;
@@ -113,7 +112,7 @@ class Chart extends React.Component {
         }
         allEvents.push(eventSpecific);
       }
-    return allEvents;
+      return allEvents;
     }
   }
 
@@ -139,8 +138,6 @@ class Chart extends React.Component {
             playerInformation = this.props["playerInfo" + l.toString()],
             whichSelData = this.props["selData" + l.toString()],
             whichMaxStat = this.props["maxForStat" + l.toString()];
-
-
         for (let name = 0; name < playerInformation.length; name++) {
           getName.push(nameOfChamp[playerInformation[name][1]])
         } 
@@ -151,7 +148,6 @@ class Chart extends React.Component {
           $("#infoStat" + l * this.props.gamesToSee).first().remove();
           $("#nameStat" + l * this.props.gamesToSee).first().remove();
         }
-
 
         // APPEND NEW BAR AND TEXT
         // BAR WAS UPSIDE DOWN
@@ -226,7 +222,6 @@ class Chart extends React.Component {
 
           // ADD LABELS TO Y-AXIS
           let allTheNames = whichSelData.append("g").attr("id", "nameStat" + l * this.props.gamesToSee);
-
           for (let textName = 0; textName < getName.length; textName++) {
             allTheNames.append("g")
               .attr("id", "splitChamp" + l + textName.toString())      

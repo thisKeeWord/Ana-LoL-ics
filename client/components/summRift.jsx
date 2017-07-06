@@ -1,7 +1,6 @@
 import React from 'react';
 
 class GamesOnSR extends React.Component {
-
   handleClick(e) {
     this.props.onClick(e);
   }
@@ -20,12 +19,17 @@ class GamesOnSR extends React.Component {
           <option value="2">2</option>
         </select> 
         from list: <br/>
-        { this.props.res.map(matchList => {
-            return (
-              <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
-            )
-          })
-        }
+        <div className="dropdown">
+          <span className="hoverHere">Hover Here For Match History</span>
+          <div className="dropdown-content">
+            { this.props.res.map(matchList => {
+                return (
+                  <input type="submit" id={matchList[0]} className={"games" + this.props.gamesToSee} name={matchList[3] + "break" + matchList[4] + "break" + matchList[5] + "break" + matchList[6]} key={matchList[0]} onClick={this.handleClick.bind(this)} style={{backgroundSize: "25px", backgroundImage:"url(" + matchList[1] + ")",  backgroundRepeat: "no-repeat", "height":"30px"}} value={matchList[2]} />
+                )
+              })
+            }
+          </div>
+        </div>
       </div>
     )
   }

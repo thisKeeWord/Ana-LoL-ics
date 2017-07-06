@@ -188,6 +188,7 @@ input.username {
   right: 40;
   position: absolute;
   color: #cccccc;
+  text-align: center;
 }
 
 #choices1 {
@@ -205,7 +206,7 @@ input.username {
 
 #time1 {
   width: 80px;
-  top: 625;
+  top: 590;
   color: #cccccc;
   left: 50%;
   margin-left: -45px;
@@ -214,7 +215,7 @@ input.username {
 }
 
 #eventDisplay1 {
-  margin-top: 50px;
+  margin-top: 660px;
   position: absolute;
   width: 190px;
   left: 0;
@@ -225,7 +226,7 @@ input.username {
 }
 
 #chart1 svg {
-  top: 675;
+  top: 670;
   right: 40;
   position: absolute;
   margin-bottom: 20px;
@@ -233,7 +234,7 @@ input.username {
 
 #builds1 {
   position: absolute;
-  top: 675;
+  top: 670;
   left: 80;
   color: #cccccc;
   margin-bottom: 20px;
@@ -241,14 +242,14 @@ input.username {
 
 #roleLane1 {
   position: absolute;
-  top: 675;
+  top: 670;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect1 {
-  top: 615;
+  top: 600;
   text-align: center;
   width: 1250px;
   min-width: 1160px;
@@ -261,14 +262,14 @@ input.username {
 #selections1 {
   float: right;
   position: relative;
-  margin-top: -10px;
+  /*margin-top: 140px;*/
+
 }
 
 #scroll1 {
   float: left;
   position: relative;
-  margin-top: -10px
-  /*margin-left: -130px;*/
+  margin-right: 50px;
 }
 
 #whichSummoner {
@@ -304,16 +305,18 @@ input.username {
   color: #cccccc;
   margin-left: auto;
   margin-right: auto;
+  z-index: 20;
+  text-align: center;
 }
 
 #map2 {
   position: absolute;
-  margin-top: 90px;
+  margin-top: 235px;
   left: 30;
 }
 
 #time2 {
-  top: 500;
+  top: 715;
   width: 80px;
   margin-left: auto;
   margin-right: auto;
@@ -323,14 +326,14 @@ input.username {
 }
 
 #eventDisplay2 {
-  top: 620;
+  top: 795;
   left: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart2 svg {
-  top: 1135;
+  top: 1310;
   left: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -338,7 +341,7 @@ input.username {
 
 #builds2 {
   position: absolute;
-  top: 620;
+  top: 795;
   left: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -346,14 +349,14 @@ input.username {
 
 #roleLane2 {
   position: absolute;
-  top: 620;
+  top: 795;
   left: 30;
   color: #cccccc;
   margin-bottom: 20px;
 }
 
 #scrollAndSelect2 {
-  margin-top: 30px;
+  margin-top: 40px;
   margin-left: auto;
   margin-right: auto;
   width: 370px;
@@ -361,14 +364,14 @@ input.username {
 }
 
 #selections2 {
-  top: 1040;
+  top: 1185;
   margin-left: auto;
   margin-right: auto;
   position: relative;
 }
 
 #scroll2 {
-  top: 500;
+  top: 675;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -383,19 +386,19 @@ input.username {
 
 #map4 {
   position: absolute;
-  margin-top: 90px;
+  margin-top: 235px;
   right: 30;
 }
 
 #eventDisplay4 {
-  top: 620;
+  top: 795;
   right: 435;
   position: absolute;
   color: #cccccc;
 }
 
 #chart4 svg {
-  top: 1135;
+  top: 1310;
   right: 30;
   position: absolute;
   margin-bottom: 20px;
@@ -403,7 +406,7 @@ input.username {
 
 #builds4 {
   position: absolute;
-  top: 620;
+  top: 795;
   right: 82;
   color: #cccccc;
   margin-bottom: 20px;
@@ -411,7 +414,7 @@ input.username {
 
 #roleLane4 {
   position: absolute;
-  top: 620;
+  top: 795;
   right: 30;
   color: #cccccc;
   margin-bottom: 20px;
@@ -522,14 +525,87 @@ input.username {
   margin-left: -85px;
 }
 
-#content.loading {
-  display: block;
-  width: 100%;
-  height: 100%;
+.loading {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    animation: spin 2s linear infinite;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -100px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#gameDescription1 {
   position: absolute;
-  z-index: 1000;/*puts on top ofeverything*/
-  background-image: url('https://media.giphy.com/media/i3pHUtmHiLd28/giphy.gif');
-  background-size: 50%;
-  background-position: center;
-  background-repeat: no-repeat;
+  width: 700px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  top: 65;
+}
+
+#gameDescription2 {
+  position: absolute;
+  width: 700px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  top: 65;
+}
+
+#simple-board01 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
+
+#simple-board02 {
+  float: left;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
+
+#simple-board12 {
+  float: right;
+  width: 175px;
+  border: 1px solid white;
+  line-height: 1.3;
+  color: #cccccc;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  text-shadow: 0.5px 0.5px #F8F8FF;
+  font-size: 20;
+  width: 180px;
+}
+
+.dropdown-content {
+  display: none;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+span.hoverHere {
+  width: 185px;
+  margin-top: 10px;
 }

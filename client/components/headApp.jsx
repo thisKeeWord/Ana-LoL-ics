@@ -11,12 +11,14 @@ import GamesOnSR from './summRift.jsx';
 import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
 import WhosGames from './whosGames.jsx';
+import GameDescription from './gameDescription.jsx';
 
 
 class HeadApp extends React.Component {
   constructor() {
     super();
     this.state = {
+      backgroundImg: ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"][Math.floor(Math.random() * 12)],
       playerID1: [],
       pos1: [],
       champImg1: {},
@@ -42,12 +44,14 @@ class HeadApp extends React.Component {
       addItems2: '',
       patch2: 0,
       maxForStat2: 0,
-      region: ''
+      region: '',
+      gameSummary: []
     }
   }
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
+    $('.loading').css('display', 'block');
     return $.ajax({
       type: 'POST',
       url: data.url.yooRL,
@@ -58,7 +62,7 @@ class HeadApp extends React.Component {
 
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
-    $('#content').addClass('loading');
+    $('.loading').css('display', 'block');
     return $.ajax({
       type: 'POST',
       url: '/getGameData',
@@ -84,6 +88,7 @@ class HeadApp extends React.Component {
       newCleanName.summonerName = { summoner: cleanName }; 
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
+        $('.loading').css('display', 'none');
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
@@ -100,6 +105,8 @@ class HeadApp extends React.Component {
       newCleanName.region = { region: that.state.region };
       this.post(newCleanName).done(gotTheInfo => {
         localStorage[cleanName] = gotTheInfo[0];
+        $('.loading').css('display', 'none');
+
         that.setState({
           res: gotTheInfo[1],
           toggle: true,
@@ -114,11 +121,16 @@ class HeadApp extends React.Component {
   handleClick(e) {
     e.preventDefault();
     this.state.clicksForGame.push(e.target.id);
+    if (this.state.gameSummary.length >= this.state.gamesToSee) {
+      this.state.gameSummary = [];
+    }
+    this.state.gameSummary.push([e.target.id, e.target.name]);
+    this.state.gameSummaryDelete = this.state.gameSummary;
+
     const that = this;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
-
         // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
         that.state.spot = 0;
         that.state.eventSelected = 'select one';
@@ -133,7 +145,7 @@ class HeadApp extends React.Component {
         that.state.totalRenders = 1;
         that.state.clicksForGame.length--;
         if (this.state.gamesToSee === 1) {
-          $('#content').removeClass('loading');
+          $('.loading').css('display', 'none');
           
           // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
           that.move();
@@ -144,7 +156,7 @@ class HeadApp extends React.Component {
       }).then(() => {
         if (that.state.clicksForGame.length === 1) {
           that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
-          $('#content').removeClass('loading');
+          $('.loading').css('display', 'none');
 
             // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
             that.state.patch2 = gotGameOne[0];
@@ -180,8 +192,8 @@ class HeadApp extends React.Component {
           nSR = "https://s3-us-west-1.amazonaws.com/riot-developer-portal/docs/map11.png";
 
       // SCALING MAP DOWN
-      let width = 400,
-          height = 400;
+      let width = 468,
+          height = 468;
 
       if (this.state.gamesToSee === 1) {
         width = 500;
@@ -569,7 +581,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
+                if (searchEvents[j][0].events[k].type === eventPicked.target.value && searchEvents[j][0].events[k].wardType !== "UNDEFINED" && (searchEvents[j][0].events[k].creatorId === this.state["playerID" + t.toString()][i][0] || searchEvents[j][0].events[k].killerId === this.state["playerID" + t.toString()][i][0])) {
                   statCount++;
                 }
               }
@@ -580,7 +592,7 @@ class HeadApp extends React.Component {
           for (let j = 0; j < searchEvents.length; j++) {
             if (searchEvents[j][0].events) {
               for (let k = 0; k < searchEvents[j][0].events.length; k++) {
-                if (searchEvents[j][0].events[k].eventType === 'CHAMPION_KILL') {
+                if (searchEvents[j][0].events[k].type === 'CHAMPION_KILL') {
                   if (eventPicked.target.value === 'killerId' || eventPicked.target.value === 'victimId') {
                     if (searchEvents[j][0].events[k][eventPicked.target.value] === this.state["playerID" + t.toString()][i][0]) {
                       statCount++;
@@ -630,6 +642,7 @@ class HeadApp extends React.Component {
   numGamesSee(e) {
     e.preventDefault();
     this.state.gamesToSee = parseInt(e.target.value, 10);
+    this.state.gameSummary = [];
   }
 
   updateRegion(e) {
@@ -641,13 +654,12 @@ class HeadApp extends React.Component {
     let that = this;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
-      let whichBackground = ["LeeSin_4", "Braum_2", "Lulu_3", "Blitzcrank_5", "Gragas_4", "Jinx_1", "Yasuo_2", "Bard_0", "Poppy_5", "MonkeyKing_5", "Chogath_6", "Anivia_5"];
       return (
         <div id="landingPage">
-          <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + whichBackground[Math.floor(Math.random() * whichBackground.length)] + ".jpg)"}} />
+          <div className="loading"></div>
+          <div id="championBackground" style={{backgroundImage: "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + this.state.backgroundImg + ".jpg)"}} />
           <ul className="linkToPages">
             <li className="goAbout"><Link to="/about">About</Link></li>
-            <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
           </ul>
           
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
@@ -656,17 +668,17 @@ class HeadApp extends React.Component {
             <form id="formSubmit" onSubmit={this.handleSubmit.bind(this)}>
               <input type="text" className="inGameName" ref="userName" placeholder="enter summoner name" required />
               <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions">
-                <option value="BR">Brazil</option>
-                <option value="EUNE">Europe Nordic & East</option>
-                <option value="EUW">Europe West</option>
-                <option value="JP">Japan</option>
+                <option value="BR1">Brazil</option>
+                <option value="EUN1">Europe Nordic & East</option>
+                <option value="EUW1">Europe West</option>
+                <option value="JP1">Japan</option>
                 <option value="KR">Korea</option>
-                <option value="LAN">Latin America North</option>
-                <option value="LAS">Latin America South</option>
-                <option value="NA">North America</option>
-                <option value="OCE">Oceania</option>
+                <option value="LA1">Latin America North</option>
+                <option value="LA2">Latin America South</option>
+                <option value="NA1">North America</option>
+                <option value="OC1">Oceania</option>
                 <option value="RU">Russia</option>
-                <option value="TR">Turkey</option>
+                <option value="TR1">Turkey</option>
               </select>
               <button type="submit" id="findStats" val>Find Stats</button>
             </form>
@@ -686,10 +698,10 @@ class HeadApp extends React.Component {
       $('body').css('background', '#292929');
       return (
         <div className="resultingInfo">
+          <div className="loading"></div>
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
 
@@ -698,21 +710,22 @@ class HeadApp extends React.Component {
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
+          <GameDescription gameSumm={this.state.gameSummary} gamesToSee={this.state.gamesToSee} />
           <GameMap gamesToSee={this.state.gamesToSee} region={this.state.region} />
           <TimeStamp gamesToSee={this.state.gamesToSee} timeline1={this.state.allowScroll1} conversion={this.state.spot} timeline2={this.state.allowScroll2} region={this.state.region} />
           <DropDownMenu gamesToSee={this.state.gamesToSee} spot={this.state.spot} whichEventPick={this.whichEventPick.bind(this)} onChange={this.onChange.bind(this)} timeline1={this.state.allowScroll1} timeline2={this.state.allowScroll2} eventSelected={this.state.eventSelected} region={this.state.region} />
@@ -726,13 +739,13 @@ class HeadApp extends React.Component {
 
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
-      $('body').css('background', '#292929');
+      $('body').css('background', '#292929');      
       return (
         <div id="second">
+          <div className="loading"></div>
           <div id="backHome">
             <ul className="linkToPages">
               <li className="goAbout"><Link to="/about">About</Link></li>
-              <li className="goSeasonStats"><Link to="/season-stats">Season Stats</Link></li>
             </ul>
           </div>
           <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
@@ -740,17 +753,17 @@ class HeadApp extends React.Component {
           </form>
 
           <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">
-            <option value="BR">Brazil</option>
-            <option value="EUNE">Europe Nordic & East</option>
-            <option value="EUW">Europe West</option>
-            <option value="JP">Japan</option>
+            <option value="BR1">Brazil</option>
+            <option value="EUN1">Europe Nordic & East</option>
+            <option value="EUW1">Europe West</option>
+            <option value="JP1">Japan</option>
             <option value="KR">Korea</option>
-            <option value="LAN">Latin America North</option>
-            <option value="LAS">Latin America South</option>
-            <option value="NA">North America</option>
-            <option value="OCE">Oceania</option>
+            <option value="LA1">Latin America North</option>
+            <option value="LA2">Latin America South</option>
+            <option value="NA1">North America</option>
+            <option value="OC1">Oceania</option>
             <option value="RU">Russia</option>
-            <option value="TR">Turkey</option>
+            <option value="TR1">Turkey</option>
           </select>
 
           <WhosGames summonersName={this.state.whosGames} /> 

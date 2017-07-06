@@ -21,38 +21,36 @@ class ChampBuild extends React.Component {
           // AT CURRENT SPOT IN TIMELINE
           if (searchEvents[this.props.spot]) {
             // health potion is 2003
-
             for (let j = 0; j <= this.props.spot; j++) {
 
               if (searchEvents[j][0].events) {
                 potions = 0, biscuits = 0, controlWards = 0;
-
                 for (let k = 0; k < searchEvents[j][0].events.length; k++) {
                   let findItem = searchEvents[j][0].events[k].itemId;
                   
                   // ITEM_PURCHASED
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
-                      itemStore.push(findItem);
+                  if (searchEvents[j][0].events[k].type === "ITEM_PURCHASED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    itemStore.push(findItem);
                   }
 
                   // ITEM_DESTROYED
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_DESTROYED" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_SOLD
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
+                  if (searchEvents[j][0].events[k].type === "ITEM_SOLD" && searchEvents[j][0].events[k].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                  if (searchEvents[j][0].events[k].eventType === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
-                    if (searchEvents[j][0].events[k].itemAfter === 0) {
-                      let checkItemEvent = searchEvents[j][0].events[k].itemBefore;
+                  if (searchEvents[j][0].events[k].type === "ITEM_UNDO" && searchEvents[j][0].events[k].participantId === player[0]) {
+                    if (searchEvents[j][0].events[k].afterId === 0) {
+                      let checkItemEvent = searchEvents[j][0].events[k].beforeId;
                       // IF PLAYER PURCHASES POTION AND UNDO'S THE PURCHASE
                       // if (checkItemEvent === 2003) {
                       //   potions--;
@@ -63,11 +61,11 @@ class ChampBuild extends React.Component {
                       // if (checkItemEvent === 2055) {
                       //   controlWards--;
                       // }
-                      itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].itemBefore), 1);
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[j][0].events[k].beforeId), 1);
                       let retrieveItem = k;
-                      while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                      while (searchEvents[j][0].events[retrieveItem] && searchEvents[j][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
-                          if (searchEvents[j][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
+                          if (searchEvents[j][0].events[retrieveItem].type === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[j][0].events[retrieveItem].itemId.toString())) {
                             itemStore.push(searchEvents[j][0].events[retrieveItem].itemId);
                           }
                         }
@@ -149,44 +147,43 @@ class ChampBuild extends React.Component {
           // IF SCROLL EXCEEDS GAME LENGTH
           if (!searchEvents[this.props.spot]) {
             for (let z = 0; z < searchEvents.length; z++) {
-                potions = 0, biscuits = 0, controlWards = 0;
-
+              potions = 0, biscuits = 0, controlWards = 0;
               if (searchEvents[z][0].events) {
-                for (let k = 0; k < searchEvents[z][0].events.length; k++) {
-                  let findItem = searchEvents[z][0].events[k].itemId;
+                for (let w = 0; w < searchEvents[z][0].events.length; w++) {
+                  let findItem = searchEvents[z][0].events[w].itemId;
 
                   // ITEM_PURCHASED
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_PURCHASED" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[w].type === "ITEM_PURCHASED" && searchEvents[z][0].events[w].participantId === player[0]) {
                     itemStore.push(findItem);
-                    // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[w].participantId === player[0])  {
                     //   potions++;
                     // }
-                    // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[w].participantId === player[0])  {
                     //   biscuits++;
                     // }
-                    // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
+                    // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[w].participantId === player[0])  {
                     //   controlWards++;
                     // }
                   }
 
                   // ITEM_DESTROYED
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_DESTROYED" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[w].type === "ITEM_DESTROYED" && searchEvents[z][0].events[w].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_SOLD
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_SOLD" && searchEvents[z][0].events[k].participantId === player[0]) {
+                  if (searchEvents[z][0].events[w].type === "ITEM_SOLD" && searchEvents[z][0].events[w].participantId === player[0]) {
                     if (itemStore.lastIndexOf(findItem) !== -1) {
                       itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                     }
                   }
 
                   // ITEM_UNDO, PLAYER MAY HAVE "DESTROYED" RECIPE ITEMS TO GET NEW ONE
-                  if (searchEvents[z][0].events[k].eventType === "ITEM_UNDO" && searchEvents[z][0].events[k].participantId === player[0]) {
-                    if (searchEvents[z][0].events[k].itemAfter === 0) {
-                      let checkItemEvent = searchEvents[z][0].events[k].itemBefore;
+                  if (searchEvents[z][0].events[w].type === "ITEM_UNDO" && searchEvents[z][0].events[w].participantId === player[0]) {
+                    if (searchEvents[z][0].events[w].afterId === 0) {
+                      let checkItemEvent = searchEvents[z][0].events[w].beforeId;
                       // potions and control wards
                       // if (checkItemEvent === 2003) {
                       //   potions--;
@@ -197,11 +194,11 @@ class ChampBuild extends React.Component {
                       // if (checkItemEvent === 2055) {
                       //   controlWards--;
                       // }
-                      itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[k].itemBefore), 1);
-                      let retrieveItem = k;
-                      while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].eventType !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
+                      itemStore.splice(itemStore.lastIndexOf(searchEvents[z][0].events[w].beforeId), 1);
+                      let retrieveItem = w;
+                      while (searchEvents[z][0].events[retrieveItem] && searchEvents[z][0].events[retrieveItem].type !== "ITEM_PURCHASED" && findItem !== checkItemEvent) {
                         if (itemStorage[checkItemEvent].from) {
-                          if (searchEvents[z][0].events[retrieveItem].eventType === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[z][0].events[retrieveItem].itemId.toString())) {
+                          if (searchEvents[z][0].events[retrieveItem].type === "ITEM_DESTROYED" && itemStorage[checkItemEvent].from.includes(searchEvents[z][0].events[retrieveItem].itemId.toString())) {
                             itemStore.push(searchEvents[z][0].events[retrieveItem].itemId);
                           }
                         }
@@ -209,36 +206,66 @@ class ChampBuild extends React.Component {
                       } 
                     }
                   }
-                  
+                  // DUPLICATE TRINKET
+                  if ((findItem === 3340 || findItem === 3341 || findItem === 3363 || findItem === 3364) && itemStore.indexOf(findItem) !== -1 && itemStore.lastIndexOf(findItem) !== itemStore.indexOf(findItem)) {
+                    itemStore.splice(itemStore.lastIndexOf(findItem), 1);
+                  }
+                  // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[w].participantId === player[0])  {
+                  //   potions++;
+                  // }
+                  // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[w].participantId === player[0])  {
+                  //   biscuits++;
+                  // }
+                  // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[w].participantId === player[0])  {
+                  //   controlWards++;
+                  // }
                 }
-              }
-            }
-            if (itemStore.includes(2003)) {
-              for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
-                if (itemStore[countPotions] === 2003) {
-                  potions++;
-                  if (countPotions !== itemStore.indexOf(2003)) {
-                    delete itemStore[countPotions];
+
+                // NO TRINKET
+                if (player[0] <= 5 && findTrinket === false && searchEvents[z][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[z][0].participantFrames[player[0]].position.x - 703, 2) + Math.pow(searchEvents[z][0].participantFrames[player[0]].position.y - 703, 2)) > 4184) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341) && !itemStore.includes(3363) && !itemStore.includes(3364)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
+                    }
+                  }
+                }
+                if (player[0] > 5 && findTrinket === false && searchEvents[z][0].participantFrames[player[0]].position) {
+                  if (Math.sqrt(Math.pow(searchEvents[z][0].participantFrames[player[0]].position.x - 14130, 2) + Math.pow(searchEvents[z][0].participantFrames[player[0]].position.y - 14130, 2)) > 4204) {
+                    if (!itemStore.includes(3340) && !itemStore.includes(3341) && !itemStore.includes(3363) && !itemStore.includes(3364)) {
+                      itemStore.push(3340);
+                      findTrinket = true;
+                    }
                   }
                 }
               }
-            }
-            if (itemStore.includes(2010)) {
-              for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
-                if (itemStore[countBiscuits] === 2010) {
-                  biscuits++;
-                  if (countBiscuits !== itemStore.indexOf(2010)) {
-                    delete itemStore[countBiscuits];
+              if (itemStore.includes(2003)) {
+                for (let countPotions = itemStore.lastIndexOf(2003); countPotions >= itemStore.indexOf(2003); countPotions--) {
+                  if (itemStore[countPotions] === 2003) {
+                    potions++;
+                    if (countPotions !== itemStore.indexOf(2003)) {
+                      delete itemStore[countPotions];
+                    }
                   }
                 }
               }
-            }
-            if (itemStore.includes(2055)) {
-              for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
-                if (itemStore[countControlWards] === 2055) {
-                  controlWards++;
-                  if (controlWards !== itemStore.indexOf(2055)) {
-                    delete itemStore[controlWards];
+              if (itemStore.includes(2010)) {
+                for (let countBiscuits = itemStore.lastIndexOf(2010); countBiscuits >= itemStore.indexOf(2010); countBiscuits--) {
+                  if (itemStore[countBiscuits] === 2010) {
+                    biscuits++;
+                    if (countBiscuits !== itemStore.indexOf(2010)) {
+                      delete itemStore[countBiscuits];
+                    }
+                  }
+                }
+              }
+              if (itemStore.includes(2055)) {
+                for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
+                  if (itemStore[countControlWards] === 2055) {
+                    controlWards++;
+                    if (controlWards !== itemStore.indexOf(2055)) {
+                      delete itemStore[controlWards];
+                    }
                   }
                 }
               }

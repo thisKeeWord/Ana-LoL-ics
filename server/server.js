@@ -23,11 +23,15 @@ app.get('/', function(req, res) {
   res.sendFile('index.html');
 });
 
+app.get('/riot.txt', function(req, res) {
+	res.sendFile('riot.txt');
+});
+
 app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
 
-app.post('/season-stats', controller.userInformation, seasonStats.results);
+// app.post('/season-stats', controller.userInformation, seasonStats.results);
 
 
 app.listen(app.get('port'), function() {
