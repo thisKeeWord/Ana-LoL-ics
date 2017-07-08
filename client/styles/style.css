@@ -155,6 +155,8 @@ ul {
   top: 500;
   left: 30;
   position: absolute;
+  min-width: 450px;
+  width: 800px;
 }
 
 #formSubmit {
@@ -614,10 +616,10 @@ span.hoverHere {
   position: fixed;
   font-size: 30px;
   width: 100%;
-  height: 100px;
   margin-top: 250px;
   color: #cccccc;
   z-index: 9000;
   background-color: #404040;
   text-align: center;
+  min-width: 500px;
 }
