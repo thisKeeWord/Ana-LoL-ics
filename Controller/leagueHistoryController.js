@@ -17,7 +17,7 @@ function results(req, res, next) {
     region: req.body.region.region.toLowerCase()
   };
 
-  request("https://" + toCheck.region + allChampInfo + process.env.stuff2, function(err, champDatas) {
+  request("https://" + toCheck.region + allChampInfo + process.env.stuff1, function(err, champDatas) {
     var champDatum = JSON.parse(champDatas.body).data;
     champStuff(req, champDatum, toCheck, res);
   });

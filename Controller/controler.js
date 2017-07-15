@@ -118,7 +118,7 @@ function getMatchList(date, req, res, next) {
 		ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 			var count = 0, matchHistory = [];
 			var country = req.body.region.region.toLowerCase();
-			request("https://" + country + matchHistoryList + req.summonerId + "/recent?" + process.env.stuff2, (error, response) => {
+			request("https://" + country + matchHistoryList + req.summonerId + "/recent?" + process.env.stuff1, (error, response) => {
 				if (error) return console.error(error, "here");
 				if (response.statusCode === 200) {
 					var gamesList = JSON.parse(response.body);
@@ -145,7 +145,7 @@ function getMatchList(date, req, res, next) {
 }
 
 function getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
-  request("https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff3, function(error, newData) {
+  request("https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1, function(error, newData) {
     if (error) return console.error(error);
     if (newData.statusCode === 429 && (!newData.headers["X-Rate-Limit-Type"] || newData.headers["X-Rate-Limit-Type"] === "service") && keepTrackOf429 < 15) {
     	setTimeout(getGameData(keepTrackOf429 + 1, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res), 10);
@@ -179,7 +179,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
       // getting timeline information by frame from another endpoint
       // since the first timeline request doesn't have the full info
       // by frame for the game
-      request("https://" + regionName + matchTimelineUrl + Object.keys(req.body)[0] + "?" + process.env.stuff8, function(er, timelineData) {
+      request("https://" + regionName + matchTimelineUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1, function(er, timelineData) {
       	var timelineDataFrames = JSON.parse(timelineData.body).frames;
 	      for (var j = 0; j < timelineDataFrames.length; j++) {
 	        gameTimeline.push([timelineDataFrames[j]]);
@@ -195,7 +195,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 	        // PARTICIPANT-ID AND CHAMPION-ID
 	        idOfPlayer.push([pId, cId, playerRole, playerLane]);
 	        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-	        request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff2, function(error, champData) {
+	        request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, function(error, champData) {
 	        	champData = JSON.parse(champData.body);
 	        	if (error) return console.error(error);
 	          var stuffs = champData.key;
@@ -215,7 +215,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
 	if (count >= matchHistory.length) return;
-	request("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff2, function(error, good) {
+	request("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff1, function(error, good) {
 		good = JSON.parse(good.body);
 		matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + good.key + '.png';
 		count++;
