@@ -28,13 +28,13 @@ function userInformation(req, res, next) {
 	}
 	else {
 		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-			if (success.length && date - success[0]['created_at'] > 10000) {
+			if (success.length && date - success[0]['created_at'] > 20000) {
 				ThrottleCalls.remove({}, function(error, removed) {
 					if (error) return console.error(error);
 					usersInfo(date, req, res, next);
-				})
+				});
 			}
-			else if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
+			else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
 				usersInfo(date, req, res, next);
 			}
 			else {
@@ -48,13 +48,13 @@ function userInformation(req, res, next) {
 function matchList(req, res) {
 	var date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 10000) {
+		if (success.length && date - success[0]['created_at'] > 20000) {
 			ThrottleCalls.remove({}, function(removed) {
 				if (error) return console.error(error);
 				getMatchList(date, req, res);
 			});
 		}
-		else if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
+		else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
 			getMatchList(date, req, res)
 		}
 		else {
@@ -76,18 +76,18 @@ function getData(req, res) {
       matchDataArray = [],
       date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 10000) {
+		if (success.length && date - success[0]['created_at'] > 20000) {
 			ThrottleCalls.remove({}, function(error, removed) {
 				if (error) return console.error(error);
 				ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
 					getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
-				})
-			})
+				});
+			});
 		}
-		else if (!success.length || (success.length && success.length < 14 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
+		else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
 			ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
 				getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
-			})
+			});
 		}
 		else {
 			return res.render('./../index.html', { error: 'too many requests, try again in a few' });
