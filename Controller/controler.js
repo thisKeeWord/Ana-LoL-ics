@@ -28,7 +28,8 @@ function userInformation(req, res, next) {
 	}
 	else {
 		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-			if (success.length && date - success[0]['created_at'] > 20000) {
+			if (success.length && date - success[0]['created_at'] > 1000) {
+
 				ThrottleCalls.remove({}, function(error, removed) {
 					if (error) return console.error(error);
 					usersInfo(date, req, res, next);
@@ -48,7 +49,7 @@ function userInformation(req, res, next) {
 function matchList(req, res) {
 	var date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 20000) {
+		if (success.length && date - success[0]['created_at'] > 1000) {
 			ThrottleCalls.remove({}, function(removed) {
 				if (error) return console.error(error);
 				getMatchList(date, req, res);
@@ -76,7 +77,7 @@ function getData(req, res) {
       matchDataArray = [],
       date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 20000) {
+		if (success.length && date - success[0]['created_at'] > 1000) {
 			ThrottleCalls.remove({}, function(error, removed) {
 				if (error) return console.error(error);
 				ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
@@ -115,6 +116,7 @@ function usersInfo(date, req, res, next) {
 function getMatchList(date, req, res, next) {
 	request(version, (error, results) => {
 		results = JSON.parse(results.body);
+
 		ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 			var count = 0, matchHistory = [];
 			var country = req.body.region.region.toLowerCase();
@@ -220,6 +222,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
 		matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + good.key + '.png';
 		count++;
 		if (count === matchHistory.length) {
+
 			matchHistory = matchHistory.filter(function(summonersRift) {
 				return summonersRift.length > 2;
 			});
