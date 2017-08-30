@@ -1,5 +1,6 @@
 var request = require('request');
 var ThrottleCalls = require('./throttleCalls.js');
+var StaticData = require('./staticData.js');
 var summonerUrl = ".api.riotgames.com/lol/summoner/v3/summoners/by-name/";
 var matchHistoryList = ".api.riotgames.com/lol/match/v3/matchlists/by-account/";
 var champImageUrl = ".api.riotgames.com/lol/static-data/v3/champions/";
@@ -188,28 +189,43 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 	      }  
 	      // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
 	      var stepScroll = 300 / gameTimeline.length;
-	      // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
-	      info.participants.forEach(function(i) {
-	        var pId = i.participantId;
-	        var cId = i.championId;
-	        var playerRole = i.timeline.role;
-	        var playerLane = i.timeline.lane;
-	        // PARTICIPANT-ID AND CHAMPION-ID
-	        idOfPlayer.push([pId, cId, playerRole, playerLane]);
-	        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-	        request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, function(error, champData) {
-	        	champData = JSON.parse(champData.body);
-	        	if (error) return console.error(error);
-	          var stuffs = champData.key;
-	          count++;
-	          imgOfChamp[cId] = champData.key;
-	          positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-	          if (count === 9) {
-	          	matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
-	          	res.status(200).send(matchDataArray);
-	          }
-	        });
-	      });
+
+        // going to add this call to db to "cache"
+        StaticData.find(function(err, staticInfo) {
+          if (error) return console.error(err);
+          if (staticInfo) {
+            
+          }
+
+
+          request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
+
+            // number of participants for a game:
+            // async, but parallel
+    	      info.participants.forEach(function(i) {
+    	        var pId = i.participantId;
+    	        var cId = i.championId;
+    	        var playerRole = i.timeline.role;
+    	        var playerLane = i.timeline.lane;
+    	        // PARTICIPANT-ID AND CHAMPION-ID
+    	        idOfPlayer.push([pId, cId, playerRole, playerLane]);
+    	        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
+              console.log("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, "test here")
+    	        request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, function(error, champData) {
+    	        	champData = JSON.parse(champData.body);
+    	        	if (error) return console.error(error);
+    	          var stuffs = champData.key;
+    	          count++;
+    	          imgOfChamp[cId] = champData.key;
+    	          positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
+    	          if (count === 9) {
+    	          	matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
+    	          	res.status(200).send(matchDataArray);
+    	          }
+    	        });
+    	      });
+          });
+        });
 	    });
     });
   });
@@ -217,7 +233,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
 	if (count >= matchHistory.length) return;
-  console.log("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff1, 'championURL')
+  // console.log("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff1, 'championURL')
 	request("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff1, function(error, good) {
 		good = JSON.parse(good.body);
     console.log(good)
