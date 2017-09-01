@@ -299,16 +299,23 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   var date = Date.now();
+                // console.log('ho')
 	if (count >= matchHistory.length) return;
   StaticData.find().exec(function(error, staticInfo) {
+    // console.log('test')
     if (error) return console.error(error);
-    if (!staticInfo || (date - staticInfo.created_at) >= 604800000 ) {
+    console.log(staticInfo, 'infohere')
+    if (staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
+      // console.log('too hot')
       StaticData.remove({}, function(error, removed) {
+        // console.log('more logs')
         if (error) return console.error(error);
+        // console.log('url here', "https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1)
         request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
-          StaticData.create({ 'created_at': { $lt: date }, 'static': JSON.parse(inform.body) }, function(err, successful) {
-            
-            var allChamps = inform.data;
+          var allChamps = JSON.parse(inform.body).data;
+          console.log(allChamps)
+          StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
+            console.log(successful, 'you are successful')
             // info.participants.forEach(function(i) {
               // var pId = i.participantId;
               // var cId = i.championId;
@@ -319,7 +326,6 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
               // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
               // console.log("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, "test here")
               // request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, function(error, champData) {
-                console.log(allChamps)
               for (var getId in allChamps) {
 
                 if (allChamps[getId].id ===  matchHistory[count][1]) {
@@ -346,9 +352,11 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
         });
       });
     }
+    // works
     else {
-      var allChamps = staticInfo.data;
+      var allChamps = staticInfo[0].static;
       for (var getId in allChamps) {
+        matchHistory = matchHistory.filter(el => el.length > 0);
         if (allChamps[getId].id ===  matchHistory[count][1]) {
           matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
           count++;
