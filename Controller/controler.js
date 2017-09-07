@@ -204,28 +204,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
                 var parsedStaticData = JSON.parse(inform.body);
                 StaticData.create({ 'created_at': { $lt: date }, 'static': parsedStaticData }, function(err, successful) {
                   var allChamps = parsedStaticData.data;
-                  info.participants.forEach(function(i) {
-                    var pId = i.participantId;
-                    var cId = i.championId;
-                    var playerRole = i.timeline.role;
-                    var playerLane = i.timeline.lane;
-
-                    // participant-id and chamption-id
-                    idOfPlayer.push([pId, cId, playerRole, playerLane]);
-
-                    // getting champion numerical key to grab image
-                    for (var getId in allChamps) {
-                      if (allChamps[getId].id === cId) {
-                        count++;
-                        imgOfChamp[cId] = allChamps[getId].key;
-                        positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-                        if (count === 9) {
-                          matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
-                          res.status(200).send(matchDataArray);
-                        }
-                      }
-                    }
-                  });
+                  championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res)
                 });
               });
             });
@@ -235,28 +214,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
           // code is almost identical to above
           else {
             var allChamps = staticInfo[0].static;
-            info.participants.forEach(function(i) {
-              var pId = i.participantId;
-              var cId = i.championId;
-              var playerRole = i.timeline.role;
-              var playerLane = i.timeline.lane;
-
-              // PARTICIPANT-ID AND CHAMPION-ID
-              idOfPlayer.push([pId, cId, playerRole, playerLane]);
-
-              // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-              for (var getId in allChamps) {
-                if (allChamps[getId].id === cId) {
-                  count++;
-                  imgOfChamp[cId] = allChamps[getId].key;
-                  positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-                  if (count === 9) {
-                    matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
-                    res.status(200).send(matchDataArray);
-                  }
-                }
-              }
-            });
+            championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res);
           }
         });
       });
@@ -311,6 +269,31 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
           else {
             getHistoryWithImages(req, res, country, matchHistory, count, results);
           }       
+        }
+      }
+    }
+  });
+}
+
+function championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res) {
+  info.participants.forEach(function(i) {
+    var pId = i.participantId;
+    var cId = i.championId;
+    var playerRole = i.timeline.role;
+    var playerLane = i.timeline.lane;
+
+    // participant-id and champion-id
+    idOfPlayer.push([pId, cId, playerRole, playerLane]);
+
+    // getting champion numerical key to grab image
+    for (var getId in allChamps) {
+      if (allChamps[getId].id === cId) {
+        count++;
+        imgOfChamp[cId] = allChamps[getId].key;
+        positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
+        if (count === 9) {
+          matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
+          res.status(200).send(matchDataArray);
         }
       }
     }
