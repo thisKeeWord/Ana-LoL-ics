@@ -209,9 +209,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
               });
             });
           }
-
-          // will refactor else statement since 
-          // code is almost identical to above
+          
           else {
             var allChamps = staticInfo[0].static;
             championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res);
