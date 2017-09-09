@@ -1,5 +1,6 @@
 var request = require('request');
 var ThrottleCalls = require('./throttleCalls.js');
+var StaticData = require('./staticData.js');
 var summonerUrl = ".api.riotgames.com/lol/summoner/v3/summoners/by-name/";
 var matchHistoryList = ".api.riotgames.com/lol/match/v3/matchlists/by-account/";
 var champImageUrl = ".api.riotgames.com/lol/static-data/v3/champions/";
@@ -28,14 +29,14 @@ function userInformation(req, res, next) {
 	}
 	else {
 		ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-			if (success.length && date - success[0]['created_at'] > 1000) {
+			if (success.length && date - success[0]['created_at'] > 10000) {
 
 				ThrottleCalls.remove({}, function(error, removed) {
 					if (error) return console.error(error);
 					usersInfo(date, req, res, next);
 				});
 			}
-			else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
+			else if (!success.length || (success.length && success.length <= 500 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
 				usersInfo(date, req, res, next);
 			}
 			else {
@@ -49,14 +50,14 @@ function userInformation(req, res, next) {
 function matchList(req, res) {
 	var date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 1000) {
+		if (success.length && date - success[0]['created_at'] > 10000) {
 			ThrottleCalls.remove({}, function(removed) {
 				if (error) return console.error(error);
 				getMatchList(date, req, res);
 			});
 		}
-		else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
-			getMatchList(date, req, res)
+		else if (!success.length || (success.length && success.length <= 500 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
+			getMatchList(date, req, res);
 		}
 		else {
 			return res.render('./../index.html', { error: 'too many requests, try again in a few' });
@@ -65,7 +66,7 @@ function matchList(req, res) {
 }
 
 function getData(req, res) {
-			keepTrackOf429 = 0,
+  var keepTrackOf429 = 0,
       count = -1,
       total = 0,
       compareVersions = 0,
@@ -77,7 +78,7 @@ function getData(req, res) {
       matchDataArray = [],
       date = Date.now();
 	ThrottleCalls.find({ 'created_at': { $lt: date } }).exec(function(error, success) {
-		if (success.length && date - success[0]['created_at'] > 1000) {
+		if (success.length && date - success[0]['created_at'] > 10000) {
 			ThrottleCalls.remove({}, function(error, removed) {
 				if (error) return console.error(error);
 				ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
@@ -85,7 +86,7 @@ function getData(req, res) {
 				});
 			});
 		}
-		else if (!success.length || (success.length && success.length <= 20 && date - success[0]['created_at'] <= 1000 && date - success[0]['created_at'] > 0)) {
+		else if (!success.length || (success.length && success.length <= 500 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
 			ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
 				getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
 			});
@@ -162,6 +163,7 @@ function getGameData(keepTrackOf429, count, total, compareVersions, patchDesired
 
 // getting proper patch version to compare with data version
 function comparePatchVersions(info, count, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
+  var date = Date.now();
 	request(version, function(error, checkingVersion) {
     var versionChecks = JSON.parse(checkingVersion.body);
     var splitCheck, gamePatch, patchVersion = 0;
@@ -178,6 +180,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
     request("http://ddragon.leagueoflegends.com/cdn/" + patchDesired + "/data/en_US/item.json", function(err, data) {
       if (error) return console.error(error);
       var resData = JSON.parse(data.body).data;
+
       // getting timeline information by frame from another endpoint
       // since the first timeline request doesn't have the full info
       // by frame for the game
@@ -185,53 +188,114 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
       	var timelineDataFrames = JSON.parse(timelineData.body).frames;
 	      for (var j = 0; j < timelineDataFrames.length; j++) {
 	        gameTimeline.push([timelineDataFrames[j]]);
-	      }  
-	      // HAVE TO USE NUMBER FOR NUMERATOR SINCE SCROLL NOT UP YET
+	      }
+
+	      // have to use number for numerator since
+        // scroll not up yet
 	      var stepScroll = 300 / gameTimeline.length;
-	      // NUMBER OF PARTICIPANTS FOR A GAME: ASYNC, BUT PARALLEL
-	      info.participants.forEach(function(i) {
-	        var pId = i.participantId;
-	        var cId = i.championId;
-	        var playerRole = i.timeline.role;
-	        var playerLane = i.timeline.lane;
-	        // PARTICIPANT-ID AND CHAMPION-ID
-	        idOfPlayer.push([pId, cId, playerRole, playerLane]);
-	        // GETTING CHAMPION NUMERICAL KEY TO GRAB IMAGE
-	        request("https://" + regionName + champImageUrl + cId + '?' + process.env.stuff1, function(error, champData) {
-	        	champData = JSON.parse(champData.body);
-	        	if (error) return console.error(error);
-	          var stuffs = champData.key;
-	          count++;
-	          imgOfChamp[cId] = champData.key;
-	          positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
-	          if (count === 9) {
-	          	matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
-	          	res.status(200).send(matchDataArray);
-	          }
-	        });
-	      });
-	    });
+
+        // going to add this call to db to "cache"
+        StaticData.find().exec(function(error, staticInfo) {
+          if (error) return console.error(error);
+          if (!staticInfo || (date - staticInfo.created_at) >= 604800000 ) {
+            StaticData.remove({}, function(error, removed) {
+              if (error) return console.error(error);
+              request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
+                var parsedStaticData = JSON.parse(inform.body);
+                StaticData.create({ 'created_at': { $lt: date }, 'static': parsedStaticData }, function(err, successful) {
+                  var allChamps = parsedStaticData.data;
+                  championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res)
+                });
+              });
+            });
+          }
+          
+          else {
+            var allChamps = staticInfo[0].static;
+            championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res);
+          }
+        });
+      });
     });
   });
 }
 
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
+  var date = Date.now();
 	if (count >= matchHistory.length) return;
-	request("https://" + country + champImageUrl + matchHistory[count][1] + "?" + process.env.stuff1, function(error, good) {
-		good = JSON.parse(good.body);
-		matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + good.key + '.png';
-		count++;
-		if (count === matchHistory.length) {
+  StaticData.find().exec(function(error, staticInfo) {
+    if (error) return console.error(error);
+    if (staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
+      StaticData.remove({}, function(error, removed) {
+        if (error) return console.error(error);
+        request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
+          var allChamps = JSON.parse(inform.body).data;
+          StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
+            for (var getId in allChamps) {
+              if (allChamps[getId].id ===  matchHistory[count][1]) {
+                matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
+                count++;
+                if (count === matchHistory.length) {
+                  matchHistory = matchHistory.filter(function(summonersRift) {
+                    return summonersRift.length > 2;
+                  });
+                  res.status(200).send([ req.summonerId, matchHistory ]);
+                }
+                else {
+                  getHistoryWithImages(req, res, country, matchHistory, count, results);
+                }       
+              }
+            }
+          });
+        });
+      });
+    }
 
-			matchHistory = matchHistory.filter(function(summonersRift) {
-				return summonersRift.length > 2;
-			});
-			res.status(200).send([ req.summonerId, matchHistory ]);
-		}
-		else {
-			getHistoryWithImages(req, res, country, matchHistory, count, results);
-		}				
-	});
+    else {
+      var allChamps = staticInfo[0].static;
+      for (var getId in allChamps) {
+        matchHistory = matchHistory.filter(el => el.length > 0);
+        if (matchHistory[count] && allChamps[getId].id ===  matchHistory[count][1]) {
+          matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
+          count++;
+          if (count === matchHistory.length) {
+            matchHistory = matchHistory.filter(function(summonersRift) {
+              return summonersRift.length > 2;
+            });
+            res.status(200).send([ req.summonerId, matchHistory ]);
+          }
+          else {
+            getHistoryWithImages(req, res, country, matchHistory, count, results);
+          }       
+        }
+      }
+    }
+  });
+}
+
+function championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res) {
+  info.participants.forEach(function(i) {
+    var pId = i.participantId;
+    var cId = i.championId;
+    var playerRole = i.timeline.role;
+    var playerLane = i.timeline.lane;
+
+    // participant-id and champion-id
+    idOfPlayer.push([pId, cId, playerRole, playerLane]);
+
+    // getting champion numerical key to grab image
+    for (var getId in allChamps) {
+      if (allChamps[getId].id === cId) {
+        count++;
+        imgOfChamp[cId] = allChamps[getId].key;
+        positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
+        if (count === 9) {
+          matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
+          res.status(200).send(matchDataArray);
+        }
+      }
+    }
+  });
 }
 
 module.exports = controler;
