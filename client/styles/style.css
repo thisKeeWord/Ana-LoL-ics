@@ -253,7 +253,7 @@ input.username {
 #scrollAndSelect1 {
   top: 600;
   text-align: center;
-  width: 1250px;
+  width: 1220px;
   min-width: 1160px;
   position: absolute;
   left: 0;
@@ -616,7 +616,7 @@ span.hoverHere {
   position: fixed;
   font-size: 30px;
   width: 100%;
-  margin-top: 250px;
+  margin-top: 400px;
   color: #cccccc;
   z-index: 9000;
   background-color: #404040;
