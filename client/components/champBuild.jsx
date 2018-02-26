@@ -131,8 +131,8 @@ class ChampBuild extends React.Component {
                 for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
                   if (itemStore[countControlWards] === 2055) {
                     controlWards++;
-                    if (controlWards !== itemStore.indexOf(2055)) {
-                      delete itemStore[controlWards];
+                    if (countControlWards !== itemStore.indexOf(2055)) {
+                      delete itemStore[countControlWards];
                     }
                   }
                 }
@@ -263,8 +263,8 @@ class ChampBuild extends React.Component {
                 for (let countControlWards = itemStore.lastIndexOf(2055); countControlWards >= itemStore.indexOf(2055); countControlWards--) {
                   if (itemStore[countControlWards] === 2055) {
                     controlWards++;
-                    if (controlWards !== itemStore.indexOf(2055)) {
-                      delete itemStore[controlWards];
+                    if (countControlWards !== itemStore.indexOf(2055)) {
+                      delete itemStore[countControlWards];
                     }
                   }
                 }
