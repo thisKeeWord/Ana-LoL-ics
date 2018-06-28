@@ -20,11 +20,11 @@ var controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
 	regionName = req.body.region.region.toLowerCase();
-	var date = Date.now();
-	if (isNaN(req.body.username.userName) === false) {
+  var date = Date.now();
+	if (!isNaN(req.body.username.userName)) {
 		req.summonerId = req.body.username.userName;
 		req.summoner = req.body.summonerName.summoner;
-		req.region = req.body.region.region.toLowerCase();
+    req.region = req.body.region.region.toLowerCase();
 		return next();
 	}
 	else {
@@ -40,6 +40,7 @@ function userInformation(req, res, next) {
 				usersInfo(date, req, res, next);
 			}
 			else {
+        console.log('wait a few minutes before submitting your username')
 				return res.render('./../index.html', { error: 'too many requests, try again in a few' });
 			}
 		});
@@ -100,6 +101,7 @@ function getData(req, res) {
 function usersInfo(date, req, res, next) {
 	ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.username.userName }, function(error, throttling) {
 	  request("https://" + req.body.region.region.toLowerCase() + summonerUrl + encodeURI(req.body.username.userName) + "?" + process.env.stuff1, (error, resp) => {
+
 			if (error) return console.error("we cannot find the summoner or " + error);
 			if (resp.statusCode === 200) {
 				var userId = JSON.parse(resp.body);
@@ -116,27 +118,27 @@ function usersInfo(date, req, res, next) {
 // can split nested requests
 function getMatchList(date, req, res, next) {
 	request(version, (error, results) => {
-		results = JSON.parse(results.body);
+    results = JSON.parse(results.body);
 
 		ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.summonerId }, function(error, throttling) {
 			var count = 0, matchHistory = [];
-			var country = req.body.region.region.toLowerCase();
-			request("https://" + country + matchHistoryList + req.summonerId + "/recent?" + process.env.stuff1, (error, response) => {
+      var country = req.body.region.region.toLowerCase();
+			request("https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1, (error, response) => {
 				if (error) return console.error(error, "here");
 				if (response.statusCode === 200) {
-					var gamesList = JSON.parse(response.body);
-					for (var i = 0; i < gamesList.matches.length; i++) {
-						var perGameSpec = [], queueType = gamesList.matches[i]["queue"];
+					var gamesList = JSON.parse(response.body).matches.slice(0,30);
+					for (var i = 0; i < gamesList.length; i++) {
+						var perGameSpec = [], queueType = gamesList[i]["queue"];
 						if (queueType === 420 || queueType === 2 || queueType === 14 || queueType === 4 || queueType === 42 || queueType === 400 || queueType === 440) {
-							perGameSpec.push(gamesList.matches[i]["gameId"]);
-							perGameSpec.push(gamesList.matches[i]["champion"]);
-							var needDate = new Date(gamesList.matches[i]["timestamp"]).toString().replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/,'');
+							perGameSpec.push(gamesList[i]["gameId"]);
+							perGameSpec.push(gamesList[i]["champion"]);
+							var needDate = new Date(gamesList[i]["timestamp"]).toString().replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/,'');
 							perGameSpec.push(needDate);
-							perGameSpec.push(gamesList.matches[i]["lane"]);
-            	perGameSpec.push(gamesList.matches[i]["platformId"]);
-            	perGameSpec.push(gamesList.matches[i]["queue"]);
-            	perGameSpec.push(gamesList.matches[i]["role"]);
-	            perGameSpec.push(gamesList.matches[i]["season"]);
+							perGameSpec.push(gamesList[i]["lane"]);
+            	perGameSpec.push(gamesList[i]["platformId"]);
+            	perGameSpec.push(gamesList[i]["queue"]);
+            	perGameSpec.push(gamesList[i]["role"]);
+	            perGameSpec.push(gamesList[i]["season"]);
 						}
 						matchHistory.push(perGameSpec);
 					}
@@ -222,6 +224,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
 
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   var date = Date.now();
+  console.log(count, matchHistory.length)
 	if (count >= matchHistory.length) return;
   StaticData.find().exec(function(error, staticInfo) {
     if (error) return console.error(error);
@@ -235,10 +238,12 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
               if (allChamps[getId].id ===  matchHistory[count][1]) {
                 matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
                 count++;
+                console.log(count, matchHistory.length)
                 if (count === matchHistory.length) {
                   matchHistory = matchHistory.filter(function(summonersRift) {
                     return summonersRift.length > 2;
                   });
+                  // console.log(req.summonerId, 'reqId')
                   res.status(200).send([ req.summonerId, matchHistory ]);
                 }
                 else {
