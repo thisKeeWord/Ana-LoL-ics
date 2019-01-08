@@ -15,10 +15,10 @@ function scripts() {
   var bundler = browserify({
     entries: ['./client/components/app.jsx'],
     transform: babelify.configure({ presets: ['react', 'es2015'] }),
-    debug: false,
+    debug: true,
     cache: {},
     packageCache: {},
-    fullPaths: false
+    fullPaths: true
   });
   var watcher = watchify(bundler);
 
@@ -31,8 +31,8 @@ function scripts() {
         console.log('Error with compiling components', err.message);
       })
       .pipe(source('bundle.js'))
-      .pipe(buffer())
-      .pipe(uglify())
+      // .pipe(buffer())
+      // .pipe(uglify())
       .pipe(gulp.dest('./client/build/'));
       console.log('Updated!', (Date.now() - updateStart) + 'ms');
     })
@@ -42,8 +42,8 @@ function scripts() {
       console.log('Error with compiling components', err.message);
     })
     .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(uglify())
+    // .pipe(buffer())
+    // .pipe(uglify())
     .pipe(gulp.dest('./client/build/'));
 }
 
