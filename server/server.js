@@ -1,4 +1,4 @@
-var dotenv = require('dotenv').config({ path: 'config.env' });
+// var dotenv = require('dotenv').config({ path: 'config.env' });
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -30,9 +30,6 @@ app.get('/riot.txt', function(req, res) {
 app.post('/', controller.userInformation, controller.matchList);
 
 app.post('/getGameData', controller.getData);
-
-// app.post('/season-stats', controller.userInformation, seasonStats.results);
-
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
