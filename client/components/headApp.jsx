@@ -13,7 +13,7 @@ import GameMap from './gameMap.jsx';
 import WhosGames from './whosGames.jsx';
 import GameDescription from './gameDescription.jsx';
 import MatchList from './getMatchList.jsx';
-// import UserInformationForm from './userInfoForm.jsx';
+import UserInformationForm from './userInfoForm.jsx';
 
 
 class HeadApp extends React.Component {
@@ -76,7 +76,6 @@ class HeadApp extends React.Component {
   handleSubmit(e, elem) {
     e.preventDefault();    
     const that = this;
-    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
     const cleanName = elem.toLowerCase().replace(/ /g, '')
     const newCleanName = {
       url: {

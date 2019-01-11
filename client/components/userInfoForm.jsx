@@ -3,7 +3,7 @@ import React from 'react';
 class UserInformationForm extends React.Component {
   handleSubmitInfo(e) {
     e.preventDefault();
-    this.props.userInfoSubmit(e);
+    this.props.userInfoSubmit(ReactDOM.findDOMNode(this.refs.userName).value);
   }
 
   render() {
