@@ -1,19 +1,27 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 
 class UserInformationForm extends React.Component {
   handleSubmitInfo(e) {
     e.preventDefault();
-    this.props.userInfoSubmit(ReactDOM.findDOMNode(this.refs.userName).value);
+    this.props.submitUserForm(e, ReactDOM.findDOMNode(this.refs.userName).value);
+  }
+
+  updateRegion(elem) {
+    elem.preventDefault();
+    this.props.updateUserRegion(elem);
   }
 
   render() {
+    const that = this;
     return (
-      <div class="userInfoForm">
+      <div className="userInfoForm">
         <form id="getSummonersGames" onSubmit={this.handleSubmitInfo.bind(this)}>
           <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
         </form>
 
-        <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
+        <select value={that.props.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.props.gamesToSee}>
           <option value="BR1">Brazil</option>
           <option value="EUN1">Europe Nordic & East</option>
           <option value="EUW1">Europe West</option>

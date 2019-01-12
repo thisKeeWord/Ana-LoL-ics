@@ -12,7 +12,6 @@ import DropDownMenu from './menu.jsx';
 import GameMap from './gameMap.jsx';
 import WhosGames from './whosGames.jsx';
 import GameDescription from './gameDescription.jsx';
-import MatchList from './getMatchList.jsx';
 import UserInformationForm from './userInfoForm.jsx';
 
 
@@ -74,6 +73,7 @@ class HeadApp extends React.Component {
 
   // HANDLE IGN SUBMIT FORM
   handleSubmit(e, elem) {
+    console.log(elem)
     e.preventDefault();    
     const that = this;
     const cleanName = elem.toLowerCase().replace(/ /g, '')
@@ -646,9 +646,9 @@ class HeadApp extends React.Component {
     this.state.gameSummary = [];
   }
 
-  updateRegion(e) {
-    e.preventDefault();
-    this.setState({ region: e.target.value });
+  updateRegion(el) {
+    el.preventDefault();
+    this.setState({ region: el.target.value });
   }
 
   render() {
@@ -666,8 +666,8 @@ class HeadApp extends React.Component {
             <p id="quickSumm">Your one stop shop to finding more than a summary but less than a replay of a game!<br />
             To get started, enter an ign (in game name) in the search bar.</p>
 
-            <MatchList submitUserForm={this.handleSubmit.bind(this)} region={this.state.region} updateUserRegion={this.updateRegion.bind(this)} />
-            
+            <UserInformationForm submitUserForm={this.handleSubmit.bind(this)} region={this.state.region} updateUserRegion={this.updateRegion.bind(this)} />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
             <br /><br /><br /><br />
 
             <p id="legalStuff">(Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views
@@ -691,24 +691,7 @@ class HeadApp extends React.Component {
             </ul>
           </div>
 
-          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
-          </form>
-
-          <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id={"regions" + this.state.gamesToSee}>
-            <option value="BR1">Brazil</option>
-            <option value="EUN1">Europe Nordic & East</option>
-            <option value="EUW1">Europe West</option>
-            <option value="JP1">Japan</option>
-            <option value="KR">Korea</option>
-            <option value="LA1">Latin America North</option>
-            <option value="LA2">Latin America South</option>
-            <option value="NA1">North America</option>
-            <option value="OC1">Oceania</option>
-            <option value="RU">Russia</option>
-            <option value="TR1">Turkey</option>
-          </select>
-
+          <UserInformationForm userFormSubmit={this.handleSubmit.bind(this)} region={this.state.region} updateRegion={this.updateRegion.bind(this)} gamesToSee={this.state.gamesToSee} />
           <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} region={this.state.region} />
           <GameDescription gameSumm={this.state.gameSummary} gamesToSee={this.state.gamesToSee} />
@@ -734,24 +717,8 @@ class HeadApp extends React.Component {
               <li className="goAbout"><Link to="/about">About</Link></li>
             </ul>
           </div>
-          <form id="getSummonersGames" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" className="userName" ref="userName" placeholder="enter summoner name" required />
-          </form>
 
-          <select value={that.state.region} defaultValue='select one' onChange={that.updateRegion.bind(that)} id="regions1">
-            <option value="BR1">Brazil</option>
-            <option value="EUN1">Europe Nordic & East</option>
-            <option value="EUW1">Europe West</option>
-            <option value="JP1">Japan</option>
-            <option value="KR">Korea</option>
-            <option value="LA1">Latin America North</option>
-            <option value="LA2">Latin America South</option>
-            <option value="NA1">North America</option>
-            <option value="OC1">Oceania</option>
-            <option value="RU">Russia</option>
-            <option value="TR1">Turkey</option>
-          </select>
-
+          <UserInformationForm userInfoSubmit={this.handleSubmit.bind(this)} region={this.state.region} updateRegion={this.updateRegion.bind(this)} gamesToSee={this.state.gamesToSee} />
           <WhosGames summonersName={this.state.whosGames} /> 
           <GamesOnSR gamesToSee={this.state.gamesToSee} res={this.state.res} onClick={this.handleClick.bind(this)} numGamesSee={this.numGamesSee.bind(this)} />
         </div>
