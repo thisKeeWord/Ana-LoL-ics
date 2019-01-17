@@ -78,44 +78,33 @@ class HeadApp extends React.Component {
     const that = this;
     const cleanName = elem.toLowerCase().replace(/ /g, '')
     const newCleanName = {
-      url: {
-        yooRL: '/'
-      }
+      url: { yooRL: '/' },
+      summonerName: { summoner: cleanName },
+      region: { region: that.state.region },
+
     };
 
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       newCleanName.username = { userName: localStorage[cleanName] };
-      newCleanName.summonerName = { summoner: cleanName }; 
-      newCleanName.region = { region: that.state.region };
-      this.post(newCleanName).done(gotTheInfo => {
-        $('.loading').css('display', 'none');
-        that.setState({
-          res: gotTheInfo[1],
-          toggle: true,
-          whosGames: cleanName.toUpperCase(),
-          secondToggle: false
-        })
-      })
     }
-
-    // IF DATA ISN'T IN LOCAL STORAGE
-    if (localStorage && !localStorage[cleanName]) {
+    else {
       newCleanName.username = { userName: cleanName };
-      newCleanName.summonerName = { summoner: cleanName }; 
-      newCleanName.region = { region: that.state.region };
-      this.post(newCleanName).done(gotTheInfo => {
-        localStorage[cleanName] = gotTheInfo[0];
-        $('.loading').css('display', 'none');
-
-        that.setState({
-          res: gotTheInfo[1],
-          toggle: true,
-          whosGames: cleanName.toUpperCase(),
-          secondToggle: false
-        })
-      })
     }
+
+    this.post(newCleanName).done(gotTheInfo => {
+      // IF DATA ISN'T IN LOCAL STORAGE
+      if (localStorage && !localStorage[cleanName]) {
+        localStorage[cleanName] = gotTheInfo[0];
+      }
+      $('.loading').css('display', 'none');
+      that.setState({
+        res: gotTheInfo[1],
+        toggle: true,
+        whosGames: cleanName.toUpperCase(),
+        secondToggle: false
+      });
+    });
   }
 
   // HANDLE CLICK FOR MATCH SELECTION
