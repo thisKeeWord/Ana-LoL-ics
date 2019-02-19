@@ -1,11 +1,10 @@
 var request = require('request');
 var ThrottleCalls = require('./throttleCalls.js');
 var StaticData = require('./staticData.js');
-var summonerUrl = ".api.riotgames.com/lol/summoner/v3/summoners/by-name/";
-var matchHistoryList = ".api.riotgames.com/lol/match/v3/matchlists/by-account/";
-var champImageUrl = ".api.riotgames.com/lol/static-data/v3/champions/";
-var matchTimelineUrl = ".api.riotgames.com/lol/match/v3/timelines/by-match/";
-var matchVersionUrl = ".api.riotgames.com/lol/match/v3/matches/";
+var summonerUrl = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/";
+var matchHistoryList = ".api.riotgames.com/lol/match/v4/matchlists/by-account/";
+var matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
+var matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
 var version = "https://ddragon.leagueoflegends.com/api/versions.json";
 var versionNumber;
 var regionName;
@@ -101,9 +100,9 @@ function getData(req, res) {
 function usersInfo(date, req, res, next) {
 	ThrottleCalls.create({ 'created_at': date, 'whatToSave': req.body.username.userName }, function(error, throttling) {
 	  request("https://" + req.body.region.region.toLowerCase() + summonerUrl + encodeURI(req.body.username.userName) + "?" + process.env.stuff1, (error, resp) => {
-
-			if (error) return console.error("we cannot find the summoner or " + error);
+      if (error) return console.error("we cannot find the summoner or " + error);
 			if (resp.statusCode === 200) {
+        console.log('fid the issue')
 				var userId = JSON.parse(resp.body);
 				var result = userId["accountId"];
 				req.summonerId = result;
@@ -202,7 +201,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
           if (!staticInfo || (date - staticInfo.created_at) >= 604800000 ) {
             StaticData.remove({}, function(error, removed) {
               if (error) return console.error(error);
-              request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
+              request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
                 var parsedStaticData = JSON.parse(inform.body);
                 StaticData.create({ 'created_at': { $lt: date }, 'static': parsedStaticData }, function(err, successful) {
                   var allChamps = parsedStaticData.data;
@@ -230,15 +229,17 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
     if (error) return console.error(error);
     if (staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
       StaticData.remove({}, function(error, removed) {
+        console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
-        request("https://" + regionName + champImageUrl + "?locale=en_US&dataById=false&" + process.env.stuff1, function(errors, inform) {
+        request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
           var allChamps = JSON.parse(inform.body).data;
+          console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
             for (var getId in allChamps) {
+              console.log(getId)
               if (allChamps[getId].id ===  matchHistory[count][1]) {
                 matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
                 count++;
-                console.log(count, matchHistory.length)
                 if (count === matchHistory.length) {
                   matchHistory = matchHistory.filter(function(summonersRift) {
                     return summonersRift.length > 2;

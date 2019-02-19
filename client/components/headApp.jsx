@@ -110,14 +110,14 @@ class HeadApp extends React.Component {
   // HANDLE CLICK FOR MATCH SELECTION
   handleClick(e) {
     e.preventDefault();
+    const that = this;
+
     this.state.clicksForGame.push(e.target.id);
     if (this.state.gameSummary.length >= this.state.gamesToSee) {
       this.state.gameSummary = [];
+      console.log('what the fk is this')
     }
     this.state.gameSummary.push([e.target.id, e.target.name]);
-    this.state.gameSummaryDelete = this.state.gameSummary;
-
-    const that = this;
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1]).done(gotGameOne => {
