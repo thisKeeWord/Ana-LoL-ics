@@ -7,6 +7,7 @@ var matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
 var matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
 var version = "https://ddragon.leagueoflegends.com/api/versions.json";
 var versionNumber;
+var patchDesired = 0;
 var regionName;
 
 
@@ -70,7 +71,7 @@ function getData(req, res) {
       count = -1,
       total = 0,
       compareVersions = 0,
-      patchDesired = 0,
+      // patchDesired = 0,
       gameTimeline = [],
       idOfPlayer = [],
       imgOfChamp = [],
@@ -141,7 +142,7 @@ function getMatchList(date, req, res, next) {
 						}
 						matchHistory.push(perGameSpec);
 					}
-					getHistoryWithImages(req, res, country, matchHistory, count, results);
+					getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
 				}
 			});
 		});
@@ -178,14 +179,14 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
       }
       patchVersion++;
     }
-    request("http://ddragon.leagueoflegends.com/cdn/" + patchDesired + "/data/en_US/item.json", function(err, data) {
+    request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(err, data) {
       if (error) return console.error(error);
       var resData = JSON.parse(data.body).data;
 
       // getting timeline information by frame from another endpoint
       // since the first timeline request doesn't have the full info
       // by frame for the game
-      request("https://" + regionName + matchTimelineUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1, function(er, timelineData) {
+      request(`https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`, function(er, timelineData) {
       	var timelineDataFrames = JSON.parse(timelineData.body).frames;
 	      for (var j = 0; j < timelineDataFrames.length; j++) {
 	        gameTimeline.push([timelineDataFrames[j]]);
@@ -221,7 +222,7 @@ function comparePatchVersions(info, count, compareVersions, patchDesired, gameTi
   });
 }
 
-function getHistoryWithImages(req, res, country, matchHistory, count, results) {
+function getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired) {
   var date = Date.now();
   console.log(count, matchHistory.length)
 	if (count >= matchHistory.length) return;
@@ -231,14 +232,16 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
       StaticData.remove({}, function(error, removed) {
         console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
+        console.log(patchDesired)
         request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
-          var allChamps = JSON.parse(inform.body).data;
+          console.log(inform.body, 'inform')
+          var allChamps = JSON.parse(inform).body.data;
           console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
             for (var getId in allChamps) {
               console.log(getId)
               if (allChamps[getId].id ===  matchHistory[count][1]) {
-                matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
+                matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${allChamps[getId].key}.png`;
                 count++;
                 if (count === matchHistory.length) {
                   matchHistory = matchHistory.filter(function(summonersRift) {
@@ -248,7 +251,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
                   res.status(200).send([ req.summonerId, matchHistory ]);
                 }
                 else {
-                  getHistoryWithImages(req, res, country, matchHistory, count, results);
+                  getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
                 }       
               }
             }
@@ -262,7 +265,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
       for (var getId in allChamps) {
         matchHistory = matchHistory.filter(el => el.length > 0);
         if (matchHistory[count] && allChamps[getId].id ===  matchHistory[count][1]) {
-          matchHistory[count][1] = 'http://ddragon.leagueoflegends.com/cdn/' + results[0] + '/img/champion/' + allChamps[getId].key + '.png';
+          matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${allChamps[getId].key}.png`;
           count++;
           if (count === matchHistory.length) {
             matchHistory = matchHistory.filter(function(summonersRift) {
@@ -271,7 +274,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
             res.status(200).send([ req.summonerId, matchHistory ]);
           }
           else {
-            getHistoryWithImages(req, res, country, matchHistory, count, results);
+            getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
           }       
         }
       }
