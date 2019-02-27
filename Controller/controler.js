@@ -6,8 +6,6 @@ var matchHistoryList = ".api.riotgames.com/lol/match/v4/matchlists/by-account/";
 var matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
 var matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
 var version = "https://ddragon.leagueoflegends.com/api/versions.json";
-var versionNumber;
-var patchDesired = 0;
 var regionName;
 
 
@@ -83,13 +81,13 @@ function getData(req, res) {
 			ThrottleCalls.remove({}, function(error, removed) {
 				if (error) return console.error(error);
 				ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
-					getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
+					getGameData(keepTrackOf429, count, total, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
 				});
 			});
 		}
 		else if (!success.length || (success.length && success.length <= 500 && date - success[0]['created_at'] <= 10000 && date - success[0]['created_at'] > 0)) {
 			ThrottleCalls.create({ 'created_at': date, 'whatToSave': Object.keys(req.body)[0] }, function(error, throttling) {
-				getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
+				getGameData(keepTrackOf429, count, total, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
 			});
 		}
 		else {
@@ -142,88 +140,101 @@ function getMatchList(date, req, res, next) {
 						}
 						matchHistory.push(perGameSpec);
 					}
-					getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
+					getHistoryWithImages(req, res, country, matchHistory, count, results);
 				}
 			});
 		});
 	});
 }
 
-function getGameData(keepTrackOf429, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
+function getGameData(keepTrackOf429, count, total, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
   request("https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1, function(error, newData) {
     if (error) return console.error(error);
     if (newData.statusCode === 429 && (!newData.headers["X-Rate-Limit-Type"] || newData.headers["X-Rate-Limit-Type"] === "service") && keepTrackOf429 < 15) {
-    	setTimeout(getGameData(keepTrackOf429 + 1, count, total, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res), 10);
+    	setTimeout(getGameData(keepTrackOf429 + 1, count, total, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res), 10);
     }
     // getting correct patch version to compare with data version
     else {
 	    var info = JSON.parse(newData.body);
-	    comparePatchVersions(info, count, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
+	    comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res);
 	  }
   });
 }
 
-// getting proper patch version to compare with data version
-function comparePatchVersions(info, count, compareVersions, patchDesired, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
-  var date = Date.now();
-	request(version, function(error, checkingVersion) {
+function getPatchVersion(info) {
+  console.log(info, 'test the info')
+  request(version, function(error, checkingVersion) {
     var versionChecks = JSON.parse(checkingVersion.body);
+    console.log(versionChecks[0], 'version Chekc')
     var splitCheck, gamePatch, patchVersion = 0;
     if (error) return console.error(error);
-    while(patchVersion < versionChecks.length) {
-      splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
-      gamePatch = info["gameVersion"].split('.').slice(0, 2);
-      if (splitCheck.join('') === gamePatch.join('')) {
-        patchDesired = versionChecks[patchVersion];
-        break;
+    if (info) {
+      while(patchVersion < versionChecks.length) {
+        splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
+        gamePatch = info["gameVersion"].split('.').slice(0, 2);
+        if (splitCheck.join('') === gamePatch.join('')) {
+          return versionChecks[patchVersion];
+        }
+        patchVersion++;
       }
-      patchVersion++;
     }
-    request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(err, data) {
-      if (error) return console.error(error);
-      var resData = JSON.parse(data.body).data;
+    else {
+      return versionChecks[0];
+    }
+  });
+}
 
-      // getting timeline information by frame from another endpoint
-      // since the first timeline request doesn't have the full info
-      // by frame for the game
-      request(`https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`, function(er, timelineData) {
-      	var timelineDataFrames = JSON.parse(timelineData.body).frames;
-	      for (var j = 0; j < timelineDataFrames.length; j++) {
-	        gameTimeline.push([timelineDataFrames[j]]);
-	      }
+// getting proper patch version to compare with data version
+function comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
+  var date = Date.now();
+  let patchDesired = getPatchVersion(info);
+  request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(err, data) {
+    if (error) return console.error(error);
+    var resData = JSON.parse(data.body).data;
 
-	      // have to use number for numerator since
-        // scroll not up yet
-	      var stepScroll = 300 / gameTimeline.length;
+    // getting timeline information by frame from another endpoint
+    // since the first timeline request doesn't have the full info
+    // by frame for the game
+    request(`https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`, function(er, timelineData) {
+      var timelineDataFrames = JSON.parse(timelineData.body).frames;
+      for (var j = 0; j < timelineDataFrames.length; j++) {
+        gameTimeline.push([timelineDataFrames[j]]);
+      }
 
-        // going to add this call to db to "cache"
-        StaticData.find().exec(function(error, staticInfo) {
-          if (error) return console.error(error);
-          if (!staticInfo || (date - staticInfo.created_at) >= 604800000 ) {
-            StaticData.remove({}, function(error, removed) {
-              if (error) return console.error(error);
-              request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
-                var parsedStaticData = JSON.parse(inform.body);
-                StaticData.create({ 'created_at': { $lt: date }, 'static': parsedStaticData }, function(err, successful) {
-                  var allChamps = parsedStaticData.data;
-                  championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res)
-                });
+      // have to use number for numerator since
+      // scroll not up yet
+      var stepScroll = 300 / gameTimeline.length;
+
+      // going to add this call to db to "cache"
+      StaticData.find().exec(function(error, staticInfo) {
+        if (error) return console.error(error);
+        if (!staticInfo || (date - staticInfo.created_at) >= 604800000 ) {
+          StaticData.remove({}, function(error, removed) {
+            if (error) return console.error(error);
+            request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
+              var parsedStaticData = JSON.parse(inform.body);
+              StaticData.create({ 'created_at': { $lt: date }, 'static': parsedStaticData }, function(err, successful) {
+                var allChamps = parsedStaticData.data;
+                championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res)
               });
             });
-          }
-          
-          else {
-            var allChamps = staticInfo[0].static;
-            championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res);
-          }
-        });
+          });
+        }
+        
+        else {
+          var allChamps = staticInfo[0].static;
+          championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res);
+        }
       });
     });
   });
 }
 
-function getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired) {
+function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   var date = Date.now();
+  let patchDesired = getPatchVersion();
+  patchDesired = '9.4.1'
+  console.log(getPatchVersion(), 'testing for patchDesired')
   console.log(count, matchHistory.length)
 	if (count >= matchHistory.length) return;
   StaticData.find().exec(function(error, staticInfo) {
@@ -233,11 +244,13 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results, p
         console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
         console.log(patchDesired)
+        getPatchVersion();
         request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
-          console.log(inform.body, 'inform')
-          var allChamps = JSON.parse(inform).body.data;
+          console.log(patchDesired, 'inform')
+          var allChamps = inform.body.data;
           console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
+            if (err) return console.error(err);
             for (var getId in allChamps) {
               console.log(getId)
               if (allChamps[getId].id ===  matchHistory[count][1]) {
@@ -251,7 +264,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results, p
                   res.status(200).send([ req.summonerId, matchHistory ]);
                 }
                 else {
-                  getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
+                  getHistoryWithImages(req, res, country, matchHistory, count, results);
                 }       
               }
             }
@@ -274,7 +287,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results, p
             res.status(200).send([ req.summonerId, matchHistory ]);
           }
           else {
-            getHistoryWithImages(req, res, country, matchHistory, count, results, patchDesired);
+            getHistoryWithImages(req, res, country, matchHistory, count, results);
           }       
         }
       }
@@ -282,7 +295,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results, p
   });
 }
 
-function championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res) {
+function championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, matchDataArray, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData, res) {
   info.participants.forEach(function(i) {
     var pId = i.participantId;
     var cId = i.championId;
@@ -299,7 +312,7 @@ function championImageHelper(timelineDataFrames, allChamps, idOfPlayer, count, m
         imgOfChamp[cId] = allChamps[getId].key;
         positionOfPlayer.push([ timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x, timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y ]);
         if (count === 9) {
-          matchDataArray.push(patchDesired, positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
+          matchDataArray.push(positionOfPlayer, imgOfChamp, idOfPlayer, gameTimeline, info, resData)
           res.status(200).send(matchDataArray);
         }
       }
