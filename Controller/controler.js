@@ -163,6 +163,8 @@ function getGameData(keepTrackOf429, count, total, compareVersions, gameTimeline
 
 function getPatchVersion(info) {
   console.log(info, 'test the info')
+  let apiVersion = null;
+  console.log(version, 'version')
   request(version, function(error, checkingVersion) {
     var versionChecks = JSON.parse(checkingVersion.body);
     console.log(versionChecks[0], 'version Chekc')
@@ -173,14 +175,17 @@ function getPatchVersion(info) {
         splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
         gamePatch = info["gameVersion"].split('.').slice(0, 2);
         if (splitCheck.join('') === gamePatch.join('')) {
-          return versionChecks[patchVersion];
+           apiVersion = versionChecks[patchVersion];
+           break;
         }
         patchVersion++;
       }
     }
     else {
-      return versionChecks[0];
+      console.log(versionChecks[0], 'versionChecks')
+      apiVersion = versionChecks[0];
     }
+    return apiVersion;
   });
 }
 
@@ -233,8 +238,8 @@ function comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPl
 function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   var date = Date.now();
   let patchDesired = getPatchVersion();
-  patchDesired = '9.4.1'
-  console.log(getPatchVersion(), 'testing for patchDesired')
+  // patchDesired = '9.4.1'
+  console.log(patchDesired, 'testing for patchDesired')
   console.log(count, matchHistory.length)
 	if (count >= matchHistory.length) return;
   StaticData.find().exec(function(error, staticInfo) {
@@ -243,12 +248,13 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
       StaticData.remove({}, function(error, removed) {
         console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
-        console.log(patchDesired)
-        getPatchVersion();
+        console.log(patchDesired, `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, 'what patch is Desired')
+        // getPatchVersion();
         request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
           console.log(patchDesired, 'inform')
           var allChamps = inform.body.data;
-          console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
+          console.log(inform.body.data, 'allChamps')
+          // console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
             if (err) return console.error(err);
             for (var getId in allChamps) {
