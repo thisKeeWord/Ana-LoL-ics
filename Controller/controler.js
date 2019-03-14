@@ -1,15 +1,18 @@
-var request = require('request');
-var ThrottleCalls = require('./throttleCalls.js');
-var StaticData = require('./staticData.js');
-var summonerUrl = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/";
-var matchHistoryList = ".api.riotgames.com/lol/match/v4/matchlists/by-account/";
-var matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
-var matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
-var version = "https://ddragon.leagueoflegends.com/api/versions.json";
-var regionName;
+const request = require('request');
+const rp = require('request-promise');
+const util = require('util');
+const ThrottleCalls = require('./throttleCalls.js');
+const StaticData = require('./staticData.js');
+const summonerUrl = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/";
+const matchHistoryList = ".api.riotgames.com/lol/match/v4/matchlists/by-account/";
+const matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
+const matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
+const version = "https://ddragon.leagueoflegends.com/api/versions.json";
+let regionName = null;
+const patchNumber = util.promisify(getPatchVersion);
 
 
-var controler = {
+const controler = {
   userInformation: userInformation,
   matchList: matchList,
   getData: getData
@@ -115,6 +118,7 @@ function usersInfo(date, req, res, next) {
 
 // can split nested requests
 function getMatchList(date, req, res, next) {
+  console.log('in match List')
 	request(version, (error, results) => {
     results = JSON.parse(results.body);
 
@@ -137,7 +141,8 @@ function getMatchList(date, req, res, next) {
             	perGameSpec.push(gamesList[i]["queue"]);
             	perGameSpec.push(gamesList[i]["role"]);
 	            perGameSpec.push(gamesList[i]["season"]);
-						}
+            }
+            console.log(perGameSpec, 'pergamespec')
 						matchHistory.push(perGameSpec);
 					}
 					getHistoryWithImages(req, res, country, matchHistory, count, results);
@@ -161,15 +166,13 @@ function getGameData(keepTrackOf429, count, total, compareVersions, gameTimeline
   });
 }
 
-function getPatchVersion(info) {
-  console.log(info, 'test the info')
+async function getPatchVersion(info) {
   let apiVersion = null;
-  console.log(version, 'version')
-  request(version, function(error, checkingVersion) {
-    var versionChecks = JSON.parse(checkingVersion.body);
-    console.log(versionChecks[0], 'version Chekc')
+  // request(version, function(error, checkingVersion) {
+    // var versionChecks = JSON.parse(checkingVersion.body);
+    let versionChecks = JSON.parse(await rp(version));
     var splitCheck, gamePatch, patchVersion = 0;
-    if (error) return console.error(error);
+    // if (error) return console.error(error);
     if (info) {
       while(patchVersion < versionChecks.length) {
         splitCheck = versionChecks[patchVersion].split('.').slice(0, 2);
@@ -182,17 +185,17 @@ function getPatchVersion(info) {
       }
     }
     else {
-      console.log(versionChecks[0], 'versionChecks')
       apiVersion = versionChecks[0];
     }
     return apiVersion;
-  });
+  // });
 }
 
 // getting proper patch version to compare with data version
-function comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
+async function comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPlayer, imgOfChamp, positionOfPlayer, matchDataArray, req, res) {
+  console.log('in compageVersions')
   var date = Date.now();
-  let patchDesired = getPatchVersion(info);
+  let patchDesired = await patchNumber(info).catch(err => console.error(err)) // Don't forget to catch errors;
   request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(err, data) {
     if (error) return console.error(error);
     var resData = JSON.parse(data.body).data;
@@ -235,25 +238,23 @@ function comparePatchVersions(info, count, compareVersions, gameTimeline, idOfPl
   });
 }
 
-function getHistoryWithImages(req, res, country, matchHistory, count, results) {
+async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   var date = Date.now();
-  let patchDesired = getPatchVersion();
-  // patchDesired = '9.4.1'
-  console.log(patchDesired, 'testing for patchDesired')
-  console.log(count, matchHistory.length)
-	if (count >= matchHistory.length) return;
+  let patchDesired = await getPatchVersion().catch(err => console.error(err)) // Don't forget to catch errors;
+  if (count >= matchHistory.length) return;
+  //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
+    console.log('in staticData', staticInfo)
     if (error) return console.error(error);
-    if (staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
+    if (!staticInfo[0].static || staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
       StaticData.remove({}, function(error, removed) {
         console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
-        console.log(patchDesired, `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, 'what patch is Desired')
         // getPatchVersion();
         request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
-          console.log(patchDesired, 'inform')
-          var allChamps = inform.body.data;
-          console.log(inform.body.data, 'allChamps')
+          if (errors) return console.error(errors);
+          var allChamps = JSON.parse(inform.body).data;
+          console.log(allChamps, 'allChamps')
           // console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
             if (err) return console.error(err);
@@ -280,7 +281,8 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
     }
 
     else {
-      var allChamps = staticInfo[0].static;
+      var allChamps = staticInfo[0].static.data;
+      console.log(allChamps, 'line 286')
       for (var getId in allChamps) {
         matchHistory = matchHistory.filter(el => el.length > 0);
         if (matchHistory[count] && allChamps[getId].id ===  matchHistory[count][1]) {
@@ -290,6 +292,7 @@ function getHistoryWithImages(req, res, country, matchHistory, count, results) {
             matchHistory = matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
             });
+            console.log(matchHistory, 'matchHistory')
             res.status(200).send([ req.summonerId, matchHistory ]);
           }
           else {
