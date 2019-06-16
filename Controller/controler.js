@@ -132,6 +132,7 @@ function getMatchList(date, req, res, next) {
 					for (var i = 0; i < gamesList.length; i++) {
 						var perGameSpec = [], queueType = gamesList[i]["queue"];
 						if (queueType === 420 || queueType === 2 || queueType === 14 || queueType === 4 || queueType === 42 || queueType === 400 || queueType === 440) {
+              console.log(gamesList[i], 'line 135')
 							perGameSpec.push(gamesList[i]["gameId"]);
 							perGameSpec.push(gamesList[i]["champion"]);
 							var needDate = new Date(gamesList[i]["timestamp"]).toString().replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/,'');
@@ -142,7 +143,7 @@ function getMatchList(date, req, res, next) {
             	perGameSpec.push(gamesList[i]["role"]);
 	            perGameSpec.push(gamesList[i]["season"]);
             }
-            console.log(perGameSpec, 'pergamespec')
+            // console.log(perGameSpec, 'pergamespec')
 						matchHistory.push(perGameSpec);
 					}
 					getHistoryWithImages(req, res, country, matchHistory, count, results);
@@ -239,27 +240,25 @@ async function comparePatchVersions(info, count, compareVersions, gameTimeline, 
 }
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
+  console.log('getting History')
   var date = Date.now();
   let patchDesired = await getPatchVersion().catch(err => console.error(err)) // Don't forget to catch errors;
   if (count >= matchHistory.length) return;
   //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
-    console.log('in staticData', staticInfo)
+    // console.log(count, matchHistory.length, 'test this')
     if (error) return console.error(error);
     if (!staticInfo[0].static || staticInfo.length === 0 || date - staticInfo[0].created_at >= 604800000 ) {
       StaticData.remove({}, function(error, removed) {
-        console.log(count, matchHistory.length, 'test this')
         if (error) return console.error(error);
         // getPatchVersion();
         request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`, function(errors, inform) {
           if (errors) return console.error(errors);
           var allChamps = JSON.parse(inform.body).data;
-          console.log(allChamps, 'allChamps')
           // console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
           StaticData.create({ 'created_at': date, 'static': allChamps }, function(err, successful) {
             if (err) return console.error(err);
             for (var getId in allChamps) {
-              console.log(getId)
               if (allChamps[getId].id ===  matchHistory[count][1]) {
                 matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${allChamps[getId].key}.png`;
                 count++;
@@ -281,21 +280,28 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
     }
 
     else {
-      var allChamps = staticInfo[0].static.data;
-      console.log(allChamps, 'line 286')
+      // console.log(staticInfo, 'line 282')
+      var allChamps = staticInfo[0].static;
+      // console.log(staticInfo[0].static, 'line 283')
+      // console.log(matchHistory, 'testing line 285')
+
+      matchHistory = matchHistory.filter(el => el.length > 0);
       for (var getId in allChamps) {
-        matchHistory = matchHistory.filter(el => el.length > 0);
-        if (matchHistory[count] && allChamps[getId].id ===  matchHistory[count][1]) {
+        count++;
+        // the count var is screwing with things!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!***
+        console.log(matchHistory[count], count, allChamps[getId].key, 'testing line 285')
+        if (matchHistory[count] && allChamps[getId].key ===  matchHistory[count][1]) {
+          console.log('is this right')
           matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${allChamps[getId].key}.png`;
           count++;
           if (count === matchHistory.length) {
             matchHistory = matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
             });
-            console.log(matchHistory, 'matchHistory')
             res.status(200).send([ req.summonerId, matchHistory ]);
           }
           else {
+            console.log('lets theck else')
             getHistoryWithImages(req, res, country, matchHistory, count, results);
           }       
         }
