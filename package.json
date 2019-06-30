@@ -18,6 +18,7 @@
     "bower": "^1.7.7",
     "browserify": "^13.0.0",
     "dotenv": "^2.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "express": "^4.13.3",
     "express-history-api-fallback": "^2.0.0",
     "gulp": "^3.9.0",
@@ -40,6 +41,33 @@
     "watchify": "^3.7.0"
   },
   "devDependencies": {
-    "morgan": "^1.7.0"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-react": "^7.14.2",
+    "husky": "^2.7.0",
+    "lint-staged": "^8.2.1",
+    "morgan": "^1.7.0",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "client/components/*.{js,jsx}": [
+      "eslint",
+      "pretty-quick — staged",
+      "git add"
+    ],
+    "Controller/*.js": [
+      "eslint",
+      "pretty-quick — staged",
+      "git add"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var staticData = {
@@ -6,4 +6,4 @@ var staticData = {
   static: { type: Object }
 };
 
-module.exports = mongoose.model('StaticData', staticData);
+module.exports = mongoose.model("StaticData", staticData);
