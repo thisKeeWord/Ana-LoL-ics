@@ -31,7 +31,7 @@
     "path": "^0.12.7",
     "react": "^0.14.3",
     "react-dom": "^0.14.6",
-    "react-router": "^2.5.0",l
+    "react-router": "^2.5.0",
     "reactify": "^1.1.1",
     "request": "^2.69.0",
     "request-promise": "^4.2.4",
