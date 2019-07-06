@@ -1,9 +1,9 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var staticData = {
+var staticDataModel = {
   created_at: { type: Number, required: true },
   static: { type: Object }
 };
 
-module.exports = mongoose.model("StaticData", staticData);
+module.exports = mongoose.model("StaticDataModel", staticDataModel);
