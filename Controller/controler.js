@@ -2,7 +2,7 @@ const request = require("request");
 const rp = require("request-promise");
 const util = require("util");
 const ThrottleCalls = require("./throttleCalls.js");
-const StaticData = require("./../database/Schema/StaticDataModel");
+const StaticData = require("./../database/Schema/StaticDataModel.js");
 const summonerUrl = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/";
 const matchHistoryList = ".api.riotgames.com/lol/match/v4/matchlists/by-account/";
 const matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
@@ -42,7 +42,6 @@ function userInformation(req, res, next) {
       ) {
         usersInfo(date, req, res, next);
       } else {
-        console.log("wait a few minutes before submitting your username");
         return res.render("./../index.html", {
           error: "too many requests, try again in a few"
         });
@@ -173,6 +172,7 @@ function usersInfo(date, req, res, next) {
 
 // can split nested requests
 function getMatchList(date, req, res, next) {
+  console.log(req.summonerId);
   request(version, (error, results) => {
     results = JSON.parse(results.body);
 
@@ -180,14 +180,17 @@ function getMatchList(date, req, res, next) {
       error,
       throttling
     ) {
+      if (error) return console.error(error);
       var count = 0,
         matchHistory = [];
       var country = req.body.region.region.toLowerCase();
       request(
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
+          console.log('line 191')
           if (error) return console.error(error, "here");
           if (response.statusCode === 200) {
+            console.log('line 192')
             var gamesList = JSON.parse(response.body).matches.slice(0, 30);
             for (var i = 0; i < gamesList.length; i++) {
               var perGameSpec = [],
@@ -284,6 +287,7 @@ function getGameData(
 }
 
 async function getPatchVersion(info) {
+
   let apiVersion = null;
   // request(version, function(error, checkingVersion) {
   // var versionChecks = JSON.parse(checkingVersion.body);
@@ -403,18 +407,14 @@ async function comparePatchVersions(
 }
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
-  console.log(count, "count");
-  console.log("getting History");
   var date = Date.now();
   let patchDesired = await getPatchVersion().catch(err => console.error(err)); // Don't forget to catch errors;
   if (count >= matchHistory.length) return;
   //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
-    // console.log(count, matchHistory.length, 'test this')
     if (error) return console.error(error);
     if (
-      !staticInfo[0].static ||
-      staticInfo.length === 0 ||
+      !staticInfo || staticInfo.length === 0 || !staticInfo[0].static ||
       date - staticInfo[0].created_at >= 604800000
     ) {
       StaticData.remove({}, function(error, removed) {
@@ -425,9 +425,9 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
           function(errors, inform) {
             if (errors) return console.error(errors);
             var allChamps = JSON.parse(inform.body).data;
-            // console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`)
             StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
               if (err) return console.error(err);
+              console.log('line 430')
               for (var getId in allChamps) {
                 if (allChamps[getId].id === matchHistory[count][1]) {
                   matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${
@@ -457,7 +457,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
 
       matchHistory = matchHistory.filter(el => el.length > 0);
       for (let i = 0; i < matchHistory.length; i++) {
-        console.log("is this right", i, matchHistory.length);
         if (matchHistory[i]) {
           matchHistory[i][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${
             champ_key_list[matchHistory[i][i]]
@@ -468,7 +467,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             });
             return res.status(200).send([req.summonerId, matchHistory]);
           } else {
-            console.log("lets theck else");
             getHistoryWithImages(req, res, country, matchHistory, count, results);
           }
         }
