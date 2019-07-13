@@ -18,12 +18,13 @@
     "bower": "^1.7.7",
     "browserify": "^13.0.0",
     "dotenv": "^2.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "express": "^4.13.3",
     "express-history-api-fallback": "^2.0.0",
     "gulp": "^3.9.0",
     "gulp-nodemon": "^2.0.6",
     "gulp-uglify": "^1.5.3",
-    "jquery": "^2.2.0",
+    "jquery": "^3.4.1",
     "mongodb": "^2.2.4",
     "mongoose": "^4.5.5",
     "nodemon": "^1.8.0",
@@ -33,11 +34,40 @@
     "react-router": "^2.5.0",
     "reactify": "^1.1.1",
     "request": "^2.69.0",
+    "request-promise": "^4.2.4",
+    "util": "^0.11.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.11.1"
   },
   "devDependencies": {
-    "morgan": "^1.7.0"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-react": "^7.14.2",
+    "husky": "^2.7.0",
+    "lint-staged": "^8.2.1",
+    "morgan": "^1.7.0",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "client/components/*.{js,jsx}": [
+      "eslint",
+      "pretty-quick — staged",
+      "git add"
+    ],
+    "Controller/*.js": [
+      "eslint",
+      "pretty-quick — staged",
+      "git add"
+    ]
   }
 }
