@@ -440,7 +440,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
                     });
                     res.status(200).send([req.summonerId, matchHistory]);
                   } else {
-                    getHistoryWithImages(req, res, country, matchHistory, count, results);
+                    getHistoryWithImages(req, res, country, matchHistory, count, results)
                   }
                 }
               }
