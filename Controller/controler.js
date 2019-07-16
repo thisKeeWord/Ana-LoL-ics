@@ -438,8 +438,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
                     matchHistory = matchHistory.filter(function(summonersRift) {
                       return summonersRift.length > 2;
                     });
-                    console.log('line 441')
-                    return res.status(200).end([req.summonerId, matchHistory]);
+                    res.status(200).send([req.summonerId, matchHistory]);
                   }
                 }
               }
@@ -464,9 +463,8 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             matchHistory = matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
             });
-            console.log('line 470')
-            return res.send([req.summonerId, matchHistory]);
-          } 
+            return res.status(200).send([req.summonerId, matchHistory]);
+          }
         }
       }
     }
