@@ -21,7 +21,7 @@ const controler = {
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   var date = Date.now();
-  if (!isNaN(req.body.username.userName)) {
+  if (req.body.username.userName) {
     req.summonerId = req.body.username.userName;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
