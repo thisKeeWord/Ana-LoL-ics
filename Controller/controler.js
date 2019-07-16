@@ -439,8 +439,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
                       return summonersRift.length > 2;
                     });
                     res.status(200).send([req.summonerId, matchHistory]);
-                  } else {
-                    getHistoryWithImages(req, res, country, matchHistory, count, results)
                   }
                 }
               }
@@ -466,8 +464,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
               return summonersRift.length > 2;
             });
             return res.status(200).send([req.summonerId, matchHistory]);
-          } else {
-            getHistoryWithImages(req, res, country, matchHistory, count, results);
           }
         }
       }
