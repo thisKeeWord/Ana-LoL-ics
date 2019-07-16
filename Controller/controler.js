@@ -440,9 +440,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
                     });
                     console.log('line 441')
                     return res.status(200).end([req.summonerId, matchHistory]);
-                  } else {
-                    console.log('line 444')
-                    getHistoryWithImages(req, res, country, matchHistory, count, results)
                   }
                 }
               }
@@ -464,18 +461,12 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             champ_key_list[matchHistory[i][i]]
           }.png`;
           if (i === matchHistory.length - 1) {
-            // matchHistory = matchHistory.filter(function(summonersRift) {
-            //   return summonersRift.length > 2;
-            // });
-            console.log('line 470')
-            return res.send([req.summonerId, matchHistory.filter(function(summonersRift) {
+            matchHistory = matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
-            })
-          ]);
-          } else {
-            console.log('line 473')
-            getHistoryWithImages(req, res, country, matchHistory, count, results);
-          }
+            });
+            console.log('line 470')
+            return res.send([req.summonerId, matchHistory]);
+          } 
         }
       }
     }
