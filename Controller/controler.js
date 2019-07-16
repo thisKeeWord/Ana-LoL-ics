@@ -21,7 +21,7 @@ const controler = {
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   var date = Date.now();
-  if (!isNaN(req.body.username.userName)) {
+  if (req.body.username.userName) {
     req.summonerId = req.body.username.userName;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
@@ -438,8 +438,10 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
                     matchHistory = matchHistory.filter(function(summonersRift) {
                       return summonersRift.length > 2;
                     });
-                    res.status(200).send([req.summonerId, matchHistory]);
+                    console.log('line 441')
+                    return res.status(200).end([req.summonerId, matchHistory]);
                   } else {
+                    console.log('line 444')
                     getHistoryWithImages(req, res, country, matchHistory, count, results)
                   }
                 }
@@ -462,11 +464,16 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             champ_key_list[matchHistory[i][i]]
           }.png`;
           if (i === matchHistory.length - 1) {
-            matchHistory = matchHistory.filter(function(summonersRift) {
+            // matchHistory = matchHistory.filter(function(summonersRift) {
+            //   return summonersRift.length > 2;
+            // });
+            console.log('line 470')
+            return res.send([req.summonerId, matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
-            });
-            return res.status(200).send([req.summonerId, matchHistory]);
+            })
+          ]);
           } else {
+            console.log('line 473')
             getHistoryWithImages(req, res, country, matchHistory, count, results);
           }
         }
