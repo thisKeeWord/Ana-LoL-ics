@@ -172,7 +172,6 @@ function usersInfo(date, req, res, next) {
 
 // can split nested requests
 function getMatchList(date, req, res, next) {
-  console.log(req.summonerId);
   request(version, (error, results) => {
     results = JSON.parse(results.body);
 
@@ -187,10 +186,8 @@ function getMatchList(date, req, res, next) {
       request(
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
-          console.log('line 191')
           if (error) return console.error(error, "here");
           if (response.statusCode === 200) {
-            console.log('line 192')
             var gamesList = JSON.parse(response.body).matches.slice(0, 30);
             for (var i = 0; i < gamesList.length; i++) {
               var perGameSpec = [],
@@ -427,7 +424,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             var allChamps = JSON.parse(inform.body).data;
             StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
               if (err) return console.error(err);
-              console.log('line 430')
               for (var getId in allChamps) {
                 if (allChamps[getId].id === matchHistory[count][1]) {
                   matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${
@@ -457,7 +453,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
       for (let i = 0; i < matchHistory.length; i++) {
         if (matchHistory[i]) {
           matchHistory[i][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${
-            champ_key_list[matchHistory[i][i]]
+            champ_key_list[matchHistory[i][1]]
           }.png`;
           if (i === matchHistory.length - 1) {
             matchHistory = matchHistory.filter(function(summonersRift) {

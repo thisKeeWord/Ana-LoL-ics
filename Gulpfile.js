@@ -1,30 +1,30 @@
-var gulp = require("gulp");
-var source = require("vinyl-source-stream");
-var browserify = require("browserify");
-var watchify = require("watchify");
-var reactify = require("reactify");
-var nodemon = require("gulp-nodemon");
-var uglify = require("gulp-uglify");
-var babelify = require("babelify");
-var buffer = require("vinyl-buffer");
+let gulp = require("gulp");
+let source = require("vinyl-source-stream");
+let browserify = require("browserify");
+let watchify = require("watchify");
+let reactify = require("reactify");
+let nodemon = require("gulp-nodemon");
+let uglify = require("gulp-uglify");
+let babelify = require("babelify");
+let buffer = require("vinyl-buffer");
 
 gulp.task("browserify", scripts).task("serve", serve);
 
 function scripts() {
-  var bundler = browserify({
+  let bundler = browserify({
     entries: ["./client/components/app.js"],
     transform: babelify.configure({ presets: ["react", "es2015"] }),
     debug: true,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: true,
   });
-  var watcher = watchify(bundler);
+  let watcher = watchify(bundler);
 
   return (
     watcher
       .on("update", function() {
-        var updateStart = Date.now();
+        let updateStart = Date.now();
         console.log("Updating!");
         watcher
           .bundle()
@@ -51,7 +51,7 @@ function scripts() {
 
 function serve() {
   nodemon({
-    script: "./server/server.js"
+    script: "./server/server.js",
   });
 }
 
