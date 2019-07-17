@@ -1,16 +1,16 @@
-var dotenv = require("dotenv").config({ path: "config.env" });
-var express = require("express");
-var app = express();
-var path = require("path");
-var mongoose = require("mongoose");
-var bodyParser = require("body-parser");
-var fallback = require("express-history-api-fallback");
-var controller = require("./../Controller/controler.js");
-var seasonStats = require("./../Controller/leagueHistoryController.js");
-var mongoURI = "mongodb://lkee:" + process.env.stuff4 + "@ds011439.mlab.com:11439/heroku_wk47xfd5";
+let dotenv = require("dotenv").config({ path: "config.env" });
+let express = require("express");
+let app = express();
+let path = require("path");
+let mongoose = require("mongoose");
+let bodyParser = require("body-parser");
+let fallback = require("express-history-api-fallback");
+let controller = require("./../Controller/controler.js");
+let seasonStats = require("./../Controller/leagueHistoryController.js");
+let mongoURI = "mongodb://lkee:" + process.env.stuff4 + "@ds011439.mlab.com:11439/heroku_wk47xfd5";
 mongoose.connect(mongoURI);
 
-app.set("port", process.env.PORT || 5001);
+app.set("port", process.env.PORT || 5000);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
