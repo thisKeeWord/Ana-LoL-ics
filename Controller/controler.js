@@ -20,7 +20,7 @@ const controler = {
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
-  var date = Date.now();
+  const date = Date.now();
   if (req.body.username.userName) {
     req.summonerId = req.body.username.userName;
     req.summoner = req.body.summonerName.summoner;
@@ -52,7 +52,7 @@ function userInformation(req, res, next) {
 
 // MOST RECENT 10 GAMES ON SUMMONER'S RIFT
 function matchList(req, res) {
-  var date = Date.now();
+  const date = Date.now();
   ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(removed) {
@@ -76,12 +76,12 @@ function matchList(req, res) {
 }
 
 function getData(req, res) {
-  var keepTrackOf429 = 0,
+  let keepTrackOf429 = 0,
     count = -1,
     total = 0,
-    compareVersions = 0,
+    compareVersions = 0;
     // patchDesired = 0,
-    gameTimeline = [],
+    const gameTimeline = [],
     idOfPlayer = [],
     imgOfChamp = [],
     positionOfPlayer = [],
@@ -158,8 +158,8 @@ function usersInfo(date, req, res, next) {
       (error, resp) => {
         if (error) return console.error("we cannot find the summoner or " + error);
         if (resp.statusCode === 200) {
-          var userId = JSON.parse(resp.body);
-          var result = userId["accountId"];
+          let userId = JSON.parse(resp.body);
+          let result = userId["accountId"];
           req.summonerId = result;
           req.userName = req.body.summonerName.summoner;
           req.region = req.body.region.region.toLowerCase();
@@ -180,17 +180,17 @@ function getMatchList(date, req, res, next) {
       throttling
     ) {
       if (error) return console.error(error);
-      var count = 0,
+      let count = 0,
         matchHistory = [];
-      var country = req.body.region.region.toLowerCase();
+      let country = req.body.region.region.toLowerCase();
       request(
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
           if (error) return console.error(error, "here");
           if (response.statusCode === 200) {
-            var gamesList = JSON.parse(response.body).matches.slice(0, 30);
-            for (var i = 0; i < gamesList.length; i++) {
-              var perGameSpec = [],
+            let gamesList = JSON.parse(response.body).matches.slice(0, 30);
+            for (let i = 0; i < gamesList.length; i++) {
+              const perGameSpec = [],
                 queueType = gamesList[i]["queue"];
               if (
                 queueType === 420 ||
@@ -203,7 +203,7 @@ function getMatchList(date, req, res, next) {
               ) {
                 perGameSpec.push(gamesList[i]["gameId"]);
                 perGameSpec.push(gamesList[i]["champion"]);
-                var needDate = new Date(gamesList[i]["timestamp"])
+                let needDate = new Date(gamesList[i]["timestamp"])
                   .toString()
                   .replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/, "");
                 perGameSpec.push(needDate);
@@ -265,7 +265,7 @@ function getGameData(
       }
       // getting correct patch version to compare with data version
       else {
-        var info = JSON.parse(newData.body);
+        let info = JSON.parse(newData.body);
         comparePatchVersions(
           info,
           count,
@@ -286,10 +286,8 @@ function getGameData(
 async function getPatchVersion(info) {
 
   let apiVersion = null;
-  // request(version, function(error, checkingVersion) {
-  // var versionChecks = JSON.parse(checkingVersion.body);
   let versionChecks = JSON.parse(await rp(version));
-  var splitCheck,
+  let splitCheck,
     gamePatch,
     patchVersion = 0;
   // if (error) return console.error(error);
@@ -323,14 +321,14 @@ async function comparePatchVersions(
   req,
   res
 ) {
-  var date = Date.now();
+  let date = Date.now();
   let patchDesired = await patchNumber(info).catch(err => console.error(err)); // Don't forget to catch errors;
   request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(
     err,
     data
   ) {
     if (error) return console.error(error);
-    var resData = JSON.parse(data.body).data;
+    let resData = JSON.parse(data.body).data;
 
     // getting timeline information by frame from another endpoint
     // since the first timeline request doesn't have the full info
@@ -338,14 +336,14 @@ async function comparePatchVersions(
     request(
       `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`,
       function(er, timelineData) {
-        var timelineDataFrames = JSON.parse(timelineData.body).frames;
-        for (var j = 0; j < timelineDataFrames.length; j++) {
+        let timelineDataFrames = JSON.parse(timelineData.body).frames;
+        for (let j = 0; j < timelineDataFrames.length; j++) {
           gameTimeline.push([timelineDataFrames[j]]);
         }
 
         // have to use number for numerator since
         // scroll not up yet
-        var stepScroll = 300 / gameTimeline.length;
+        let stepScroll = 300 / gameTimeline.length;
 
         // going to add this call to db to "cache"
         StaticData.find().exec(function(error, staticInfo) {
@@ -356,11 +354,11 @@ async function comparePatchVersions(
               request(
                 `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
                 function(errors, inform) {
-                  var parsedStaticData = JSON.parse(inform.body);
+                  let parsedStaticData = JSON.parse(inform.body);
                   StaticData.create(
                     { created_at: { $lt: date }, static: parsedStaticData },
                     function(err, successful) {
-                      var allChamps = parsedStaticData.data;
+                      let allChamps = parsedStaticData.data;
                       championImageHelper(
                         timelineDataFrames,
                         allChamps,
@@ -381,7 +379,7 @@ async function comparePatchVersions(
               );
             });
           } else {
-            var allChamps = staticInfo[0].static;
+            let allChamps = staticInfo[0].static;
             championImageHelper(
               timelineDataFrames,
               allChamps,
@@ -404,7 +402,7 @@ async function comparePatchVersions(
 }
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
-  var date = Date.now();
+  let date = Date.now();
   let patchDesired = await getPatchVersion().catch(err => console.error(err)); // Don't forget to catch errors;
   if (count >= matchHistory.length) return;
   //staticInfo not valid?
@@ -421,10 +419,10 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
           `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
           function(errors, inform) {
             if (errors) return console.error(errors);
-            var allChamps = JSON.parse(inform.body).data;
+            let allChamps = JSON.parse(inform.body).data;
             StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
               if (err) return console.error(err);
-              for (var getId in allChamps) {
+              for (let getId in allChamps) {
                 if (allChamps[getId].id === matchHistory[count][1]) {
                   matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${
                     results[0]
@@ -443,9 +441,9 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
         );
       });
     } else {
-      var allChamps = staticInfo[0].static;
+      let allChamps = staticInfo[0].static;
       const champ_key_list = {};
-      for (var getId in allChamps) {
+      for (let getId in allChamps) {
         champ_key_list[allChamps[getId].key] = allChamps[getId].id;
       }
 
@@ -483,16 +481,16 @@ function championImageHelper(
   res
 ) {
   info.participants.forEach(function(i) {
-    var pId = i.participantId;
-    var cId = i.championId;
-    var playerRole = i.timeline.role;
-    var playerLane = i.timeline.lane;
+    let pId = i.participantId;
+    let cId = i.championId;
+    let playerRole = i.timeline.role;
+    let playerLane = i.timeline.lane;
 
     // participant-id and champion-id
     idOfPlayer.push([pId, cId, playerRole, playerLane]);
 
     // getting champion numerical key to grab image
-    for (var getId in allChamps) {
+    for (let getId in allChamps) {
       if (allChamps[getId].id === cId) {
         count++;
         imgOfChamp[cId] = allChamps[getId].key;
