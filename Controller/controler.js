@@ -21,15 +21,19 @@ const controler = {
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   const date = Date.now();
+  console.log(req.body)
   if (req.body.username.userName) {
     req.summonerId = req.body.username.userName;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
-    console.log('im testing for username in node')
+    console.log('where is this')
+
     return next();
   } else {
+    console.log('line 30')
     ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
-      if (error) return console.error(error)
+      if (error) return console.error(error);
+      
       if (success.length && date - success[0]["created_at"] > 10000) {
         ThrottleCalls.remove({}, (err, removed) => {
           if (error) return console.error(err);
@@ -42,8 +46,10 @@ function userInformation(req, res, next) {
           date - success[0]["created_at"] <= 10000 &&
           date - success[0]["created_at"] > 0)
       ) {
+        console.log('test')
         usersInfo(date, req, res, next);
       } else {
+        console.log('hello world wtf')
         return res.render("./../index.html", {
           error: "too many requests, try again in a few"
         });
@@ -146,6 +152,8 @@ function getData(req, res) {
 }
 
 function usersInfo(date, req, res, next) {
+  const {username, region, summonerName} = req.body;
+  console.log(username, region, summonerName, 'line 151')
   ThrottleCalls.create({ created_at: date, whatToSave: req.body.username.userName }, function(
     error,
     throttling
