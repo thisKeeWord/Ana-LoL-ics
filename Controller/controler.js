@@ -21,16 +21,22 @@ const controler = {
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   const date = Date.now();
-  if (req.body.username.userName) {
-    req.summonerId = req.body.username.userName;
+  console.log(req.body)
+  if (req.body.user_id.users_id) {
+    req.summonerId = req.body.user_id.users_id;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
+    console.log('where is this')
+
     return next();
   } else {
-    ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
+    console.log('line 30')
+    ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
+      if (error) return console.error(error);
+      
       if (success.length && date - success[0]["created_at"] > 10000) {
-        ThrottleCalls.remove({}, function(error, removed) {
-          if (error) return console.error(error);
+        ThrottleCalls.remove({}, (err, removed) => {
+          if (error) return console.error(err);
           usersInfo(date, req, res, next);
         });
       } else if (
@@ -40,8 +46,10 @@ function userInformation(req, res, next) {
           date - success[0]["created_at"] <= 10000 &&
           date - success[0]["created_at"] > 0)
       ) {
+        console.log('test')
         usersInfo(date, req, res, next);
       } else {
+        console.log('hello world wtf')
         return res.render("./../index.html", {
           error: "too many requests, try again in a few"
         });
@@ -144,7 +152,9 @@ function getData(req, res) {
 }
 
 function usersInfo(date, req, res, next) {
-  ThrottleCalls.create({ created_at: date, whatToSave: req.body.username.userName }, function(
+  const {user_id, region, summonerName} = req.body;
+  console.log(user_id, region, summonerName, 'line 151')
+  ThrottleCalls.create({ created_at: date, whatToSave: req.body.user_id.users_id }, function(
     error,
     throttling
   ) {
@@ -152,7 +162,7 @@ function usersInfo(date, req, res, next) {
       "https://" +
         req.body.region.region.toLowerCase() +
         summonerUrl +
-        encodeURI(req.body.username.userName) +
+        encodeURI(req.body.user_id.users_id) +
         "?" +
         process.env.stuff1,
       (error, resp) => {

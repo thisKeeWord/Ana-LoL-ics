@@ -30,7 +30,7 @@ class HeadApp extends React.Component {
         "Poppy_5",
         "MonkeyKing_5",
         "Chogath_6",
-        "Anivia_5"
+        "Anivia_5",
       ][Math.floor(Math.random() * 12)],
       playerID1: [],
       pos1: [],
@@ -58,28 +58,30 @@ class HeadApp extends React.Component {
       patch2: 0,
       maxForStat2: 0,
       region: "",
-      gameSummary: []
+      gameSummary: [],
     };
   }
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
     $(".loading").css("display", "block");
+
     return $.ajax({
       type: "POST",
       url: data.url.yooRL,
       data: JSON.stringify(data),
-      contentType: "application/json"
+      contentType: "application/json",
     });
   }
 
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
     $(".loading").css("display", "block");
+
     return $.ajax({
       type: "POST",
       url: "/getGameData",
-      data: perGameData
+      data: perGameData,
     });
   }
 
@@ -92,19 +94,21 @@ class HeadApp extends React.Component {
     const newCleanName = {
       url: { yooRL: "/" },
       summonerName: { summoner: cleanName },
-      region: { region: that.state.region }
+      region: { region: that.state.region },
     };
 
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
-      newCleanName.username = { userName: localStorage[cleanName] };
+      console.log("data is apparently in lcoal storage");
+      newCleanName.user_id = { users_id: localStorage[cleanName] };
     } else {
-      newCleanName.username = { userName: cleanName };
+      newCleanName.user_id = { users_id: null };
     }
 
-    this.post(newCleanName).done(gotTheInfo => {
+    this.post(newCleanName).done((gotTheInfo) => {
       // IF DATA ISN'T IN LOCAL STORAGE
       if (localStorage && !localStorage[cleanName]) {
+        console.log("is data in local storage");
         localStorage[cleanName] = gotTheInfo[0];
       }
       $(".loading").css("display", "none");
@@ -112,7 +116,7 @@ class HeadApp extends React.Component {
         res: gotTheInfo[1],
         toggle: true,
         whosGames: cleanName.toUpperCase(),
-        secondToggle: false
+        secondToggle: false,
       });
     });
   }
@@ -131,7 +135,7 @@ class HeadApp extends React.Component {
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1])
-        .done(gotGameOne => {
+        .done((gotGameOne) => {
           // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
           that.state.spot = 0;
           that.state.eventSelected = "select one";
@@ -157,7 +161,7 @@ class HeadApp extends React.Component {
         })
         .then(() => {
           if (that.state.clicksForGame.length === 1) {
-            that.postForGame(this.state.clicksForGame[0]).done(gotGameOne => {
+            that.postForGame(this.state.clicksForGame[0]).done((gotGameOne) => {
               $(".loading").css("display", "none");
 
               // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
@@ -187,7 +191,7 @@ class HeadApp extends React.Component {
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
     const domain = {
         min: { x: -120, y: -120 },
-        max: { x: 14870, y: 14980 }
+        max: { x: 14870, y: 14980 },
       },
       // NEWEST VERSION OF SUMMONER'S RIFT
       nSR = "https://s3-us-west-1.amazonaws.com/riot-developer-portal/docs/map11.png";
@@ -246,7 +250,7 @@ class HeadApp extends React.Component {
     }
 
     if (this.state.gamesToSee === 1) {
-      let svg = d3
+      const svg = d3
         .select("#map" + 1 * this.state.gamesToSee)
         .append("svg:svg")
         .attr("id", "backdrop" + 1 * this.state.gamesToSee)
@@ -285,10 +289,10 @@ class HeadApp extends React.Component {
               this.state.champImg1[checking] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image")
@@ -297,12 +301,12 @@ class HeadApp extends React.Component {
 
       // SET STATE FOR SVG TO USE LATER
       this.setState({
-        png1: svg
+        png1: svg,
       });
     }
 
     if (this.state.gamesToSee === 2) {
-      let svg = d3
+      const svg = d3
         .select("#map" + 1 * this.state.gamesToSee)
         .append("svg:svg")
         .attr("id", "backdrop" + 1 * this.state.gamesToSee)
@@ -341,10 +345,10 @@ class HeadApp extends React.Component {
               this.state.champImg1[checking1] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image")
@@ -390,10 +394,10 @@ class HeadApp extends React.Component {
               this.state.champImg2[checking2] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image")
@@ -403,7 +407,7 @@ class HeadApp extends React.Component {
       // SET STATE FOR SVG TO USE LATER
       this.setState({
         png1: svg,
-        png2: svg2
+        png2: svg2,
       });
     }
   }
@@ -412,7 +416,7 @@ class HeadApp extends React.Component {
   onChange(e) {
     e.preventDefault();
     this.setState({
-      spot: e.target.value
+      spot: e.target.value,
     });
   }
 
@@ -443,7 +447,7 @@ class HeadApp extends React.Component {
 
       if (this.state.gamesToSee === 1) {
         this.setState({
-          selData1: svg
+          selData1: svg,
         });
       }
     }
@@ -480,7 +484,7 @@ class HeadApp extends React.Component {
 
       this.setState({
         selData1: svg2,
-        selData2: svg4
+        selData2: svg4,
       });
     }
   }
@@ -573,7 +577,7 @@ class HeadApp extends React.Component {
 
       this.setState({
         addItems1: svg,
-        whichRole1: champRole
+        whichRole1: champRole,
       });
     }
 
@@ -610,7 +614,7 @@ class HeadApp extends React.Component {
         addItems1: svg,
         addItems2: svg2,
         whichRole1: champRole,
-        whichRole2: champRole2
+        whichRole2: champRole2,
       });
     }
   }
@@ -641,7 +645,7 @@ class HeadApp extends React.Component {
 
       if (this.state.gamesToSee === 1) {
         this.setState({
-          eventDisplay1: champEvent
+          eventDisplay1: champEvent,
         });
       }
     }
@@ -678,7 +682,7 @@ class HeadApp extends React.Component {
 
       this.setState({
         eventDisplay1: champEvent,
-        eventDisplay2: champEvent2
+        eventDisplay2: champEvent2,
       });
     }
   }
@@ -690,8 +694,8 @@ class HeadApp extends React.Component {
 
     // NUMBER OF GAMES WANTED
     for (let t = 1; t <= this.state.gamesToSee; t++) {
-      let searchEvents = this.state["allowScroll" + t.toString()];
-      let eventSpecific = [];
+      const searchEvents = this.state["allowScroll" + t.toString()];
+      const eventSpecific = [];
       for (let i = 0; i < this.state["playerID" + t.toString()].length; i++) {
         let statCount = 0;
         if (
@@ -776,14 +780,14 @@ class HeadApp extends React.Component {
     if (this.state.gamesToSee === 1) {
       this.setState({
         eventSelected: eventPicked.target.value,
-        maxForStat1: Math.max(...eventsForGames[0])
+        maxForStat1: Math.max(...eventsForGames[0]),
       });
     }
     if (this.state.gamesToSee === 2) {
       this.setState({
         eventSelected: eventPicked.target.value,
         maxForStat1: Math.max(...eventsForGames[0]),
-        maxForStat2: Math.max(...eventsForGames[1])
+        maxForStat2: Math.max(...eventsForGames[1]),
       });
     }
   }
@@ -800,7 +804,7 @@ class HeadApp extends React.Component {
   }
 
   render() {
-    let that = this;
+    const that = this;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
@@ -812,7 +816,7 @@ class HeadApp extends React.Component {
               backgroundImage:
                 "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
                 this.state.backgroundImg +
-                ".jpg)"
+                ".jpg)",
             }}
           />
           <ul className="linkToPages">
@@ -851,6 +855,7 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS AND MATCH DATA
     if (this.state.secondToggle === true && this.state.toggle === true) {
       $("body").css("background", "#292929");
+
       return (
         <div className="resultingInfo">
           <div className="loading"></div>
@@ -967,6 +972,7 @@ class HeadApp extends React.Component {
     // MATCH LIST BUTTONS
     if (this.state.toggle === true) {
       $("body").css("background", "#292929");
+
       return (
         <div id="second">
           <div className="loading"></div>
