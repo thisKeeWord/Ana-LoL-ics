@@ -30,7 +30,9 @@ function userInformation(req, res, next) {
 
     return next();
   } else {
-    console.log('line 30')
+   
+    // add a call to userInformation from matchList if users_id value in local storage is incorrect
+
     ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
       if (error) return console.error(error);
       
