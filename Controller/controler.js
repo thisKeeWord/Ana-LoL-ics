@@ -25,12 +25,14 @@ function userInformation(req, res, next) {
     req.summonerId = req.body.username.userName;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
+    console.log('im testing for username in node')
     return next();
   } else {
-    ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
+    ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
+      if (error) return console.error(error)
       if (success.length && date - success[0]["created_at"] > 10000) {
-        ThrottleCalls.remove({}, function(error, removed) {
-          if (error) return console.error(error);
+        ThrottleCalls.remove({}, (err, removed) => {
+          if (error) return console.error(err);
           usersInfo(date, req, res, next);
         });
       } else if (
