@@ -22,8 +22,8 @@ function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   const date = Date.now();
   console.log(req.body)
-  if (req.body.username.userName) {
-    req.summonerId = req.body.username.userName;
+  if (req.body.user_id.users_id) {
+    req.summonerId = req.body.user_id.users_id;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
     console.log('where is this')
@@ -152,9 +152,9 @@ function getData(req, res) {
 }
 
 function usersInfo(date, req, res, next) {
-  const {username, region, summonerName} = req.body;
-  console.log(username, region, summonerName, 'line 151')
-  ThrottleCalls.create({ created_at: date, whatToSave: req.body.username.userName }, function(
+  const {user_id, region, summonerName} = req.body;
+  console.log(user_id, region, summonerName, 'line 151')
+  ThrottleCalls.create({ created_at: date, whatToSave: req.body.user_id.users_id }, function(
     error,
     throttling
   ) {
@@ -162,7 +162,7 @@ function usersInfo(date, req, res, next) {
       "https://" +
         req.body.region.region.toLowerCase() +
         summonerUrl +
-        encodeURI(req.body.username.userName) +
+        encodeURI(req.body.user_id.users_id) +
         "?" +
         process.env.stuff1,
       (error, resp) => {

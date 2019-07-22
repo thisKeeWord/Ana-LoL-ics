@@ -100,9 +100,9 @@ class HeadApp extends React.Component {
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
       console.log("data is apparently in lcoal storage");
-      newCleanName.username = { userName: localStorage[cleanName] };
+      newCleanName.user_id = { users_id: localStorage[cleanName] };
     } else {
-      newCleanName.username = { userName: cleanName };
+      newCleanName.user_id = { users_id: null };
     }
 
     this.post(newCleanName).done((gotTheInfo) => {
