@@ -1,30 +1,30 @@
-let gulp = require("gulp");
-let source = require("vinyl-source-stream");
-let browserify = require("browserify");
-let watchify = require("watchify");
-let reactify = require("reactify");
-let nodemon = require("gulp-nodemon");
-let uglify = require("gulp-uglify");
-let babelify = require("babelify");
-let buffer = require("vinyl-buffer");
+const gulp = require("gulp");
+const source = require("vinyl-source-stream");
+const browserify = require("browserify");
+const watchify = require("watchify");
+const reactify = require("reactify");
+const nodemon = require("gulp-nodemon");
+const uglify = require("gulp-uglify");
+const babelify = require("babelify");
+const buffer = require("vinyl-buffer");
 
 gulp.task("browserify", scripts).task("serve", serve);
 
 function scripts() {
-  let bundler = browserify({
+  const bundler = browserify({
     entries: ["./client/components/app.js"],
-    transform: babelify.configure({ presets: ["react", "es2015"] }),
+    transform: babelify.configure({ presets: ["@babel/react", "es2015"] }),
     debug: true,
     cache: {},
     packageCache: {},
     fullPaths: true,
   });
-  let watcher = watchify(bundler);
+  const watcher = watchify(bundler);
 
   return (
     watcher
       .on("update", function() {
-        let updateStart = Date.now();
+        const updateStart = Date.now();
         console.log("Updating!");
         watcher
           .bundle()
