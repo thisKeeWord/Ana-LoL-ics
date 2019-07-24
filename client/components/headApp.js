@@ -87,7 +87,6 @@ class HeadApp extends React.Component {
 
   // HANDLE IGN SUBMIT FORM
   handleSubmit(e, elem) {
-    console.log(elem);
     e.preventDefault();
     const that = this;
     const cleanName = elem.toLowerCase().replace(/ /g, "");
@@ -99,7 +98,6 @@ class HeadApp extends React.Component {
 
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
     if (localStorage && localStorage[cleanName]) {
-      console.log("data is apparently in lcoal storage");
       newCleanName.user_id = { users_id: localStorage[cleanName] };
     } else {
       newCleanName.user_id = { users_id: null };
@@ -108,7 +106,6 @@ class HeadApp extends React.Component {
     this.post(newCleanName).done((gotTheInfo) => {
       // IF DATA ISN'T IN LOCAL STORAGE
       if (localStorage && !localStorage[cleanName]) {
-        console.log("is data in local storage");
         localStorage[cleanName] = gotTheInfo[0];
       }
       $(".loading").css("display", "none");
@@ -129,7 +126,6 @@ class HeadApp extends React.Component {
     this.state.clicksForGame.push(e.target.id);
     if (this.state.gameSummary.length >= this.state.gamesToSee) {
       this.state.gameSummary = [];
-      console.log("what the fk is this");
     }
     this.state.gameSummary.push([e.target.id, e.target.name]);
 
