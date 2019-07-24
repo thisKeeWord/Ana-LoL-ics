@@ -21,12 +21,10 @@ const controler = {
 function userInformation(req, res, next) {
   regionName = req.body.region.region.toLowerCase();
   const date = Date.now();
-  console.log(req.body)
   if (req.body.user_id.users_id) {
     req.summonerId = req.body.user_id.users_id;
     req.summoner = req.body.summonerName.summoner;
     req.region = req.body.region.region.toLowerCase();
-    console.log('where is this')
 
     return next();
   } else {
@@ -48,10 +46,8 @@ function userInformation(req, res, next) {
           date - success[0]["created_at"] <= 10000 &&
           date - success[0]["created_at"] > 0)
       ) {
-        console.log('test')
         usersInfo(date, req, res, next);
       } else {
-        console.log('hello world wtf')
         return res.render("./../index.html", {
           error: "too many requests, try again in a few"
         });
@@ -155,7 +151,6 @@ function getData(req, res) {
 
 function usersInfo(date, req, res, next) {
   const {user_id, region, summonerName} = req.body;
-  console.log(user_id, region, summonerName, 'line 151')
   ThrottleCalls.create({ created_at: date, whatToSave: req.body.user_id.users_id }, function(
     error,
     throttling
