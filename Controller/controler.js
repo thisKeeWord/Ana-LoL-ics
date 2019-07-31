@@ -19,12 +19,13 @@ const controler = {
 
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
-  regionName = req.body.region.region.toLowerCase();
+  const {region, user_id, summonerName} = req.body;
+  regionName = region.region.toLowerCase();
   const date = Date.now();
-  if (req.body.user_id.users_id) {
-    req.summonerId = req.body.user_id.users_id;
-    req.summoner = req.body.summonerName.summoner;
-    req.region = req.body.region.region.toLowerCase();
+  if (user_id.users_id) {
+    req.summonerId = user_id.users_id;
+    req.summoner = summonerName.summoner;
+    req.region = region.region.toLowerCase();
 
     return next();
   } else {
