@@ -13,7 +13,7 @@ gulp.task("browserify", scripts).task("serve", serve);
 function scripts() {
   const bundler = browserify({
     entries: ["./client/components/app.js"],
-    transform: babelify.configure({ presets: ["@babel/react", "es2015"] }),
+    transform: babelify.configure({ presets: ["@babel/preset-react", "@babel/preset-env"] }),
     debug: true,
     cache: {},
     packageCache: {},

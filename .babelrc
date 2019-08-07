@@ -1,0 +1,31 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current",
+          "ie": "11"
+        }
+      }
+    ],
+    "@babel/react"
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      {
+        "loose": true,
+        "useBuiltIns": true
+      }
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ],
+    "@babel/plugin-transform-async-to-generator",
+    ["@babel/plugin-transform-template-literals", { "loose": true }]
+  ]
+}
