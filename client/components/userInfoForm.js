@@ -1,7 +1,14 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
-class UserInformationForm extends React.Component {
+export default class UserInformationForm extends Component {
+  static propTypes = {
+    submitUserForm: PropTypes.func,
+    updateUserRegion: PropTypes.func,
+    gamesToSee: PropTypes.number,
+  };
+
   handleSubmitInfo(e) {
     e.preventDefault();
     this.props.submitUserForm(e, ReactDOM.findDOMNode(this.refs.userName).value);
@@ -14,6 +21,7 @@ class UserInformationForm extends React.Component {
 
   render() {
     const that = this;
+
     return (
       <div className="userInfoForm">
         <form id="getSummonersGames" onSubmit={this.handleSubmitInfo.bind(this)}>
@@ -48,5 +56,3 @@ class UserInformationForm extends React.Component {
     );
   }
 }
-
-module.exports = UserInformationForm;

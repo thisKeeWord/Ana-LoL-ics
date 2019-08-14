@@ -1,6 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import $ from "jquery";
+import d3 from "d3";
 import { Link } from "react-router";
 import TimeStamp from "./timeStamp.js";
 import EventDisplay from "./eventDisplay.js";
@@ -800,7 +800,6 @@ class HeadApp extends React.Component {
   }
 
   render() {
-    const that = this;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (

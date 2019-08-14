@@ -2,11 +2,8 @@ const gulp = require("gulp");
 const source = require("vinyl-source-stream");
 const browserify = require("browserify");
 const watchify = require("watchify");
-const reactify = require("reactify");
 const nodemon = require("gulp-nodemon");
-const uglify = require("gulp-uglify");
 const babelify = require("babelify");
-const buffer = require("vinyl-buffer");
 
 gulp.task("browserify", scripts).task("serve", serve);
 
