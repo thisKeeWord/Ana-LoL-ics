@@ -868,7 +868,7 @@ class HeadApp extends React.Component {
             updateRegion={this.updateRegion.bind(this)}
             gamesToSee={this.state.gamesToSee}
           />
-          <WhosGames summonersName={this.state.whosGames} region={this.state.region} />
+          <WhosGames summonersName={this.state.whosGames} />
           <GamesOnSR
             gamesToSee={this.state.gamesToSee}
             res={this.state.res}
