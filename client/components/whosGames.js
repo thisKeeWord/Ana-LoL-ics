@@ -1,9 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-class WhosGames extends React.Component {
-  render() {
-    return <div id="whichSummoner">{this.props.summonersName}'s Games</div>;
-  }
+WhosGames.propTypes = {
+  summonersName: PropTypes.string.isRequired,
+};
+
+export default function WhosGames(props) {
+  return <div id="whichSummoner">{props.summonersName} Games</div>;
 }
-
-module.exports = WhosGames;

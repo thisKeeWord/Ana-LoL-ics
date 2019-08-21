@@ -19,12 +19,13 @@ const controler = {
 
 // FINDING USER'S INFORMATION FROM ENDPOINT
 function userInformation(req, res, next) {
-  regionName = req.body.region.region.toLowerCase();
+  const { region, user_id, summonerName } = req.body;
+  regionName = region.region.toLowerCase();
   const date = Date.now();
-  if (req.body.user_id.users_id) {
-    req.summonerId = req.body.user_id.users_id;
-    req.summoner = req.body.summonerName.summoner;
-    req.region = req.body.region.region.toLowerCase();
+  if (user_id.users_id) {
+    req.summonerId = user_id.users_id;
+    req.summoner = summonerName.summoner;
+    req.region = region.region.toLowerCase();
 
     return next();
   } else {
@@ -54,6 +55,34 @@ function userInformation(req, res, next) {
       }
     });
   }
+}
+
+function usersInfo(date, req, res, next) {
+  const { user_id, region, summonerName } = req.body;
+  ThrottleCalls.create({ created_at: date, whatToSave: user_id.users_id }, function(
+    error,
+    throttling
+  ) {
+    request(
+      `https://
+        ${region.region.toLowerCase()}
+        ${summonerUrl}
+        ${encodeURI(user_id.users_id)}
+        ?
+        ${process.env.stuff1}`,
+      (error, resp) => {
+        if (error) return console.error("we cannot find the summoner or " + error);
+        if (resp.statusCode === 200) {
+          const userId = JSON.parse(resp.body);
+          const result = userId["accountId"];
+          req.summonerId = result;
+          req.userName = summonerName.summoner;
+          req.region = region.region.toLowerCase();
+        }
+        return next();
+      }
+    );
+  });
 }
 
 // MOST RECENT 10 GAMES ON SUMMONER'S RIFT
@@ -86,14 +115,15 @@ function getData(req, res) {
     count = -1,
     total = 0,
     compareVersions = 0;
-    // patchDesired = 0,
-    const gameTimeline = [],
+
+  const gameTimeline = [],
     idOfPlayer = [],
     imgOfChamp = [],
     positionOfPlayer = [],
     matchDataArray = [],
     date = Date.now();
-  ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
+
+  ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(error, removed) {
         if (error) return console.error(error);
@@ -149,33 +179,7 @@ function getData(req, res) {
   });
 }
 
-function usersInfo(date, req, res, next) {
-  const {user_id, region, summonerName} = req.body;
-  ThrottleCalls.create({ created_at: date, whatToSave: req.body.user_id.users_id }, function(
-    error,
-    throttling
-  ) {
-    request(
-      "https://" +
-        req.body.region.region.toLowerCase() +
-        summonerUrl +
-        encodeURI(req.body.user_id.users_id) +
-        "?" +
-        process.env.stuff1,
-      (error, resp) => {
-        if (error) return console.error("we cannot find the summoner or " + error);
-        if (resp.statusCode === 200) {
-          let userId = JSON.parse(resp.body);
-          let result = userId["accountId"];
-          req.summonerId = result;
-          req.userName = req.body.summonerName.summoner;
-          req.region = req.body.region.region.toLowerCase();
-        }
-        return next();
-      }
-    );
-  });
-}
+
 
 // can split nested requests
 function getMatchList(date, req, res, next) {

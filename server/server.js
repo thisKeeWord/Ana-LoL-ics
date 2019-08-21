@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const fallback = require("express-history-api-fallback");
 const controller = require("./../Controller/controler.js");
-const seasonStats = require("./../Controller/leagueHistoryController.js");
 const mongoURI =
   "mongodb://lkee:" + process.env.stuff4 + "@ds011439.mlab.com:11439/heroku_wk47xfd5";
 mongoose.connect(mongoURI);
