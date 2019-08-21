@@ -11,7 +11,6 @@ export default class UserInformationForm extends Component {
 
   handleSubmitInfo(e) {
     e.preventDefault();
-    console.log(e.target);;
     this.props.submitUserForm(e, ReactDOM.findDOMNode(this.refs.userName).value);
   }
 
