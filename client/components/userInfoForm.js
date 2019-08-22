@@ -35,8 +35,7 @@ export default class UserInformationForm extends Component {
         </form>
 
         <select
-          value={that.props.region}
-          defaultValue="select one"
+          value={that.props.region || ""}
           onChange={that.updateRegion.bind(that)}
           id={"regions" + this.props.gamesToSee}
         >

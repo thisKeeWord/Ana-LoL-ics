@@ -1,20 +1,20 @@
 import React from "react";
 import $ from "jquery";
 import d3 from "d3";
-import { Link } from "react-router";
-import TimeStamp from "./timeStamp.js";
-import EventDisplay from "./eventDisplay.js";
-import Chart from "./chart.js";
-import ChampBuild from "./champBuild.js";
-import ChampImage from "./champImage.js";
-import GamesOnSR from "./summRift.js";
-import DropDownMenu from "./menu.js";
-import GameMap from "./gameMap.js";
-import WhosGames from "./whosGames.js";
-import GameDescription from "./gameDescription.js";
-import UserInformationForm from "./userInfoForm.js";
+import { Link } from "react-router-dom";
+import TimeStamp from "./timeStamp";
+import EventDisplay from "./eventDisplay";
+import Chart from "./chart";
+import ChampBuild from "./champBuild";
+import ChampImage from "./champImage";
+import GamesOnSR from "./summRift";
+import DropDownMenu from "./menu";
+import GameMap from "./gameMap";
+import WhosGames from "./whosGames";
+import GameDescription from "./gameDescription";
+import UserInformationForm from "./userInfoForm";
 
-class HeadApp extends React.Component {
+export default class HeadApp extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -800,6 +800,7 @@ class HeadApp extends React.Component {
   }
 
   render() {
+    console.log(this.state.toggle);;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (
@@ -997,5 +998,3 @@ class HeadApp extends React.Component {
     }
   }
 }
-
-module.exports = HeadApp;

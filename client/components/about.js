@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
-class About extends React.Component {
+export default class About extends React.Component {
   render() {
     return (
       <div id="aboutMe">
@@ -17,7 +17,7 @@ class About extends React.Component {
           id="championBackground"
           style={{
             backgroundImage:
-              "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Kennen_4.jpg)"
+              "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Kennen_4.jpg)",
           }}
         />
         <div id="description">
@@ -49,5 +49,3 @@ class About extends React.Component {
     );
   }
 }
-
-module.exports = About;

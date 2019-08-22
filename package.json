@@ -6,7 +6,6 @@
   "scripts": {
     "prestart": "npm run task",
     "start": "nodemon server/server.js",
-    "start-dev": "npm run task & npm start",
     "task": "gulp",
     "postinstall": "bower install"
   },
