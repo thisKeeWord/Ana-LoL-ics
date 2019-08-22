@@ -21,7 +21,7 @@ export default function DropDownMenu(props) {
     if (gamesToSee === 2) {
       return Math.max(timeline1.length, timeline2.length) - 1;
     }
-  };;
+  };
 
   return (
     <div id={"scrollAndSelect" + gamesToSee}>
