@@ -1,22 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-class GameMap extends React.Component {
-  render() {
-    if (this.props.gamesToSee === 1) {
-      return <div id={"map" + 1 * this.props.gamesToSee} />;
-    }
+GameMap.propTypes = {
+  gamesToSee: PropTypes.number.isRequired,
+};
 
-    if (this.props.gamesToSee === 2) {
-      let gameMapArr = [1, 2];
-      return (
-        <div>
-          {gameMapArr.map(i => {
-            return <div id={"map" + i * this.props.gamesToSee} key={i} />;
-          })}
-        </div>
-      );
-    }
+export default function GameMap(props) {
+  if (props.gamesToSee === 1) {
+    return <div id={`map${1 * props.gamesToSee}`} />;
   }
-}
 
-module.exports = GameMap;
+  return (
+    <div>
+      {[1, 2].map((i) => {
+        return <div id={`map${i * props.gamesToSee}`} key={i} />;
+      })}
+    </div>
+  );
+}
