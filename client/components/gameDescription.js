@@ -2,13 +2,13 @@ import React from "react";
 
 class GameDescription extends React.Component {
   getGameDescription() {
-    let tables = [],
+    const tables = [],
       breakDown = ["LANE", "REGION", "GAME TYPE", "ROLE"];
     for (let i = 0; i < this.props.gameSumm.length; i++) {
-      let infoByGame = this.props.gameSumm[i][1].split("break"),
+      const infoByGame = this.props.gameSumm[i][1].split("break"),
         rows = [];
       for (let j = 0; j < infoByGame.length; j++) {
-        let description = [],
+        const description = [],
           subData = infoByGame[j],
           categories = breakDown[j];
         rows.push(
@@ -31,12 +31,14 @@ class GameDescription extends React.Component {
         </table>
       );
     }
+
     return tables;
   }
 
   render() {
     if (this.props.gameSumm) {
-      let gameInfo = this.getGameDescription();
+      const gameInfo = this.getGameDescription();
+
       return (
         <div className="table" id={"gameDescription" + this.props.gamesToSee}>
           {gameInfo}

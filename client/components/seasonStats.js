@@ -5,7 +5,7 @@ import $ from "jquery";
 
 class SeasonStats extends React.Component {
   render() {
-    let whichBackground = [
+    const whichBackground = [
       "LeeSin_4",
       "Braum_2",
       "Lulu_3",
@@ -17,8 +17,9 @@ class SeasonStats extends React.Component {
       "Poppy_5",
       "MonkeyKing_5",
       "Chogath_6",
-      "Anivia_5"
+      "Anivia_5",
     ];
+
     return (
       <div className="seasonalStats">
         <div
@@ -28,7 +29,7 @@ class SeasonStats extends React.Component {
             backgroundImage:
               "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
               whichBackground[Math.floor(Math.random() * whichBackground.length)] +
-              ".jpg)"
+              ".jpg)",
           }}
         />
         <p id="ranked">Ranked Stats</p>
@@ -54,19 +55,19 @@ class OutForm extends React.Component {
       type: "POST",
       url: "/season-stats",
       data: JSON.stringify(data),
-      contentType: "application/json"
+      contentType: "application/json",
     });
   }
 
   handle(e) {
     e.preventDefault();
-    let that = this;
-    let inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
-    let data = {
+    const that = this;
+    const inGameName = ReactDOM.findDOMNode(this.refs.userName).value;
+    const data = {
       champion: ReactDOM.findDOMNode(this.refs.champion)
         .value.toLowerCase()
         .replace(/\s/g, ""),
-      season: ReactDOM.findDOMNode(this.refs.season).value
+      season: ReactDOM.findDOMNode(this.refs.season).value,
     };
 
     const cleanName = inGameName.toLowerCase().replace(/ /g, "");
@@ -74,7 +75,7 @@ class OutForm extends React.Component {
       data.username = { userName: localStorage[cleanName] };
       data.summonerName = { summoner: cleanName };
       data.region = { region: that.props.region };
-      this.post(data).done(gotTheInfo => {
+      this.post(data).done((gotTheInfo) => {
         console.log("success");
       });
     }
@@ -84,12 +85,12 @@ class OutForm extends React.Component {
       data.username = { userName: cleanName };
       data.summonerName = { summonersName: cleanName };
       data.region = { region: that.props.region };
-      this.post(data).done(gotTheInfo => {
+      this.post(data).done((gotTheInfo) => {
         localStorage[cleanName] = gotTheInfo[0];
       });
     }
 
-    this.post(data).done(res => {
+    this.post(data).done((res) => {
       that.props.update(res[1]);
     });
   }
@@ -100,7 +101,8 @@ class OutForm extends React.Component {
   }
 
   render() {
-    let that = this;
+    const that = this;
+
     return (
       <div id="seasonSpecifics">
         <form id="league-form" onSubmit={this.handle.bind(that)}>
@@ -118,7 +120,7 @@ class OutForm extends React.Component {
               name="season"
               ref="season"
               placeholder="ex: input 2017 not 7"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              onKeyPress="return event.charCode >= 48 && event.charCode <= 57"
               required
             />
           </div>
@@ -153,7 +155,7 @@ class DbResults extends React.Component {
     super();
     this.state = {
       champData: {},
-      region: ""
+      region: "",
     };
   }
 
@@ -167,7 +169,7 @@ class DbResults extends React.Component {
   }
 
   getData() {
-    let that = this;
+    const that = this;
     $.get("/season-stats").done(function(data) {
       that.setState({ champData: data });
     });

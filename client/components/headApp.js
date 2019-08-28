@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import $ from "jquery";
 import d3 from "d3";
 import { Link } from "react-router-dom";
@@ -14,53 +14,50 @@ import WhosGames from "./whosGames";
 import GameDescription from "./gameDescription";
 import UserInformationForm from "./userInfoForm";
 
-export default class HeadApp extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      backgroundImg: [
-        "LeeSin_4",
-        "Braum_2",
-        "Lulu_3",
-        "Blitzcrank_5",
-        "Gragas_4",
-        "Jinx_1",
-        "Yasuo_2",
-        "Bard_0",
-        "Poppy_5",
-        "MonkeyKing_5",
-        "Chogath_6",
-        "Anivia_5",
-      ][Math.floor(Math.random() * 12)],
-      playerID1: [],
-      pos1: [],
-      champImg1: {},
-      allowScroll1: [],
-      result1: {},
-      png1: [],
-      selData1: "",
-      eventSelected: "",
-      addItems1: "",
-      toggle: false,
-      patch1: 0,
-      secondToggle: false,
-      maxForStat1: 0,
-      gamesToSee: 1,
-      clicksForGame: [],
-      playerID2: [],
-      pos2: [],
-      champImg2: {},
-      allowScroll2: [],
-      result2: {},
-      png2: [],
-      selData2: "",
-      addItems2: "",
-      patch2: 0,
-      maxForStat2: 0,
-      region: "",
-      gameSummary: [],
-    };
-  }
+export default class HeadApp extends Component {
+  state = {
+    backgroundImg: [
+      "LeeSin_4",
+      "Braum_2",
+      "Lulu_3",
+      "Blitzcrank_5",
+      "Gragas_4",
+      "Jinx_1",
+      "Yasuo_2",
+      "Bard_0",
+      "Poppy_5",
+      "MonkeyKing_5",
+      "Chogath_6",
+      "Anivia_5",
+    ][Math.floor(Math.random() * 12)],
+    playerID1: [],
+    pos1: [],
+    champImg1: {},
+    allowScroll1: [],
+    result1: {},
+    png1: [],
+    selData1: "",
+    eventSelected: "",
+    addItems1: "",
+    toggle: false,
+    patch1: 0,
+    secondToggle: false,
+    maxForStat1: 0,
+    gamesToSee: 1,
+    clicksForGame: [],
+    playerID2: [],
+    pos2: [],
+    champImg2: {},
+    allowScroll2: [],
+    result2: {},
+    png2: [],
+    selData2: "",
+    addItems2: "",
+    patch2: 0,
+    maxForStat2: 0,
+    region: "",
+    gameSummary: [],
+  };
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
   post(data) {
@@ -800,7 +797,6 @@ export default class HeadApp extends React.Component {
   }
 
   render() {
-    console.log(this.state.toggle);;
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
       return (

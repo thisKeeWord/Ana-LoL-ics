@@ -1,38 +1,44 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-class TimeStamp extends React.Component {
+TimeStamp.propTypes = {
+  gamesToSee: PropTypes.number.isRequired,
+  conversion: PropTypes.array.isRequired,
+  timeline1: PropTypes.array.isRequired,
+  timeline2: PropTypes.array.isRequired,
+};
+
+export default function TimeStamp(props) {
+  const { timeline1, timeline2, gamesToSee, conversion } = props;
   // CONVERTING MILLISECONDS TO HH:MM:SS:MS
-  swap() {
-    let convert = this.props.conversion;
+  let convert = conversion;
 
-    if (this.props.timeline1 && this.props.gamesToSee === 1 && this.props.conversion.length) {
-      convert = this.props.timeline1[this.props.conversion][0].timestamp;
-    }
-
-    if (this.props.timeline2 && this.props.gamesToSee === 2 && this.props.conversion.length) {
-      if (this.props.timeline1.length > this.props.timeline2.length) {
-        convert = this.props.timeline1[this.props.conversion][0].timestamp;
-      } else {
-        convert = this.props.timeline2[this.props.conversion][0].timestamp;
-      }
-    }
-
-    let milliseconds = parseInt(convert % 1000),
-      seconds = parseInt((convert / 1000) % 60),
-      minutes = parseInt((convert / (1000 * 60)) % 60),
-      hours = parseInt((convert / (1000 * 60 * 60)) % 24);
-
-    hours = hours < 10 ? "0" + hours : hours;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    return hours + ":" + minutes + ":" + seconds;
+  if (timeline1 && gamesToSee === 1 && conversion.length) {
+    convert = timeline1[conversion][0].timestamp;
   }
 
-  render() {
-    const callSwap = this.swap();
-    return <div id={"time" + this.props.gamesToSee}>{callSwap}</div>;
+  if (timeline2 && gamesToSee === 2 && conversion.length) {
+    if (timeline1.length > timeline2.length) {
+      convert = timeline1[conversion][0].timestamp;
+    } else {
+      convert = timeline2[conversion][0].timestamp;
+    }
   }
+
+  const milliseconds = parseInt(convert % 1000);
+  let seconds = parseInt((convert / 1000) % 60);
+  let minutes = parseInt((convert / (1000 * 60)) % 60);
+  let hours = parseInt((convert / (1000 * 60 * 60)) % 24);
+
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return (
+    <div id={`time${gamesToSee}`}>
+      {hours} : {minutes} : {seconds} : {milliseconds}
+    </div>
+  );
 }
 
 module.exports = TimeStamp;
