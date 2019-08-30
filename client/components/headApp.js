@@ -83,10 +83,10 @@ export default class HeadApp extends Component {
   }
 
   // HANDLE IGN SUBMIT FORM
-  handleSubmit(e, elem) {
+  handleSubmit(e) {
     e.preventDefault();
     const that = this;
-    const cleanName = elem.toLowerCase().replace(/ /g, "");
+    const cleanName = this.state.name.toLowerCase().replace(/ /g, "");
     const newCleanName = {
       url: { yooRL: "/" },
       summonerName: { summoner: cleanName },
@@ -794,6 +794,12 @@ export default class HeadApp extends Component {
   updateRegion(el) {
     el.preventDefault();
     this.setState({ region: el.target.value });
+  }
+
+  updateUsername(name) {
+    this.setState({
+      user_name: name,
+    });;
   }
 
   render() {

@@ -1,23 +1,29 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
 export default class UserInformationForm extends Component {
   static propTypes = {
     submitUserForm: PropTypes.func,
     updateUserRegion: PropTypes.func,
+    handleNameChange: PropTypes.func.isRequired,
     gamesToSee: PropTypes.number,
   };
 
-  handleSubmitInfo(e) {
+  handleSubmitInfo = (e) => {
     e.preventDefault();
-    this.props.submitUserForm(e, ReactDOM.findDOMNode(this.refs.userName).value);
-  }
+    console.log(e.target);
+    this.props.submitUserForm();
+  };
 
-  updateRegion(elem) {
+  updateRegion = (elem) => {
     elem.preventDefault();
     this.props.updateUserRegion(elem);
-  }
+  };
+
+  handleChange = (e) => {
+    e.preventDefault();
+    this.props.handleNameChange(e.target.value);
+  };
 
   render() {
     const that = this;
@@ -28,8 +34,8 @@ export default class UserInformationForm extends Component {
           <input
             type="text"
             className="userName"
-            ref="userName"
             placeholder="enter summoner name"
+            onChange={this.handleChange.bind(this)}
             required
           />
         </form>
