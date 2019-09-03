@@ -9,7 +9,6 @@ const matchTimelineUrl = ".api.riotgames.com/lol/match/v4/timelines/by-match/";
 const matchVersionUrl = ".api.riotgames.com/lol/match/v4/matches/";
 const version = "https://ddragon.leagueoflegends.com/api/versions.json";
 let regionName = null;
-const patchNumber = util.promisify(getPatchVersion);
 
 const controler = {
   userInformation: userInformation,
@@ -199,10 +198,10 @@ function getMatchList(date, req, res, next) {
         (error, response) => {
           if (error) return console.error(error, "here");
           if (response.statusCode === 200) {
-            let gamesList = JSON.parse(response.body).matches.slice(0, 30);
+            let gamesList = JSON.parse(response.body).matches.slice(0, 20);
             for (let i = 0; i < gamesList.length; i++) {
-              const perGameSpec = [],
-                queueType = gamesList[i]["queue"];
+              const perGameSpec = [];
+              let queueType = gamesList[i].queue;
               if (
                 queueType === 420 ||
                 queueType === 2 ||
@@ -212,17 +211,19 @@ function getMatchList(date, req, res, next) {
                 queueType === 400 ||
                 queueType === 440
               ) {
-                perGameSpec.push(gamesList[i]["gameId"]);
-                perGameSpec.push(gamesList[i]["champion"]);
-                let needDate = new Date(gamesList[i]["timestamp"])
+                let needDate = Date(gamesList[i].timestamp)
                   .toString()
                   .replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/, "");
-                perGameSpec.push(needDate);
-                perGameSpec.push(gamesList[i]["lane"]);
-                perGameSpec.push(gamesList[i]["platformId"]);
-                perGameSpec.push(gamesList[i]["queue"]);
-                perGameSpec.push(gamesList[i]["role"]);
-                perGameSpec.push(gamesList[i]["season"]);
+                perGameSpec.push(
+                  gamesList[i].gameId,
+                  gamesList[i].champion,
+                  needDate,
+                  gamesList[i].lane,
+                  gamesList[i].platformId,
+                  gamesList[i].queue,
+                  gamesList[i].role,
+                  gamesList[i].season
+                );
               }
               matchHistory.push(perGameSpec);
             }
@@ -247,6 +248,7 @@ function getGameData(
   req,
   res
 ) {
+  console.log("https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1)
   request(
     "https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1,
     function(error, newData) {
@@ -301,8 +303,9 @@ async function getPatchVersion(info) {
   let splitCheck,
     gamePatch,
     patchVersion = 0;
-  // if (error) return console.error(error);
+    console.log(info)
   if (info) {
+    console.log(info["gameVersion"])
     while (patchVersion < versionChecks.length) {
       splitCheck = versionChecks[patchVersion].split(".").slice(0, 2);
       gamePatch = info["gameVersion"].split(".").slice(0, 2);
@@ -313,10 +316,10 @@ async function getPatchVersion(info) {
       patchVersion++;
     }
   } else {
+    console.log(versionChecks[0])
     apiVersion = versionChecks[0];
   }
   return apiVersion;
-  // });
 }
 
 // getting proper patch version to compare with data version
@@ -333,7 +336,8 @@ async function comparePatchVersions(
   res
 ) {
   let date = Date.now();
-  let patchDesired = await patchNumber(info).catch(err => console.error(err)); // Don't forget to catch errors;
+  let patchDesired = await getPatchVersion(info).catch(err => console.error(err)); // Don't forget to catch errors;
+  console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`);
   request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(
     err,
     data
@@ -344,6 +348,7 @@ async function comparePatchVersions(
     // getting timeline information by frame from another endpoint
     // since the first timeline request doesn't have the full info
     // by frame for the game
+    console.log(`https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`)
     request(
       `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`,
       function(er, timelineData) {
@@ -413,8 +418,11 @@ async function comparePatchVersions(
 }
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
+  // console.log(matchHistory)
+
   let date = Date.now();
   let patchDesired = await getPatchVersion().catch(err => console.error(err)); // Don't forget to catch errors;
+  console.log(patchDesired)
   if (count >= matchHistory.length) return;
   //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
@@ -425,7 +433,6 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
     ) {
       StaticData.remove({}, function(error, removed) {
         if (error) return console.error(error);
-        // getPatchVersion();
         request(
           `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
           function(errors, inform) {
@@ -434,6 +441,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
               if (err) return console.error(err);
               for (let getId in allChamps) {
+                console.log(allChamps[getId], allChamps[getId].id, matchHistory[count][1])
                 if (allChamps[getId].id === matchHistory[count][1]) {
                   matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${
                     results[0]
@@ -460,6 +468,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
 
       matchHistory = matchHistory.filter(el => el.length > 0);
       for (let i = 0; i < matchHistory.length; i++) {
+        console.log(matchHistory[i][1], champ_key_list[matchHistory[i][1]]);
         if (matchHistory[i]) {
           matchHistory[i][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${
             champ_key_list[matchHistory[i][1]]
@@ -491,6 +500,7 @@ function championImageHelper(
   resData,
   res
 ) {
+  // console.log(info)
   info.participants.forEach(function(i) {
     let pId = i.participantId;
     let cId = i.championId;

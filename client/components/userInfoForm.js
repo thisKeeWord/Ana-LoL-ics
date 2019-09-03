@@ -11,13 +11,12 @@ export default class UserInformationForm extends Component {
 
   handleSubmitInfo = (e) => {
     e.preventDefault();
-    console.log(e.target);
     this.props.submitUserForm();
   };
 
-  updateRegion = (elem) => {
-    elem.preventDefault();
-    this.props.updateUserRegion(elem);
+  updateRegion = (e) => {
+    e.preventDefault();
+    this.props.updateUserRegion(e);
   };
 
   handleChange = (e) => {
