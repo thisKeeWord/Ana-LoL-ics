@@ -1,6 +1,6 @@
 import React from "react";
 import $ from "jquery";
-import d3 from "d3";
+import * as d3 from "d3";
 
 class ChampBuild extends React.Component {
   // GET PLAYER'S ITEM BUILD

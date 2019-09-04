@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
 GameMap.propTypes = {
   gamesToSee: PropTypes.number.isRequired,
@@ -12,7 +13,7 @@ export default function GameMap(props) {
 
   return (
     <div>
-      {[1, 2].map((i) => {
+      {_.range(2).map((i) => {
         return <div id={`map${i * props.gamesToSee}`} key={i} />;
       })}
     </div>

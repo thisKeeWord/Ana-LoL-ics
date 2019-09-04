@@ -1,4 +1,5 @@
 import React from "react";
+import * as d3 from "d3";
 import $ from "jquery";
 
 class Chart extends React.Component {
@@ -10,9 +11,9 @@ class Chart extends React.Component {
       (this.props.timeline2 && this.props.gamesToSee === 2)
     ) {
       for (let l = 1; l <= this.props.gamesToSee; l++) {
-        let eventSpecific = [];
-        let searchEvents = this.props["timeline" + l.toString()];
-        let eventChosen = this.props.eventSelected;
+        const eventSpecific = [];
+        const searchEvents = this.props["timeline" + l.toString()];
+        const eventChosen = this.props.eventSelected;
 
         for (let i = 0; i < this.props["playerInfo" + l.toString()].length; i++) {
           let count = 0;
@@ -159,6 +160,7 @@ class Chart extends React.Component {
         }
         allEvents.push(eventSpecific);
       }
+
       return allEvents;
     }
   }
@@ -166,25 +168,25 @@ class Chart extends React.Component {
   redo(whichData) {
     // GRAB CHAMP NAMES TO USE AS LABELS FOR CHART
     const h = 450,
-      y = d3.scale
-        .linear()
+      y = d3
+        .scaleLinear()
         .domain([0, 1])
         .range([0, h]),
-      x = d3.scale
-        .linear()
+      x = d3
+        .scaleLinear()
         .domain([0, 1])
         .rangeRound([0, 375]),
       yAxis = d3.svg
         .axis()
         .scale(y)
         .orient("bottom");
-    let labelWidth = 400;
+    const labelWidth = 400;
 
     // GAMES
     for (let l = 1; l <= this.props.gamesToSee; l++) {
-      let getName = [];
+      const getName = [];
       if (this.props["selData" + l.toString()]) {
-        let nameOfChamp = this.props["champName" + l.toString()],
+        const nameOfChamp = this.props["champName" + l.toString()],
           playerInformation = this.props["playerInfo" + l.toString()],
           whichSelData = this.props["selData" + l.toString()],
           whichMaxStat = this.props["maxForStat" + l.toString()];
@@ -232,6 +234,7 @@ class Chart extends React.Component {
                 if (l === 2 || this.props.gamesToSee === 1) {
                   return labelWidth - 58;
                 }
+
                 return 58;
               }
             })
@@ -246,10 +249,11 @@ class Chart extends React.Component {
                 if (l === 2 || this.props.gamesToSee === 1) {
                   return labelWidth - 58 - (d / whichMaxStat) * (labelWidth - 58); // FLIP THE BAR TO LOAD UPWARD
                 }
+
                 return 58;
               }
             })
-            .attr("fill", d => {
+            .attr("fill", (d) => {
               return "white";
             })
             .attr("id", "shape");
@@ -275,6 +279,7 @@ class Chart extends React.Component {
                 if (l === 2 || this.props.gamesToSee === 1) {
                   return labelWidth - 58 - (d / whichMaxStat) * (labelWidth - 58) + 26;
                 }
+
                 return (d / whichMaxStat) * (labelWidth - 50) + 25;
               }
             })
@@ -285,7 +290,7 @@ class Chart extends React.Component {
             .attr("id", "amount");
 
           // ADD LABELS TO Y-AXIS
-          let allTheNames = whichSelData
+          const allTheNames = whichSelData
             .append("g")
             .attr("id", "nameStat" + l * this.props.gamesToSee);
           for (let textName = 0; textName < getName.length; textName++) {
@@ -304,12 +309,14 @@ class Chart extends React.Component {
                 if (l === 2 || this.props.gamesToSee === 1) {
                   return labelWidth - 50;
                 }
+
                 return 50;
               })
               .attr("text-anchor", () => {
                 if (l === 2 || this.props.gamesToSee === 1) {
                   return "left";
                 }
+
                 return "end";
               })
               .attr("font-family", "sans-serif")
@@ -317,7 +324,7 @@ class Chart extends React.Component {
               .attr("fill", "white")
               .attr("id", "whichChamp" + textName + l.toString());
 
-            let wrapWord = Number(
+            const wrapWord = Number(
               allTheNames
                 .selectAll("#whichChamp" + textName + l.toString())
                 .style("width")
@@ -341,12 +348,14 @@ class Chart extends React.Component {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return labelWidth - 50;
                   }
+
                   return 50;
                 })
                 .attr("text-anchor", () => {
                   if (l === 2 || this.props.gamesToSee === 1) {
                     return "left";
                   }
+
                   return "end";
                 })
                 .attr("font-family", "sans-serif")
@@ -361,12 +370,12 @@ class Chart extends React.Component {
   }
 
   render() {
-    let whichData = this.diff();
+    const whichData = this.diff();
     if (!whichData) {
       return <div id="chart"></div>;
     }
 
-    let bar = this.redo(whichData);
+    const bar = this.redo(whichData);
     // GAME 1
     if (this.props.gamesToSee === 1) {
       return <div id={"chart" + 1 * this.props.gamesToSee}>{bar}</div>;
@@ -374,10 +383,11 @@ class Chart extends React.Component {
 
     // GAME 2
     if (this.props.gamesToSee === 2) {
-      let ray = [1, 2];
+      const ray = [1, 2];
+
       return (
         <div>
-          {ray.map(l => {
+          {ray.map((l) => {
             return (
               <div id={"chart" + l * this.props.gamesToSee} key={l}>
                 {bar}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import $ from "jquery";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Link } from "react-router-dom";
 import TimeStamp from "./timeStamp";
 import EventDisplay from "./eventDisplay";
@@ -74,6 +74,7 @@ export default class HeadApp extends Component {
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
     $(".loading").css("display", "block");
+    console.log(perGameData);
 
     return $.ajax({
       type: "POST",
@@ -82,11 +83,16 @@ export default class HeadApp extends Component {
     });
   }
 
+  handleChange(val) {
+    this.setState({
+      name: val.toLowerCase().replace(/ /g, ""),
+    });
+  }
+
   // HANDLE IGN SUBMIT FORM
-  handleSubmit(e, elem) {
-    e.preventDefault();
+  handleSubmit() {
     const that = this;
-    const cleanName = elem.toLowerCase().replace(/ /g, "");
+    const cleanName = this.state.name;
     const newCleanName = {
       url: { yooRL: "/" },
       summonerName: { summoner: cleanName },
@@ -106,10 +112,11 @@ export default class HeadApp extends Component {
         localStorage[cleanName] = gotTheInfo[0];
       }
       $(".loading").css("display", "none");
+      console.log(gotTheInfo);
       that.setState({
         res: gotTheInfo[1],
         toggle: true,
-        whosGames: cleanName.toUpperCase(),
+        whosGames: cleanName,
         secondToggle: false,
       });
     });
@@ -127,9 +134,25 @@ export default class HeadApp extends Component {
     this.state.gameSummary.push([e.target.id, e.target.name]);
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
+      console.log("test");
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1])
         .done((gotGameOne) => {
+          console.log(gotGameOne);
           // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
+          // that.setState({
+          //   spot: 0,
+          //   eventSelected: "select one",
+          //   patch1: gotGameOne[0],
+          //   pos1: gotGameOne[1],
+          //   champImg1: gotGameOne[2],
+          //   playerID1: gotGameOne[3],
+          //   allowScroll1: gotGameOne[4],
+          //   result1: gotGameOne[5],
+          //   itemStorage1: gotGameOne[6],
+          //   secondToggle: true,
+          //   totalRenders: 1,
+          //   clicksForGame: [...that.state.clicksForGame].pop(),
+          // });
           that.state.spot = 0;
           that.state.eventSelected = "select one";
           that.state.patch1 = gotGameOne[0];
@@ -199,13 +222,13 @@ export default class HeadApp extends Component {
     }
 
     // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
-    const xScale = d3.scale
-      .linear()
+    const xScale = d3
+      .scaleLinear()
       .domain([domain.min.x, domain.max.x])
       .range([0, width]);
 
-    const yScale = d3.scale
-      .linear()
+    const yScale = d3
+      .scaleLinear()
       .domain([domain.min.y, domain.max.y])
       .range([height, 0]);
 
@@ -796,6 +819,12 @@ export default class HeadApp extends Component {
     this.setState({ region: el.target.value });
   }
 
+  updateUsername(name) {
+    this.setState({
+      user_name: name,
+    });
+  }
+
   render() {
     // IGN SEARCH BAR
     if (this.state.toggle === false) {
@@ -827,6 +856,7 @@ export default class HeadApp extends Component {
             submitUserForm={this.handleSubmit.bind(this)}
             region={this.state.region}
             updateUserRegion={this.updateRegion.bind(this)}
+            handleNameChange={this.handleChange.bind(this)}
           />
 
           <br />
@@ -864,6 +894,7 @@ export default class HeadApp extends Component {
             region={this.state.region}
             updateRegion={this.updateRegion.bind(this)}
             gamesToSee={this.state.gamesToSee}
+            handleNameChange={this.handleChange.bind(this)}
           />
           <WhosGames summonersName={this.state.whosGames} />
           <GamesOnSR
@@ -981,6 +1012,7 @@ export default class HeadApp extends Component {
             region={this.state.region}
             updateRegion={this.updateRegion.bind(this)}
             gamesToSee={this.state.gamesToSee}
+            handleNameChange={this.handleChange.bind(this)}
           />
           <WhosGames summonersName={this.state.whosGames} />
           <GamesOnSR
