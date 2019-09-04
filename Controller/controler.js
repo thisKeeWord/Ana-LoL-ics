@@ -13,7 +13,7 @@ let regionName = null;
 const controler = {
   userInformation: userInformation,
   matchList: matchList,
-  getData: getData
+  getData: getData,
 };
 
 // FINDING USER'S INFORMATION FROM ENDPOINT
@@ -28,15 +28,18 @@ function userInformation(req, res, next) {
 
     return next();
   } else {
-   
     // add a call to userInformation from matchList if users_id value in local storage is incorrect
 
     ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
-      if (error) return console.error(error);
-      
+      if (error) {
+        return console.error(error);
+      }
+
       if (success.length && date - success[0]["created_at"] > 10000) {
         ThrottleCalls.remove({}, (err, removed) => {
-          if (error) return console.error(err);
+          if (error) {
+            return console.error(err);
+          }
           usersInfo(date, req, res, next);
         });
       } else if (
@@ -49,7 +52,7 @@ function userInformation(req, res, next) {
         usersInfo(date, req, res, next);
       } else {
         return res.render("./../index.html", {
-          error: "too many requests, try again in a few"
+          error: "too many requests, try again in a few",
         });
       }
     });
@@ -58,19 +61,19 @@ function userInformation(req, res, next) {
 
 function usersInfo(date, req, res, next) {
   const { user_id, region, summonerName } = req.body;
-  ThrottleCalls.create({ created_at: date, whatToSave: user_id.users_id }, function(
+
+  ThrottleCalls.create({ created_at: date, whatToSave: summonerName.summoner }, function(
     error,
     throttling
   ) {
     request(
-      `https://
-        ${region.region.toLowerCase()}
-        ${summonerUrl}
-        ${encodeURI(user_id.users_id)}
-        ?
-        ${process.env.stuff1}`,
+      `https://${region.region.toLowerCase()}${summonerUrl}${encodeURI(summonerName.summoner)}?${
+        process.env.stuff1
+      }`,
       (error, resp) => {
-        if (error) return console.error("we cannot find the summoner or " + error);
+        if (error) {
+          return console.error("we cannot find the summoner or " + error);
+        }
         if (resp.statusCode === 200) {
           const userId = JSON.parse(resp.body);
           const result = userId["accountId"];
@@ -78,6 +81,7 @@ function usersInfo(date, req, res, next) {
           req.userName = summonerName.summoner;
           req.region = region.region.toLowerCase();
         }
+
         return next();
       }
     );
@@ -90,7 +94,9 @@ function matchList(req, res) {
   ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(removed) {
-        if (error) return console.error(error);
+        if (error) {
+          return console.error(error);
+        }
         getMatchList(date, req, res);
       });
     } else if (
@@ -103,14 +109,14 @@ function matchList(req, res) {
       getMatchList(date, req, res);
     } else {
       return res.render("./../index.html", {
-        error: "too many requests, try again in a few"
+        error: "too many requests, try again in a few",
       });
     }
   });
 }
 
 function getData(req, res) {
-  let keepTrackOf429 = 0,
+  const keepTrackOf429 = 0,
     count = -1,
     total = 0,
     compareVersions = 0;
@@ -125,7 +131,9 @@ function getData(req, res) {
   ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(error, removed) {
-        if (error) return console.error(error);
+        if (error) {
+          return console.error(error);
+        }
         ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
           error,
           throttling
@@ -172,13 +180,11 @@ function getData(req, res) {
       });
     } else {
       return res.render("./../index.html", {
-        error: "too many requests, try again in a few"
+        error: "too many requests, try again in a few",
       });
     }
   });
 }
-
-
 
 // can split nested requests
 function getMatchList(date, req, res, next) {
@@ -189,19 +195,23 @@ function getMatchList(date, req, res, next) {
       error,
       throttling
     ) {
-      if (error) return console.error(error);
-      let count = 0,
+      if (error) {
+        return console.error(error);
+      }
+      const count = 0,
         matchHistory = [];
-      let country = req.body.region.region.toLowerCase();
+      const country = req.body.region.region.toLowerCase();
       request(
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
-          if (error) return console.error(error, "here");
+          if (error) {
+            return console.error(error, "here");
+          }
           if (response.statusCode === 200) {
-            let gamesList = JSON.parse(response.body).matches.slice(0, 20);
+            const gamesList = JSON.parse(response.body).matches.slice(0, 20);
             for (let i = 0; i < gamesList.length; i++) {
               const perGameSpec = [];
-              let queueType = gamesList[i].queue;
+              const queueType = gamesList[i].queue;
               if (
                 queueType === 420 ||
                 queueType === 2 ||
@@ -211,7 +221,7 @@ function getMatchList(date, req, res, next) {
                 queueType === 400 ||
                 queueType === 440
               ) {
-                let needDate = Date(gamesList[i].timestamp)
+                const needDate = new Date(gamesList[i].timestamp)
                   .toString()
                   .replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/, "");
                 perGameSpec.push(
@@ -248,11 +258,12 @@ function getGameData(
   req,
   res
 ) {
-  console.log("https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1)
   request(
     "https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1,
     function(error, newData) {
-      if (error) return console.error(error);
+      if (error) {
+        return console.error(error);
+      }
       if (
         newData.statusCode === 429 &&
         (!newData.headers["X-Rate-Limit-Type"] ||
@@ -278,7 +289,7 @@ function getGameData(
       }
       // getting correct patch version to compare with data version
       else {
-        let info = JSON.parse(newData.body);
+        const info = JSON.parse(newData.body);
         comparePatchVersions(
           info,
           count,
@@ -297,15 +308,12 @@ function getGameData(
 }
 
 async function getPatchVersion(info) {
-
   let apiVersion = null;
-  let versionChecks = JSON.parse(await rp(version));
+  const versionChecks = JSON.parse(await rp(version));
   let splitCheck,
     gamePatch,
     patchVersion = 0;
-    console.log(info)
   if (info) {
-    console.log(info["gameVersion"])
     while (patchVersion < versionChecks.length) {
       splitCheck = versionChecks[patchVersion].split(".").slice(0, 2);
       gamePatch = info["gameVersion"].split(".").slice(0, 2);
@@ -316,9 +324,9 @@ async function getPatchVersion(info) {
       patchVersion++;
     }
   } else {
-    console.log(versionChecks[0])
     apiVersion = versionChecks[0];
   }
+
   return apiVersion;
 }
 
@@ -335,46 +343,54 @@ async function comparePatchVersions(
   req,
   res
 ) {
-  let date = Date.now();
-  let patchDesired = await getPatchVersion(info).catch(err => console.error(err)); // Don't forget to catch errors;
-  console.log(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`);
+  const date = Date.now();
+  const patchDesired = await getPatchVersion(info).catch((err) => console.error(err)); // Don't forget to catch errors;
   request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(
     err,
     data
   ) {
-    if (error) return console.error(error);
-    let resData = JSON.parse(data.body).data;
+    if (err) {
+      return console.error(err);
+    }
+    const resData = JSON.parse(data.body).data;
 
     // getting timeline information by frame from another endpoint
     // since the first timeline request doesn't have the full info
     // by frame for the game
-    console.log(`https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`)
+    console.log(
+      `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`
+    );
     request(
       `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`,
       function(er, timelineData) {
-        let timelineDataFrames = JSON.parse(timelineData.body).frames;
+        const timelineDataFrames = JSON.parse(timelineData.body).frames;
+        // console.log(timelineDataFrames);
         for (let j = 0; j < timelineDataFrames.length; j++) {
           gameTimeline.push([timelineDataFrames[j]]);
         }
 
         // have to use number for numerator since
         // scroll not up yet
-        let stepScroll = 300 / gameTimeline.length;
+        const stepScroll = 300 / gameTimeline.length;
 
         // going to add this call to db to "cache"
         StaticData.find().exec(function(error, staticInfo) {
-          if (error) return console.error(error);
+          if (error) {
+            return console.error(error);
+          }
           if (!staticInfo || date - staticInfo.created_at >= 604800000) {
             StaticData.remove({}, function(error, removed) {
-              if (error) return console.error(error);
+              if (error) {
+                return console.error(error);
+              }
               request(
                 `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
                 function(errors, inform) {
-                  let parsedStaticData = JSON.parse(inform.body);
+                  const parsedStaticData = JSON.parse(inform.body);
                   StaticData.create(
                     { created_at: { $lt: date }, static: parsedStaticData },
                     function(err, successful) {
-                      let allChamps = parsedStaticData.data;
+                      const allChamps = parsedStaticData.data;
                       championImageHelper(
                         timelineDataFrames,
                         allChamps,
@@ -383,7 +399,6 @@ async function comparePatchVersions(
                         matchDataArray,
                         positionOfPlayer,
                         imgOfChamp,
-                        idOfPlayer,
                         gameTimeline,
                         info,
                         resData,
@@ -395,7 +410,7 @@ async function comparePatchVersions(
               );
             });
           } else {
-            let allChamps = staticInfo[0].static;
+            const allChamps = staticInfo[0].static;
             championImageHelper(
               timelineDataFrames,
               allChamps,
@@ -404,7 +419,6 @@ async function comparePatchVersions(
               matchDataArray,
               positionOfPlayer,
               imgOfChamp,
-              idOfPlayer,
               gameTimeline,
               info,
               resData,
@@ -418,30 +432,38 @@ async function comparePatchVersions(
 }
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
-  // console.log(matchHistory)
-
-  let date = Date.now();
-  let patchDesired = await getPatchVersion().catch(err => console.error(err)); // Don't forget to catch errors;
-  console.log(patchDesired)
-  if (count >= matchHistory.length) return;
+  const date = Date.now();
+  const patchDesired = await getPatchVersion().catch((err) => console.error(err)); // Don't forget to catch errors;
+  if (count >= matchHistory.length) {
+    return;
+  }
   //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
-    if (error) return console.error(error);
+    if (error) {
+      return console.error(error);
+    }
     if (
-      !staticInfo || staticInfo.length === 0 || !staticInfo[0].static ||
+      !staticInfo ||
+      staticInfo.length === 0 ||
+      !staticInfo[0].static ||
       date - staticInfo[0].created_at >= 604800000
     ) {
       StaticData.remove({}, function(error, removed) {
-        if (error) return console.error(error);
+        if (error) {
+          return console.error(error);
+        }
         request(
           `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
           function(errors, inform) {
-            if (errors) return console.error(errors);
-            let allChamps = JSON.parse(inform.body).data;
+            if (errors) {
+              return console.error(errors);
+            }
+            const allChamps = JSON.parse(inform.body).data;
             StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
-              if (err) return console.error(err);
-              for (let getId in allChamps) {
-                console.log(allChamps[getId], allChamps[getId].id, matchHistory[count][1])
+              if (err) {
+                return console.error(err);
+              }
+              for (const getId in allChamps) {
                 if (allChamps[getId].id === matchHistory[count][1]) {
                   matchHistory[count][1] = `http://ddragon.leagueoflegends.com/cdn/${
                     results[0]
@@ -460,15 +482,14 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
         );
       });
     } else {
-      let allChamps = staticInfo[0].static;
+      const allChamps = staticInfo[0].static;
       const champ_key_list = {};
-      for (let getId in allChamps) {
+      for (const getId in allChamps) {
         champ_key_list[allChamps[getId].key] = allChamps[getId].id;
       }
 
-      matchHistory = matchHistory.filter(el => el.length > 0);
+      matchHistory = matchHistory.filter((el) => el.length > 0);
       for (let i = 0; i < matchHistory.length; i++) {
-        console.log(matchHistory[i][1], champ_key_list[matchHistory[i][1]]);
         if (matchHistory[i]) {
           matchHistory[i][1] = `http://ddragon.leagueoflegends.com/cdn/${results[0]}/img/champion/${
             champ_key_list[matchHistory[i][1]]
@@ -477,6 +498,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
             matchHistory = matchHistory.filter(function(summonersRift) {
               return summonersRift.length > 2;
             });
+
             return res.status(200).send([req.summonerId, matchHistory]);
           }
         }
@@ -494,31 +516,32 @@ function championImageHelper(
   matchDataArray,
   positionOfPlayer,
   imgOfChamp,
-  idOfPlayer,
   gameTimeline,
   info,
   resData,
   res
 ) {
-  // console.log(info)
+  // console.log("info", info);
   info.participants.forEach(function(i) {
-    let pId = i.participantId;
-    let cId = i.championId;
-    let playerRole = i.timeline.role;
-    let playerLane = i.timeline.lane;
+    const pId = i.participantId;
+    const cId = i.championId;
+    const playerRole = i.timeline.role;
+    const playerLane = i.timeline.lane;
 
     // participant-id and champion-id
     idOfPlayer.push([pId, cId, playerRole, playerLane]);
 
     // getting champion numerical key to grab image
-    for (let getId in allChamps) {
-      if (allChamps[getId].id === cId) {
+    for (const getId in allChamps) {
+      const champion_key = parseInt(allChamps[getId].key);
+      if (champion_key === cId) {
         count++;
-        imgOfChamp[cId] = allChamps[getId].key;
+        imgOfChamp[cId] = champion_key;
         positionOfPlayer.push([
           timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x,
-          timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y
+          timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y,
         ]);
+        console.log("count", count);
         if (count === 9) {
           matchDataArray.push(
             positionOfPlayer,
@@ -528,6 +551,7 @@ function championImageHelper(
             info,
             resData
           );
+          console.log(matchDataArray);
           res.status(200).send(matchDataArray);
         }
       }

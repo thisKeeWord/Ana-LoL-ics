@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import $ from "jquery";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Link } from "react-router-dom";
 import TimeStamp from "./timeStamp";
 import EventDisplay from "./eventDisplay";
@@ -139,32 +139,32 @@ export default class HeadApp extends Component {
         .done((gotGameOne) => {
           console.log(gotGameOne);
           // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
-          that.setState({
-            spot: 0,
-            eventSelected: "select one",
-            patch1: gotGameOne[0],
-            pos1: gotGameOne[1],
-            champImg1: gotGameOne[2],
-            playerID1: gotGameOne[3],
-            allowScroll1: gotGameOne[4],
-            result1: gotGameOne[5],
-            itemStorage1: gotGameOne[6],
-            secondToggle: true,
-            totalRenders: 1,
-            clicksForGame: [...that.state.clicksForGame].pop(),
-          });
-          // that.state.spot = 0;
-          // that.state.eventSelected = "select one";
-          // that.state.patch1 = gotGameOne[0];
-          // that.state.pos1 = gotGameOne[1];
-          // that.state.champImg1 = gotGameOne[2];
-          // that.state.playerID1 = gotGameOne[3];
-          // that.state.allowScroll1 = gotGameOne[4];
-          // that.state.result1 = gotGameOne[5];
-          // that.state.itemStorage1 = gotGameOne[6];
-          // that.state.secondToggle = true;
-          // that.state.totalRenders = 1;
-          // that.state.clicksForGame.length--;
+          // that.setState({
+          //   spot: 0,
+          //   eventSelected: "select one",
+          //   patch1: gotGameOne[0],
+          //   pos1: gotGameOne[1],
+          //   champImg1: gotGameOne[2],
+          //   playerID1: gotGameOne[3],
+          //   allowScroll1: gotGameOne[4],
+          //   result1: gotGameOne[5],
+          //   itemStorage1: gotGameOne[6],
+          //   secondToggle: true,
+          //   totalRenders: 1,
+          //   clicksForGame: [...that.state.clicksForGame].pop(),
+          // });
+          that.state.spot = 0;
+          that.state.eventSelected = "select one";
+          that.state.patch1 = gotGameOne[0];
+          that.state.pos1 = gotGameOne[1];
+          that.state.champImg1 = gotGameOne[2];
+          that.state.playerID1 = gotGameOne[3];
+          that.state.allowScroll1 = gotGameOne[4];
+          that.state.result1 = gotGameOne[5];
+          that.state.itemStorage1 = gotGameOne[6];
+          that.state.secondToggle = true;
+          that.state.totalRenders = 1;
+          that.state.clicksForGame.length--;
           if (this.state.gamesToSee === 1) {
             $(".loading").css("display", "none");
 
@@ -222,13 +222,13 @@ export default class HeadApp extends Component {
     }
 
     // ADJUSTING COORDINATES TO FIT "MINIMAP" SIZE
-    const xScale = d3.scale
-      .linear()
+    const xScale = d3
+      .scaleLinear()
       .domain([domain.min.x, domain.max.x])
       .range([0, width]);
 
-    const yScale = d3.scale
-      .linear()
+    const yScale = d3
+      .scaleLinear()
       .domain([domain.min.y, domain.max.y])
       .range([height, 0]);
 

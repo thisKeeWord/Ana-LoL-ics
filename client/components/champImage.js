@@ -1,11 +1,12 @@
 import React from "react";
+import * as d3 from "d3";
 
 class ChampImage extends React.Component {
   addChampImg() {
     // APPARENTLY NEEDED TO PROPERLY "SCALE" NEW ICONS FOR USE
     const domain = {
       min: { x: -120, y: -120 },
-      max: { x: 14870, y: 14980 }
+      max: { x: 14870, y: 14980 },
     };
 
     // SCALING MAP DOWN
@@ -17,13 +18,13 @@ class ChampImage extends React.Component {
       height = 500;
     }
 
-    const xScale = d3.scale
-      .linear()
+    const xScale = d3
+      .scaleLinear()
       .domain([domain.min.x, domain.max.x])
       .range([0, width]);
 
-    const yScale = d3.scale
-      .linear()
+    const yScale = d3
+      .scaleLinear()
       .domain([domain.min.y, domain.max.y])
       .range([height, 0]);
 
@@ -69,8 +70,8 @@ class ChampImage extends React.Component {
                     ].position.x,
                     this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[
                       w + 1
-                    ].position.y
-                  ]
+                    ].position.y,
+                  ],
                 ])
                 .enter()
                 .append("image")
@@ -84,10 +85,10 @@ class ChampImage extends React.Component {
                     ] +
                     ".png"
                 )
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .attr("class", "image")
@@ -104,15 +105,15 @@ class ChampImage extends React.Component {
                     ].position.x,
                     this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[
                       w + 1
-                    ].position.y
-                  ]
+                    ].position.y,
+                  ],
                 ])
                 .enter()
                 .append("rect")
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
@@ -139,8 +140,8 @@ class ChampImage extends React.Component {
                     this.props["timeline" + count.toString()][this.props.spot - 1][0]
                       .participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][this.props.spot - 1][0]
-                      .participantFrames[w + 1].position.y
-                  ]
+                      .participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("image")
@@ -154,10 +155,10 @@ class ChampImage extends React.Component {
                     ] +
                     ".png"
                 )
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .attr("class", "image")
@@ -172,15 +173,15 @@ class ChampImage extends React.Component {
                     this.props["timeline" + count.toString()][this.props.spot - 1][0]
                       .participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][this.props.spot - 1][0]
-                      .participantFrames[w + 1].position.y
-                  ]
+                      .participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("rect")
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
@@ -205,8 +206,8 @@ class ChampImage extends React.Component {
                     ][0].participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][
                       this.props["timeline" + count.toString()].length - 1
-                    ][0].participantFrames[w + 1].position.y
-                  ]
+                    ][0].participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("image")
@@ -220,10 +221,10 @@ class ChampImage extends React.Component {
                     ] +
                     ".png"
                 )
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .attr("class", "image")
@@ -240,15 +241,15 @@ class ChampImage extends React.Component {
                     ][0].participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][
                       this.props["timeline" + count.toString()].length - 1
-                    ][0].participantFrames[w + 1].position.y
-                  ]
+                    ][0].participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("rect")
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
@@ -277,8 +278,8 @@ class ChampImage extends React.Component {
                     ][0].participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][
                       this.props["timeline" + count.toString()].length - 1 - 1
-                    ][0].participantFrames[w + 1].position.y
-                  ]
+                    ][0].participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("image")
@@ -292,10 +293,10 @@ class ChampImage extends React.Component {
                     ] +
                     ".png"
                 )
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .attr("class", "image")
@@ -312,15 +313,15 @@ class ChampImage extends React.Component {
                     ][0].participantFrames[w + 1].position.x,
                     this.props["timeline" + count.toString()][
                       this.props["timeline" + count.toString()].length - 1 - 1
-                    ][0].participantFrames[w + 1].position.y
-                  ]
+                    ][0].participantFrames[w + 1].position.y,
+                  ],
                 ])
                 .enter()
                 .append("rect")
-                .attr("x", d => {
+                .attr("x", (d) => {
                   return xScale(d[0]);
                 })
-                .attr("y", d => {
+                .attr("y", (d) => {
                   return yScale(d[1]);
                 })
                 .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
