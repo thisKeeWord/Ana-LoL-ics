@@ -176,10 +176,7 @@ class Chart extends React.Component {
         .scaleLinear()
         .domain([0, 1])
         .rangeRound([0, 375]),
-      yAxis = d3.svg
-        .axis()
-        .scale(y)
-        .orient("bottom");
+      yAxis = d3.axisBottom(y);
     const labelWidth = 400;
 
     // GAMES

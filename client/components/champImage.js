@@ -54,6 +54,16 @@ class ChampImage extends React.Component {
           d3.select("#champIcon" + count * this.props.gamesToSee).remove();
           d3.select("#whichTeam" + colorOfTeam + w + whichGameBorder).remove();
 
+          console.log(
+            "http://ddragon.leagueoflegends.com/cdn/" +
+              this.props["patch" + count.toString()] +
+              "/img/champion/" +
+              this.props["champImg" + count.toString()][
+                this.props["playerInfo" + count.toString()][w][1]
+              ] +
+              ".png"
+          );;
+
           if (this.props["timeline" + count.toString()][this.props.spot]) {
             if (
               this.props["timeline" + count.toString()][this.props.spot][0].participantFrames[w + 1]
@@ -91,8 +101,8 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .attr("class", "image")
-                .style({ width: "24px", height: "24px" });
+                .attr("class", "image");
+              // .style({ width: "24px", height: "24px" });
 
               this.props["png" + count.toString()]
                 .append("svg:g")
@@ -116,7 +126,7 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+                // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
                 .attr("height", 23)
                 .attr("width", 23)
                 .attr("fill", "transparent");
@@ -161,8 +171,8 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .attr("class", "image")
-                .style({ width: "24px", height: "24px" });
+                .attr("class", "image");
+              // .style({ width: "24px", height: "24px" });
 
               this.props["png" + count.toString()]
                 .append("svg:g")
@@ -184,12 +194,18 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+                // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
                 .attr("height", 23)
                 .attr("width", 23)
                 .attr("fill", "transparent");
             }
           } else {
+            console.log(this.props["timeline" + count.toString()]);
+            console.log(
+              this.props["timeline" + count.toString()][
+                this.props["timeline" + count.toString()].length - 1
+              ][0]
+            );
             if (
               this.props["timeline" + count.toString()][
                 this.props["timeline" + count.toString()].length - 1
@@ -227,8 +243,8 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .attr("class", "image")
-                .style({ width: "24px", height: "24px" });
+                .attr("class", "image");
+              // .style({ width: "24px", height: "24px" });
 
               this.props["png" + count.toString()]
                 .append("svg:g")
@@ -252,7 +268,7 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+                // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
                 .attr("height", 23)
                 .attr("width", 23)
                 .attr("fill", "transparent");
@@ -299,8 +315,8 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .attr("class", "image")
-                .style({ width: "24px", height: "24px" });
+                .attr("class", "image");
+              // .style({ width: "24px", height: "24px" });
 
               this.props["png" + count.toString()]
                 .append("svg:g")
@@ -324,7 +340,7 @@ class ChampImage extends React.Component {
                 .attr("y", (d) => {
                   return yScale(d[1]);
                 })
-                .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+                // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
                 .attr("height", 23)
                 .attr("width", 23)
                 .attr("fill", "transparent");

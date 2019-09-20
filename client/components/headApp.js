@@ -311,8 +311,8 @@ export default class HeadApp extends Component {
           .attr("y", (d) => {
             return yScale(d[1]);
           })
-          .attr("class", "image")
-          .style({ width: "24px", height: "24px" });
+          .attr("class", "image");
+        // .style({ width: "24px", height: "24px" });
       }
 
       // SET STATE FOR SVG TO USE LATER
