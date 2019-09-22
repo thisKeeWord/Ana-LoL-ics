@@ -525,7 +525,7 @@ class ChampBuild extends React.Component {
               .append("rect")
               .attr("y", w * 45)
               .attr("x", 264)
-              .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+              // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
               .attr("height", 39)
               .attr("width", 39)
               .attr("fill", "transparent");
@@ -573,7 +573,7 @@ class ChampBuild extends React.Component {
                   return 45 * w + 10;
                 }
               })
-              .style({ "stroke-width": 1, stroke: "black" })
+              // .style({ "stroke-width": 1, stroke: "black" })
               .attr("height", (d, el) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })
@@ -670,7 +670,7 @@ class ChampBuild extends React.Component {
               .enter()
               .append("rect")
               .attr("y", w * 45)
-              .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+              // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
               .attr("height", 39)
               .attr("width", 39)
               .attr("fill", "transparent");
@@ -718,7 +718,7 @@ class ChampBuild extends React.Component {
                   return 45 * w + 10;
                 }
               })
-              .style({ "stroke-width": 1, stroke: "black" })
+              // .style({ "stroke-width": 1, stroke: "black" })
               .attr("height", (d, el) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })

@@ -527,7 +527,7 @@ function championImageHelper(
   // console.log("info", info);
 
   info.participants.forEach(function(i) {
-    console.log(i);
+    // console.log(i);
     const pId = i.participantId;
     const cId = i.championId;
     const playerRole = i.timeline.role;
@@ -536,17 +536,23 @@ function championImageHelper(
     // participant-id and champion-id
     idOfPlayer.push([pId, cId, playerRole, playerLane]);
 
+    // console.log(cId);
+
     // getting champion numerical key to grab image
     for (const getId in allChamps) {
       const champion_key = allChamps[getId].key;
+      // console.log(allChamps[getId].key);
       const champion_id = allChamps[getId].id;
-      if (champion_key === cId) {
+
+      console.log(typeof champion_key, typeof cId, "htest");
+      if (champion_key == cId) {
         count++;
         imgOfChamp[cId] = champion_id;
         positionOfPlayer.push([
           timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x,
           timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y,
         ]);
+        console.log(count, "count");
         if (count === 9) {
           matchDataArray.push(
             patchDesired,
@@ -557,7 +563,7 @@ function championImageHelper(
             info,
             resData
           );
-          console.log(matchDataArray);
+          console.log("line 560", matchDataArray);
           res.status(200).send(matchDataArray);
         }
       }
