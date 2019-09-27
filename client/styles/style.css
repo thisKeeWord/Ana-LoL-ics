@@ -19,6 +19,31 @@ a:hover {
   z-index: -100;
 }
 
+.champBuilds1 image,
+.champBuilds2 image {
+  height: 30px;
+  width: 30px;
+}
+
+.champIcons1 image {
+  height: 40px;
+  width: 40px;
+  margin-bottom: 3px;
+}
+
+.champIcons2 image {
+  width: "40px";
+  height: "40px";
+  margin-bottom: "3px";
+  float: "right";
+}
+
+#champIcon1 image,
+#champIcon2 image {
+  height: 24px;
+  width: 24px;
+}
+
 .linkToPages {
   padding-left: 4px;
   font-size: 15px;
@@ -630,4 +655,9 @@ span.hoverHere {
   background-color: #404040;
   text-align: center;
   min-width: 500px;
+}
+
+.consumeableCount1,
+.consumeableCount2 {
+  font-size: 15px;
 }
