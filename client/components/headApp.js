@@ -74,7 +74,6 @@ export default class HeadApp extends Component {
   // GET THE MATCH HISTORY
   postForGame(perGameData) {
     $(".loading").css("display", "block");
-    console.log(perGameData);
 
     return $.ajax({
       type: "POST",
@@ -112,7 +111,6 @@ export default class HeadApp extends Component {
         localStorage[cleanName] = gotTheInfo[0];
       }
       $(".loading").css("display", "none");
-      console.log(gotTheInfo);
       that.setState({
         res: gotTheInfo[1],
         toggle: true,
@@ -134,10 +132,8 @@ export default class HeadApp extends Component {
     this.state.gameSummary.push([e.target.id, e.target.name]);
 
     if (this.state.clicksForGame.length === this.state.gamesToSee) {
-      console.log("test");
       this.postForGame(this.state.clicksForGame[this.state.clicksForGame.length - 1])
         .done((gotGameOne) => {
-          console.log(gotGameOne);
           // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
           // that.setState({
           //   spot: 0,
@@ -311,8 +307,8 @@ export default class HeadApp extends Component {
           .attr("y", (d) => {
             return yScale(d[1]);
           })
-          .attr("class", "image")
-          .style({ width: "24px", height: "24px" });
+          .attr("class", "image");
+        // .style({ width: "24px", height: "24px" });
       }
 
       // SET STATE FOR SVG TO USE LATER

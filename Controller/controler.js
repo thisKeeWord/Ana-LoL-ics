@@ -357,14 +357,10 @@ async function comparePatchVersions(
     // getting timeline information by frame from another endpoint
     // since the first timeline request doesn't have the full info
     // by frame for the game
-    console.log(
-      `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`
-    );
     request(
       `https://${regionName}${matchTimelineUrl}${Object.keys(req.body)[0]}?${process.env.stuff1}`,
       function(er, timelineData) {
         const timelineDataFrames = JSON.parse(timelineData.body).frames;
-        // console.log(timelineDataFrames);
         for (let j = 0; j < timelineDataFrames.length; j++) {
           gameTimeline.push([timelineDataFrames[j]]);
         }
@@ -392,6 +388,7 @@ async function comparePatchVersions(
                     function(err, successful) {
                       const allChamps = parsedStaticData.data;
                       championImageHelper(
+                        patchDesired,
                         timelineDataFrames,
                         allChamps,
                         idOfPlayer,
@@ -412,6 +409,7 @@ async function comparePatchVersions(
           } else {
             const allChamps = staticInfo[0].static;
             championImageHelper(
+              patchDesired,
               timelineDataFrames,
               allChamps,
               idOfPlayer,
@@ -509,6 +507,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
 }
 
 function championImageHelper(
+  patchDesired,
   timelineDataFrames,
   allChamps,
   idOfPlayer,
@@ -521,7 +520,6 @@ function championImageHelper(
   resData,
   res
 ) {
-  // console.log("info", info);
   info.participants.forEach(function(i) {
     const pId = i.participantId;
     const cId = i.championId;
@@ -533,17 +531,19 @@ function championImageHelper(
 
     // getting champion numerical key to grab image
     for (const getId in allChamps) {
-      const champion_key = parseInt(allChamps[getId].key);
-      if (champion_key === cId) {
+      const champion_key = allChamps[getId].key;
+      const champion_id = allChamps[getId].id;
+
+      if (champion_key == cId) {
         count++;
-        imgOfChamp[cId] = champion_key;
+        imgOfChamp[cId] = champion_id;
         positionOfPlayer.push([
           timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.x,
           timelineDataFrames[0].participantFrames[idOfPlayer[count][0]].position.y,
         ]);
-        console.log("count", count);
         if (count === 9) {
           matchDataArray.push(
+            patchDesired,
             positionOfPlayer,
             imgOfChamp,
             idOfPlayer,
@@ -551,7 +551,6 @@ function championImageHelper(
             info,
             resData
           );
-          console.log(matchDataArray);
           res.status(200).send(matchDataArray);
         }
       }

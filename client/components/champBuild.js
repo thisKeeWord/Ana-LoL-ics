@@ -513,8 +513,8 @@ class ChampBuild extends React.Component {
                   ".png"
               )
               .attr("y", w * 45)
-              .attr("x", 264)
-              .style({ width: "40px", height: "40px", marginBottom: "3px" });
+              .attr("x", 264);
+            // .style({ width: "40px", height: "40px", marginBottom: "3px" });
 
             this.props["addItems" + i.toString()]
               .append("svg:g")
@@ -525,7 +525,7 @@ class ChampBuild extends React.Component {
               .append("rect")
               .attr("y", w * 45)
               .attr("x", 264)
-              .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+              // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
               .attr("height", 39)
               .attr("width", 39)
               .attr("fill", "transparent");
@@ -573,7 +573,7 @@ class ChampBuild extends React.Component {
                   return 45 * w + 10;
                 }
               })
-              .style({ "stroke-width": 1, stroke: "black" })
+              // .style({ "stroke-width": 1, stroke: "black" })
               .attr("height", (d, el) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })
@@ -654,13 +654,13 @@ class ChampBuild extends React.Component {
                   this.props["champName" + i.toString()][build[1]] +
                   ".png"
               )
-              .attr("y", w * 45)
-              .style({
-                width: "40px",
-                height: "40px",
-                marginBottom: "3px",
-                float: "right",
-              });
+              .attr("y", w * 45);
+            // .style({
+            //   width: "40px",
+            //   height: "40px",
+            //   marginBottom: "3px",
+            //   float: "right",
+            // });
 
             this.props["addItems" + i.toString()]
               .append("svg:g")
@@ -670,7 +670,7 @@ class ChampBuild extends React.Component {
               .enter()
               .append("rect")
               .attr("y", w * 45)
-              .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
+              // .style({ "stroke-width": 2, stroke: colorOfTeam.toString() })
               .attr("height", 39)
               .attr("width", 39)
               .attr("fill", "transparent");
@@ -697,8 +697,8 @@ class ChampBuild extends React.Component {
               .attr("x", (d, i) => {
                 return 30 * i + 40;
               })
-              .attr("y", 45 * w + 10)
-              .style({ width: "30px", height: "30px" });
+              .attr("y", 45 * w + 10);
+            // .style({ width: "30px", height: "30px" });
 
             // add rectangle frame for consumable count background
             this.props["addItems" + i.toString()]
@@ -718,7 +718,7 @@ class ChampBuild extends React.Component {
                   return 45 * w + 10;
                 }
               })
-              .style({ "stroke-width": 1, stroke: "black" })
+              // .style({ "stroke-width": 1, stroke: "black" })
               .attr("height", (d, el) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })
@@ -745,8 +745,8 @@ class ChampBuild extends React.Component {
               .attr("x", (d, i) => {
                 return 30 * i + 57;
               })
-              .attr("y", 45 * w + 24)
-              .style({ "font-size": "15px" });
+              .attr("y", 45 * w + 24);
+            // .style({ "font-size": "15px" });
 
             // player role on team
             this.props["whichRole" + i.toString()]
@@ -780,7 +780,7 @@ class ChampBuild extends React.Component {
               })
               .attr("font-size", "10px")
               .attr("text-anchor", "end")
-              .style({ width: "20px", height: "20px" })
+              // .style({ width: "20px", height: "20px" })
               .attr("fill", "#cccccc");
           }
         }
