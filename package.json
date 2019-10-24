@@ -4,9 +4,7 @@
   "description": "",
   "main": "Gulpfile.js",
   "scripts": {
-    "prestart": "npm run task",
-    "start": "nodemon --exec babel-node server.js",
-    "task": "gulp",
+    "start": "nodemon --exec babel-node server/server.js",
     "postinstall": "bower install"
   },
   "dependencies": {
@@ -14,7 +12,7 @@
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-transform-async-to-generator": "^7.5.0",
     "@babel/plugin-transform-template-literals": "^7.4.4",
     "@babel/preset-env": "^7.6.3",
