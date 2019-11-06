@@ -1,6 +1,5 @@
 const request = require("request");
 const rp = require("request-promise");
-const util = require("util");
 const ThrottleCalls = require("./throttleCalls.js");
 const StaticData = require("./../database/Schema/StaticDataModel.js");
 const summonerUrl = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/";
@@ -29,14 +28,13 @@ function userInformation(req, res, next) {
     return next();
   } else {
     // add a call to userInformation from matchList if users_id value in local storage is incorrect
-
     ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
       if (error) {
         return console.error(error);
       }
 
       if (success.length && date - success[0]["created_at"] > 10000) {
-        ThrottleCalls.remove({}, (err, removed) => {
+        ThrottleCalls.remove({}, (err) => {
           if (error) {
             return console.error(err);
           }
@@ -60,12 +58,12 @@ function userInformation(req, res, next) {
 }
 
 function usersInfo(date, req, res, next) {
-  const { user_id, region, summonerName } = req.body;
+  const { region, summonerName } = req.body;
 
-  ThrottleCalls.create({ created_at: date, whatToSave: summonerName.summoner }, function(
-    error,
-    throttling
-  ) {
+  ThrottleCalls.create({ created_at: date, whatToSave: summonerName.summoner }, function(error) {
+    if (error) {
+      return console.error(error);
+    }
     request(
       `https://${region.region.toLowerCase()}${summonerUrl}${encodeURI(summonerName.summoner)}?${
         process.env.stuff1
@@ -92,10 +90,14 @@ function usersInfo(date, req, res, next) {
 function matchList(req, res) {
   const date = Date.now();
   ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
+    if (error) {
+      return console.error(error);
+    }
+
     if (success.length && date - success[0]["created_at"] > 10000) {
-      ThrottleCalls.remove({}, function(removed) {
-        if (error) {
-          return console.error(error);
+      ThrottleCalls.remove({}, function(err) {
+        if (err) {
+          return console.error(err);
         }
         getMatchList(date, req, res);
       });
@@ -130,14 +132,16 @@ function getData(req, res) {
 
   ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
     if (success.length && date - success[0]["created_at"] > 10000) {
-      ThrottleCalls.remove({}, function(error, removed) {
+      ThrottleCalls.remove({}, function(error) {
         if (error) {
           return console.error(error);
         }
         ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
-          error,
-          throttling
+          err
         ) {
+          if (err) {
+            return console.error(err);
+          }
           getGameData(
             keepTrackOf429,
             count,
@@ -161,9 +165,11 @@ function getData(req, res) {
         date - success[0]["created_at"] > 0)
     ) {
       ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
-        error,
-        throttling
+        error
       ) {
+        if (error) {
+          return console.error(error);
+        }
         getGameData(
           keepTrackOf429,
           count,
@@ -187,14 +193,11 @@ function getData(req, res) {
 }
 
 // can split nested requests
-function getMatchList(date, req, res, next) {
+function getMatchList(date, req, res) {
   request(version, (error, results) => {
     results = JSON.parse(results.body);
 
-    ThrottleCalls.create({ created_at: date, whatToSave: req.summonerId }, function(
-      error,
-      throttling
-    ) {
+    ThrottleCalls.create({ created_at: date, whatToSave: req.summonerId }, function(error) {
       if (error) {
         return console.error(error);
       }
@@ -367,7 +370,7 @@ async function comparePatchVersions(
 
         // have to use number for numerator since
         // scroll not up yet
-        const stepScroll = 300 / gameTimeline.length;
+        // const stepScroll = 300 / gameTimeline.length;
 
         // going to add this call to db to "cache"
         StaticData.find().exec(function(error, staticInfo) {
@@ -375,7 +378,7 @@ async function comparePatchVersions(
             return console.error(error);
           }
           if (!staticInfo || date - staticInfo.created_at >= 604800000) {
-            StaticData.remove({}, function(error, removed) {
+            StaticData.remove({}, function(error) {
               if (error) {
                 return console.error(error);
               }
@@ -385,7 +388,10 @@ async function comparePatchVersions(
                   const parsedStaticData = JSON.parse(inform.body);
                   StaticData.create(
                     { created_at: { $lt: date }, static: parsedStaticData },
-                    function(err, successful) {
+                    function(err) {
+                      if (err) {
+                        return console.error(error);
+                      }
                       const allChamps = parsedStaticData.data;
                       championImageHelper(
                         patchDesired,
@@ -446,7 +452,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
       !staticInfo[0].static ||
       date - staticInfo[0].created_at >= 604800000
     ) {
-      StaticData.remove({}, function(error, removed) {
+      StaticData.remove({}, function(error) {
         if (error) {
           return console.error(error);
         }
@@ -457,7 +463,7 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
               return console.error(errors);
             }
             const allChamps = JSON.parse(inform.body).data;
-            StaticData.create({ created_at: date, static: allChamps }, function(err, successful) {
+            StaticData.create({ created_at: date, static: allChamps }, function(err) {
               if (err) {
                 return console.error(err);
               }
