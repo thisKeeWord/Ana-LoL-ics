@@ -1,4 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+EventDisplay.propTypes = {
+  timeline1: PropTypes.array.isRequired,
+  champImg1: PropTypes.string.isRequired,
+  playerInfo1: PropTypes.object.isRequired,
+  timeline2: PropTypes.array.isRequired,
+  champImg2: PropTypes.string.isRequired,
+  playerInfo2: PropTypes.object.isRequired,
+  gamesToSee: PropTypes.number.isRequired,
+  spot: PropTypes.array.isRequired,
+  patch1: PropTypes.number.isRequired,
+};
 
 class EventDisplay extends React.Component {
   // LOGS CHAMPION KILLS PER FRAME
@@ -14,24 +27,24 @@ class EventDisplay extends React.Component {
         this.props.playerInfo2 &&
         this.props.gamesToSee === 2)
     ) {
-      let eventPerGame = [];
+      const eventPerGame = [];
       for (let i = 1; i <= this.props.gamesToSee; i++) {
-        let interaction = [];
+        const interaction = [];
         if (this.props["timeline" + i.toString()][this.props.spot]) {
           if (this.props["timeline" + i.toString()][this.props.spot][0].events) {
-            let searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
+            const searchEvents = this.props["timeline" + i.toString()][this.props.spot][0].events;
             for (let j = 0; j < searchEvents.length; j++) {
               if (searchEvents[j].type === "CHAMPION_KILL") {
                 if (searchEvents[j].killerId === 0) {
                   interaction.push([
                     this.props["champImg" + i.toString()][
                       this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1][1]
-                    ]
+                    ],
                   ]);
                 } else {
                   interaction.push([
                     this.props["playerInfo" + i.toString()][searchEvents[j].killerId - 1],
-                    this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1]
+                    this.props["playerInfo" + i.toString()][searchEvents[j].victimId - 1],
                   ]);
                 }
               }
@@ -42,12 +55,13 @@ class EventDisplay extends React.Component {
           eventPerGame.push([]);
         }
       }
+
       return eventPerGame;
     }
   }
 
   render() {
-    let stat = this.log();
+    const stat = this.log();
 
     // DOESN'T EXIST INITIALLY
     if (!stat) {
@@ -63,13 +77,13 @@ class EventDisplay extends React.Component {
       7: "purple",
       8: "purple",
       9: "purple",
-      10: "purple"
+      10: "purple",
     };
     // GAME 1
     if (this.props.gamesToSee === 1) {
       return (
         <div id={"eventDisplay" + 1 * this.props.gamesToSee}>
-          {stat[0].map(champFight => {
+          {stat[0].map((champFight, index) => {
             if (!champFight[1]) {
               return (
                 <div>
@@ -78,7 +92,7 @@ class EventDisplay extends React.Component {
                     style={{
                       border: "1px solid " + colorOfTeam[champFight[0][0]],
                       height: "40px",
-                      width: "40px"
+                      width: "40px",
                     }}
                   >
                     <img
@@ -97,14 +111,15 @@ class EventDisplay extends React.Component {
                 </div>
               );
             }
+
             return (
-              <div>
+              <div key={index}>
                 <div
                   id="champKiller"
                   style={{
                     border: "1px solid " + colorOfTeam[champFight[0][0]],
                     height: "40px",
-                    width: "40px"
+                    width: "40px",
                   }}
                 >
                   <img
@@ -125,7 +140,7 @@ class EventDisplay extends React.Component {
                   style={{
                     border: "1px solid " + colorOfTeam[champFight[1][0]],
                     height: "40px",
-                    width: "40px"
+                    width: "40px",
                   }}
                 >
                   <img
@@ -149,13 +164,14 @@ class EventDisplay extends React.Component {
 
     // GAME 2
     if (this.props.gamesToSee === 2) {
-      let eventArr = [1, 2];
+      const eventArr = [1, 2];
+
       return (
         <div>
-          {eventArr.map(i => {
+          {eventArr.map((i) => {
             return (
               <div id={"eventDisplay" + i * this.props.gamesToSee} key={i}>
-                {stat[i - 1].map(champFight => {
+                {stat[i - 1].map((champFight) => {
                   if (!champFight[1]) {
                     return (
                       <div
@@ -163,7 +179,7 @@ class EventDisplay extends React.Component {
                         style={{
                           border: "1px solid " + colorOfTeam[champFight[0][0]],
                           height: "40px",
-                          width: "40px"
+                          width: "40px",
                         }}
                       >
                         <img
@@ -181,14 +197,15 @@ class EventDisplay extends React.Component {
                       </div>
                     );
                   }
+
                   return (
-                    <div id="playerKPlayer">
+                    <div id="playerKPlayer" key={i}>
                       <div
                         id={"champKiller" + i.toString()}
                         style={{
                           border: "1px solid " + colorOfTeam[champFight[0][0]],
                           height: "30px",
-                          width: "30px"
+                          width: "30px",
                         }}
                       >
                         <img
@@ -209,7 +226,7 @@ class EventDisplay extends React.Component {
                         style={{
                           border: "1px solid " + colorOfTeam[champFight[1][0]],
                           height: "30px",
-                          width: "30px"
+                          width: "30px",
                         }}
                       >
                         <img

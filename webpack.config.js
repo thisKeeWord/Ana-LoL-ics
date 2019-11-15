@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
+  // eslint-disable-next-line no-undef
   entry: path.join(__dirname, "js", "app.js"),
   module: {
     rules: [
@@ -18,6 +19,7 @@ module.exports = {
     extensions: ["*", ".js", ".jsx"],
   },
   output: {
+    // eslint-disable-next-line no-undef
     path: path.join(__dirname, "public"),
     filename: "bundle.js",
     publicPath: "/",
