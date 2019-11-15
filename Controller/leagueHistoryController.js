@@ -1,43 +1,45 @@
-var request = require("request");
-var champUrl = ".api.pvp.net/api/lol/";
-var allChampInfo = ".api.riotgames.com/lol/static-data/v3/champions?dataById=true&api_key=";
-var ThrottleCalls = require("./throttleCalls.js");
+const request = require("request");
+const champUrl = ".api.pvp.net/api/lol/";
+const allChampInfo = ".api.riotgames.com/lol/static-data/v3/champions?dataById=true&api_key=";
+const ThrottleCalls = require("./throttleCalls.js");
 
-var History = {
-  results: results
+const History = {
+  results: results,
 };
 
 // champion data query and save
-function results(req, res, next) {
-  var champCheck = {};
-  var toCheck = {
+function results(req, res) {
+  const toCheck = {
     userName: req.body.summonerName.summoner,
     champion: req.body.champion,
     season: req.body.season,
-    region: req.body.region.region.toLowerCase()
+    region: req.body.region.region.toLowerCase(),
   };
 
   request("https://" + toCheck.region + allChampInfo + process.env.stuff1, function(
     err,
     champDatas
   ) {
-    var champDatum = JSON.parse(champDatas.body).data;
+    const champDatum = JSON.parse(champDatas.body).data;
     champStuff(req, champDatum, toCheck, res);
   });
 }
 
 // helper function being called
 function champStuff(req, champDatum, infos, res) {
-  var date = Date.now();
+  const date = Date.now();
   ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
     if (success.length && date - success[0]["created_at"] > 10000) {
-      ThrottleCalls.remove({}, function(error, removed) {
-        if (error) return console.error(error);
+      ThrottleCalls.remove({}, function(error) {
+        if (error) {
+          throw new error();
+        }
         ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
-          error,
-          throttling
+          error
         ) {
-          if (error) return console.error(error);
+          if (error) {
+            throw new error();
+          }
           getStats(req, champDatum, infos, res);
         });
       });
@@ -49,10 +51,11 @@ function champStuff(req, champDatum, infos, res) {
         date - success[0]["created_at"] > 0)
     ) {
       ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
-        error,
-        throttling
+        error
       ) {
-        if (error) return console.error(error);
+        if (error) {
+          throw new error();
+        }
         getStats(req, champDatum, infos, res);
       });
     }
@@ -60,7 +63,7 @@ function champStuff(req, champDatum, infos, res) {
 }
 
 function getStats(req, champDatum, infos, res) {
-  var desiredChamp = {};
+  let desiredChamp = {};
   request(
     "https://" +
       infos.region +
@@ -73,17 +76,19 @@ function getStats(req, champDatum, infos, res) {
       "&" +
       process.env.stuff1,
     function(error, champStat) {
-      if (error) return console.error(error);
-      var champStatis = JSON.parse(champStat.body).champions;
-      var champNameCheck = Object.keys(champDatum);
-      for (var i = 0; i < champNameCheck.length; i++) {
+      if (error) {
+        throw new error();
+      }
+      const champStatis = JSON.parse(champStat.body).champions;
+      const champNameCheck = Object.keys(champDatum);
+      for (let i = 0; i < champNameCheck.length; i++) {
         champNameCheck[i] = champNameCheck[i].toLowerCase();
       }
-      var champName =
+      const champName =
         champDatum[Object.keys(champDatum)[champNameCheck.indexOf(infos.champion)]].id;
-      for (var i = 0; i < champStatis.length; i++) {
+      for (let i = 0; i < champStatis.length; i++) {
         if (champStatis[i].id === champName) {
-          var capitalizeFirstLetter = infos.champion.substr(0, 1);
+          let capitalizeFirstLetter = infos.champion.substr(0, 1);
           capitalizeFirstLetter =
             capitalizeFirstLetter.toUpperCase() +
             infos.champion.substr(1, infos.champion.length - 1);
@@ -114,8 +119,9 @@ function getStats(req, champDatum, infos, res) {
             totalTurretsKilled: champStatis[i].stats["totalTurretsKilled"],
             mostSpellsCast: champStatis[i].stats["mostSpellsCast"],
             maxNumDeaths: champStatis[i].stats["maxNumDeaths"],
-            totalUnrealKills: champStatis[i].stats["totalUnrealKills"]
+            totalUnrealKills: champStatis[i].stats["totalUnrealKills"],
           };
+
           return res.send([req.summonerId, desiredChamp]);
         }
       }

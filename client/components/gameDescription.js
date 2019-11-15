@@ -1,4 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+GameDescription.propTypes = {
+  gameSumm: PropTypes.array.isRequired,
+  gamesToSee: PropTypes.number.isRequired,
+};
 
 class GameDescription extends React.Component {
   getGameDescription() {
@@ -8,8 +14,7 @@ class GameDescription extends React.Component {
       const infoByGame = this.props.gameSumm[i][1].split("break"),
         rows = [];
       for (let j = 0; j < infoByGame.length; j++) {
-        const description = [],
-          subData = infoByGame[j],
+        const subData = infoByGame[j],
           categories = breakDown[j];
         rows.push(
           <tr

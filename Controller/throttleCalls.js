@@ -1,9 +1,8 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-var throttleCalls = {
+const throttleCalls = {
   created_at: { type: Number, required: true },
-  whatToSave: { type: String, required: true }
+  whatToSave: { type: String, required: true },
 };
 
 module.exports = mongoose.model("ThrottleCalls", throttleCalls);

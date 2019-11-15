@@ -30,13 +30,13 @@ function userInformation(req, res, next) {
     // add a call to userInformation from matchList if users_id value in local storage is incorrect
     ThrottleCalls.find({ created_at: { $lt: date } }).exec((error, success) => {
       if (error) {
-        return console.error(error);
+        throw new Error(error);
       }
 
       if (success.length && date - success[0]["created_at"] > 10000) {
         ThrottleCalls.remove({}, (err) => {
           if (error) {
-            return console.error(err);
+            throw new Error(err);
           }
           usersInfo(date, req, res, next);
         });
@@ -62,7 +62,7 @@ function usersInfo(date, req, res, next) {
 
   ThrottleCalls.create({ created_at: date, whatToSave: summonerName.summoner }, function(error) {
     if (error) {
-      return console.error(error);
+      throw new Error(error);
     }
     request(
       `https://${region.region.toLowerCase()}${summonerUrl}${encodeURI(summonerName.summoner)}?${
@@ -70,7 +70,7 @@ function usersInfo(date, req, res, next) {
       }`,
       (error, resp) => {
         if (error) {
-          return console.error("we cannot find the summoner or " + error);
+          throw new Error("cannot find the summoner or " + error);
         }
         if (resp.statusCode === 200) {
           const userId = JSON.parse(resp.body);
@@ -91,13 +91,13 @@ function matchList(req, res) {
   const date = Date.now();
   ThrottleCalls.find({ created_at: { $lt: date } }).exec(function(error, success) {
     if (error) {
-      return console.error(error);
+      throw new Error(error);
     }
 
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(err) {
         if (err) {
-          return console.error(err);
+          throw new Error(err);
         }
         getMatchList(date, req, res);
       });
@@ -134,13 +134,13 @@ function getData(req, res) {
     if (success.length && date - success[0]["created_at"] > 10000) {
       ThrottleCalls.remove({}, function(error) {
         if (error) {
-          return console.error(error);
+          throw new Error(error);
         }
         ThrottleCalls.create({ created_at: date, whatToSave: Object.keys(req.body)[0] }, function(
           err
         ) {
           if (err) {
-            return console.error(err);
+            throw new Error(err);
           }
           getGameData(
             keepTrackOf429,
@@ -168,7 +168,7 @@ function getData(req, res) {
         error
       ) {
         if (error) {
-          return console.error(error);
+          throw new Error(error);
         }
         getGameData(
           keepTrackOf429,
@@ -199,7 +199,7 @@ function getMatchList(date, req, res) {
 
     ThrottleCalls.create({ created_at: date, whatToSave: req.summonerId }, function(error) {
       if (error) {
-        return console.error(error);
+        throw new Error(error);
       }
       const count = 0,
         matchHistory = [];
@@ -208,7 +208,7 @@ function getMatchList(date, req, res) {
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
           if (error) {
-            return console.error(error, "here");
+            throw (new error(), "here");
           }
           if (response.statusCode === 200) {
             const gamesList = JSON.parse(response.body).matches.slice(0, 20);
@@ -226,7 +226,7 @@ function getMatchList(date, req, res) {
               ) {
                 const needDate = new Date(gamesList[i].timestamp)
                   .toString()
-                  .replace(/(?:\s+GMT[\+\-]\d+)?(?:\s+\([^\)]+\))?$/, "");
+                  .replace(/(?:\s+GMT[+-]\d+)?(?:\s+\([^)]+\))?$/, "");
                 perGameSpec.push(
                   gamesList[i].gameId,
                   gamesList[i].champion,
@@ -265,7 +265,7 @@ function getGameData(
     "https://" + regionName + matchVersionUrl + Object.keys(req.body)[0] + "?" + process.env.stuff1,
     function(error, newData) {
       if (error) {
-        return console.error(error);
+        throw new Error(error);
       }
       if (
         newData.statusCode === 429 &&
@@ -347,13 +347,15 @@ async function comparePatchVersions(
   res
 ) {
   const date = Date.now();
-  const patchDesired = await getPatchVersion(info).catch((err) => console.error(err)); // Don't forget to catch errors;
+  const patchDesired = await getPatchVersion(info).catch((err) => {
+    throw new Error(err);
+  }); // Don't forget to catch error;
   request(`http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/item.json`, function(
     err,
     data
   ) {
     if (err) {
-      return console.error(err);
+      throw new Error(err);
     }
     const resData = JSON.parse(data.body).data;
 
@@ -375,12 +377,12 @@ async function comparePatchVersions(
         // going to add this call to db to "cache"
         StaticData.find().exec(function(error, staticInfo) {
           if (error) {
-            return console.error(error);
+            throw new Error(error);
           }
           if (!staticInfo || date - staticInfo.created_at >= 604800000) {
             StaticData.remove({}, function(error) {
               if (error) {
-                return console.error(error);
+                throw new Error(error);
               }
               request(
                 `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
@@ -390,7 +392,7 @@ async function comparePatchVersions(
                     { created_at: { $lt: date }, static: parsedStaticData },
                     function(err) {
                       if (err) {
-                        return console.error(error);
+                        throw new Error(error);
                       }
                       const allChamps = parsedStaticData.data;
                       championImageHelper(
@@ -437,14 +439,16 @@ async function comparePatchVersions(
 
 async function getHistoryWithImages(req, res, country, matchHistory, count, results) {
   const date = Date.now();
-  const patchDesired = await getPatchVersion().catch((err) => console.error(err)); // Don't forget to catch errors;
+  const patchDesired = await getPatchVersion().catch((err) => {
+    throw new Error(err);
+  }); // Don't forget to catch error;
   if (count >= matchHistory.length) {
     return;
   }
   //staticInfo not valid?
   StaticData.find().exec(function(error, staticInfo) {
     if (error) {
-      return console.error(error);
+      throw new Error(error);
     }
     if (
       !staticInfo ||
@@ -454,18 +458,18 @@ async function getHistoryWithImages(req, res, country, matchHistory, count, resu
     ) {
       StaticData.remove({}, function(error) {
         if (error) {
-          return console.error(error);
+          throw new Error(error);
         }
         request(
           `http://ddragon.leagueoflegends.com/cdn/${patchDesired}/data/en_US/champion.json`,
           function(errors, inform) {
             if (errors) {
-              return console.error(errors);
+              throw new Error(errors);
             }
             const allChamps = JSON.parse(inform.body).data;
             StaticData.create({ created_at: date, static: allChamps }, function(err) {
               if (err) {
-                return console.error(err);
+                throw new Error(err);
               }
               for (const getId in allChamps) {
                 if (allChamps[getId].id === matchHistory[count][1]) {
