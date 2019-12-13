@@ -22,8 +22,8 @@ export default class About extends React.Component {
         />
         <div id="description">
           <p>
-            Ana-LoL-ics doesn't just give a more specialized way of viewing stats by game - played
-            on Summoner's Rift - it allows side-by-side analysis of games.
+            Ana-LoL-ics doesn&apos;t just give a more specialized way of viewing stats by game -
+            played on Summoner&apos;s Rift - it allows side-by-side analysis of games.
           </p>
           <p>
             Users can view stats - warding, creep score, deaths, etc - side-by-side, which should

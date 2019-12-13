@@ -1,5 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as d3 from "d3";
+
+ChampImage.propTypes = {
+  gamesToSee: PropTypes.number.isRequired,
+  spot: PropTypes.number.isRequired,
+  png1: PropTypes.string.isRequired,
+  png2: PropTypes.string.isRequired,
+};
 
 class ChampImage extends React.Component {
   addChampImg() {
@@ -40,12 +48,10 @@ class ChampImage extends React.Component {
         let colorOfTeam = "blue";
 
         // BLUE OR PURPLE SIDE
-
         for (let w = 0; w < this.props["playerInfo" + count.toString()].length; w++) {
           if (w > 4) {
             colorOfTeam = "purple";
           }
-          const checking = this.props["playerInfo" + count.toString()][w];
 
           // REMOVE PREVIOUS ICONS
           // USE SVG FROM STATE TO APPEND NEW ICONS

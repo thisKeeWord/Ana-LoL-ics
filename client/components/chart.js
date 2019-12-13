@@ -1,6 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as d3 from "d3";
 import $ from "jquery";
+
+Chart.propTypes = {
+  gamesToSee: PropTypes.number.isRequired,
+  timeline1: PropTypes.array.isRequired,
+  timeline2: PropTypes.array.isRequired,
+  eventSelected: PropTypes.object.isRequired,
+  spot: PropTypes.number.isRequired,
+};
 
 class Chart extends React.Component {
   diff() {
