@@ -1,6 +1,21 @@
 import React from "react";
+import PropTypes from "prop-types";
 import $ from "jquery";
 import * as d3 from "d3";
+
+ChampBuild.propTypes = {
+  timeline1: PropTypes.array.isRequired,
+  champImg1: PropTypes.string.isRequired,
+  playerInfo1: PropTypes.object.isRequired,
+  addItems1: PropTypes.array.isRequired,
+  addItems2: PropTypes.array.isRequired,
+  timeline2: PropTypes.array.isRequired,
+  champImg2: PropTypes.string.isRequired,
+  playerInfo2: PropTypes.object.isRequired,
+  gamesToSee: PropTypes.number.isRequired,
+  spot: PropTypes.array.isRequired,
+  patch1: PropTypes.number.isRequired,
+};
 
 class ChampBuild extends React.Component {
   // GET PLAYER'S ITEM BUILD
@@ -113,15 +128,6 @@ class ChampBuild extends React.Component {
                   ) {
                     itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                   }
-                  // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[k].participantId === player[0])  {
-                  //   potions++;
-                  // }
-                  // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[k].participantId === player[0])  {
-                  //   biscuits++;
-                  // }
-                  // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[k].participantId === player[0])  {
-                  //   controlWards++;
-                  // }
                 }
 
                 // NO TRINKET
@@ -249,15 +255,6 @@ class ChampBuild extends React.Component {
                     searchEvents[z][0].events[w].participantId === player[0]
                   ) {
                     itemStore.push(findItem);
-                    // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[w].participantId === player[0])  {
-                    //   potions++;
-                    // }
-                    // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[w].participantId === player[0])  {
-                    //   biscuits++;
-                    // }
-                    // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[w].participantId === player[0])  {
-                    //   controlWards++;
-                    // }
                   }
 
                   // ITEM_DESTROYED
@@ -332,15 +329,6 @@ class ChampBuild extends React.Component {
                   ) {
                     itemStore.splice(itemStore.lastIndexOf(findItem), 1);
                   }
-                  // if ((itemStore.includes(2003) && findItem === 2003) && searchEvents[j][0].events[w].participantId === player[0])  {
-                  //   potions++;
-                  // }
-                  // if ((itemStore.includes(2010) && findItem === 2010) && searchEvents[j][0].events[w].participantId === player[0])  {
-                  //   biscuits++;
-                  // }
-                  // if ((itemStore.includes(2055) && findItem === 2055) && searchEvents[j][0].events[w].participantId === player[0])  {
-                  //   controlWards++;
-                  // }
                 }
 
                 // NO TRINKET
@@ -491,7 +479,6 @@ class ChampBuild extends React.Component {
           }
 
           // WID=WIDTH HARDCODED FOR NOW
-          const wid = 466;
           const build = this.props["playerInfo" + i.toString()][w];
 
           // FLIP SECOND BUILD FOR SYMMETRY
@@ -574,13 +561,13 @@ class ChampBuild extends React.Component {
                 }
               })
               // .style({ "stroke-width": 1, stroke: "black" })
-              .attr("height", (d, el) => {
+              .attr("height", (d) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })
-              .attr("width", (d, el) => {
+              .attr("width", (d) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? 17 : 0;
               })
-              .attr("fill", (d, el) => {
+              .attr("fill", (d) => {
                 return showItems[i - 1][w][1][0][d] > 0 ? "grey" : "white";
               });
 
@@ -815,11 +802,11 @@ class ChampBuild extends React.Component {
         <div>
           {arr.map((i) => {
             return (
-              <div>
+              <div key={i}>
                 <div id={"builds" + i * this.props.gamesToSee} key={i}>
                   {items}
                 </div>
-                <div id={"roleLane" + i * this.props.gamesToSee} key={i + i} />
+                <div id={"roleLane" + i * this.props.gamesToSee} key={i} />
               </div>
             );
           })}
