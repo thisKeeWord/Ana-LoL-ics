@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import $ from "jquery";
 import * as d3 from "d3";
 import { Link } from "react-router-dom";
@@ -14,53 +14,54 @@ import WhosGames from "./whosGames";
 import GameDescription from "./gameDescription";
 import UserInformationForm from "./userInfoForm";
 
-export default class HeadApp extends Component {
-  state = {
-    backgroundImg: [
-      "LeeSin_4",
-      "Braum_2",
-      "Lulu_3",
-      "Blitzcrank_5",
-      "Gragas_4",
-      "Jinx_1",
-      "Yasuo_2",
-      "Bard_0",
-      "Poppy_5",
-      "MonkeyKing_5",
-      "Chogath_6",
-      "Anivia_5",
-    ][Math.floor(Math.random() * 12)],
-    playerID1: [],
-    pos1: [],
-    champImg1: {},
-    allowScroll1: [],
-    result1: {},
-    png1: [],
-    selData1: "",
-    eventSelected: "",
-    addItems1: "",
-    toggle: false,
-    patch1: 0,
-    secondToggle: false,
-    maxForStat1: 0,
-    gamesToSee: 1,
-    clicksForGame: [],
-    playerID2: [],
-    pos2: [],
-    champImg2: {},
-    allowScroll2: [],
-    result2: {},
-    png2: [],
-    selData2: "",
-    addItems2: "",
-    patch2: 0,
-    maxForStat2: 0,
-    region: "",
-    gameSummary: [],
+const backgroundImg = [
+  "LeeSin_4",
+  "Braum_2",
+  "Lulu_3",
+  "Blitzcrank_5",
+  "Gragas_4",
+  "Jinx_1",
+  "Yasuo_2",
+  "Bard_0",
+  "Poppy_5",
+  "MonkeyKing_5",
+  "Chogath_6",
+  "Anivia_5",
+][Math.floor(Math.random() * 12)];
+
+export default function HeadApp() {
+    const [name, setName] = React.useState("");
+    const [playerID1, setPlayerID1] = React.useState([]);
+    const [pos1, setPos1] = React.useState([]);
+    const [champImg1, setChampImg1] = React.useState({});
+    const [allowScroll1, setAllowScroll1] = React.useState([]);
+    const [result1, setResult1] = React.useState({});
+    const [png1, setPng1] = React.useState([]);
+    const [selData1, setSelData1] = React.useState("");
+    const [eventSelected, setEventSelected] = React.useState("");
+    const [addItems1, setAddItems1] = React.useState("");
+    const [toggle, setToggle] = React.useState(false);
+    const [patch1, setPatch1] = React.useState(0);
+    const [secondToggle, setSecondToggle] = React.useState(false);
+    const [maxForStat1, setMaxForStat1] = React.useState(0);
+    const [gamesToSee, setGamesToSee] = React.useState(1);
+    const [clicksForGame, setClicksForGame] = React.useState([]);
+    const [playerID2, setPlayerID2] = React.useState([]);
+    const [pos2, setPos2] = React.useState([]);
+    const [champImg2, setChampImg2] = React.useState({});
+    const [allowScroll2, setAllowScroll2] = React.useState([]);
+    const [result2, setResult2] = React.useState({});
+    const [png2, setPng2] = React.useState([]);
+    const [selData2, setSelData2] = React.useState("");
+    const [addItems2, setAddItems2] = React.useState("");
+    const [patch2, setPatch2] = React.useState(0);
+    const [maxForStat2, setMaxForStat2] = React.useState(0);
+    const [region, setRegion] = React.useState("");
+    const [gameSummary, setGameSummary] = React.useState([]);
   };
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
-  post(data) {
+  const post = React.useCallback(function() {
     $(".loading").css("display", "block");
 
     return $.ajax({
@@ -69,10 +70,10 @@ export default class HeadApp extends Component {
       data: JSON.stringify(data),
       contentType: "application/json",
     });
-  }
+  }, []);
 
   // GET THE MATCH HISTORY
-  postForGame(perGameData) {
+  const postForGame = React.useCallback(function() {
     $(".loading").css("display", "block");
 
     return $.ajax({
@@ -80,22 +81,20 @@ export default class HeadApp extends Component {
       url: "/getGameData",
       data: perGameData,
     });
-  }
+  }, []);
 
-  handleChange(val) {
-    this.setState({
-      name: val.toLowerCase().replace(/ /g, ""),
-    });
-  }
+  const handleChange = React.useCallback(function(val) {
+      setName(val.toLowerCase().replace(/ /g, ""));
+  }, []);
 
   // HANDLE IGN SUBMIT FORM
-  handleSubmit() {
+  const handleSubmit = React.useCallback(function() {
     const that = this;
-    const cleanName = this.state.name;
+    const cleanName = name;
     const newCleanName = {
       url: { yooRL: "/" },
       summonerName: { summoner: cleanName },
-      region: { region: that.state.region },
+      region: { region },
     };
 
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
@@ -105,22 +104,21 @@ export default class HeadApp extends Component {
       newCleanName.user_id = { users_id: null };
     }
 
-    this.post(newCleanName).done((gotTheInfo) => {
+    post(newCleanName).done((gotTheInfo) => {
       // IF DATA ISN'T IN LOCAL STORAGE
       if (localStorage && !localStorage[cleanName]) {
         localStorage[cleanName] = gotTheInfo[0];
       }
       $(".loading").css("display", "none");
-      that.setState({
-        res: gotTheInfo[1],
-        toggle: true,
-        whosGames: cleanName,
-        secondToggle: false,
-      });
+      setRes(gotTheInfo[1]);
+      setToggle(true);
+      setWhosGames(cleanName);
+      setSecondToggle(false);
     });
-  }
+  }, []);
 
   // HANDLE CLICK FOR MATCH SELECTION
+  // continue React Hook conversion from ----- here
   handleClick(e) {
     e.preventDefault();
     const that = this;
