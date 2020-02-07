@@ -26,7 +26,7 @@ const backgroundImg = [
   "Poppy_5",
   "MonkeyKing_5",
   "Chogath_6",
-  "Anivia_5"
+  "Anivia_5",
 ][Math.floor(Math.random() * 12)];
 
 export default function HeadApp() {
@@ -58,6 +58,8 @@ export default function HeadApp() {
   const [maxForStat2, setMaxForStat2] = React.useState(0);
   const [region, setRegion] = React.useState("");
   const [spot, setSpot] = React.useState(null);
+  const [res, setRes] = React.useState({});
+  const [whosGames, setWhosGames] = React.useState("");
   let gameSummary = [];
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
@@ -68,7 +70,7 @@ export default function HeadApp() {
       type: "POST",
       url: data.url.yooRL,
       data: JSON.stringify(data),
-      contentType: "application/json"
+      contentType: "application/json",
     });
   }, []);
 
@@ -79,7 +81,7 @@ export default function HeadApp() {
     return $.ajax({
       type: "POST",
       url: "/getGameData",
-      data: perGameData
+      data: perGameData,
     });
   }, []);
 
@@ -93,7 +95,7 @@ export default function HeadApp() {
     const newCleanName = {
       url: { yooRL: "/" },
       summonerName: { summoner: cleanName },
-      region: { region }
+      region: { region },
     };
 
     // CHECK IF DATA EXISTS IN LOCAL STORAGE
@@ -103,7 +105,7 @@ export default function HeadApp() {
       newCleanName.user_id = { users_id: null };
     }
 
-    post(newCleanName).done(gotTheInfo => {
+    post(newCleanName).done((gotTheInfo) => {
       // IF DATA ISN'T IN LOCAL STORAGE
       if (localStorage && !localStorage[cleanName]) {
         localStorage[cleanName] = gotTheInfo[0];
@@ -118,7 +120,7 @@ export default function HeadApp() {
 
   // HANDLE CLICK FOR MATCH SELECTION
   // continue React Hook conversion from ----- here
-  const handleClick = React.useCallback(e => {
+  const handleClick = React.useCallback((e) => {
     e.preventDefault();
     const that = this;
 
@@ -130,7 +132,7 @@ export default function HeadApp() {
 
     if (clicksForGame.length === gamesToSee) {
       postForGame(clicksForGame[clicksForGame.length - 1])
-        .done(gotGameOne => {
+        .done((gotGameOne) => {
           // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
           // that.setState({
           //   spot: 0,
@@ -146,18 +148,18 @@ export default function HeadApp() {
           //   totalRenders: 1,
           //   clicksForGame: [...that.state.clicksForGame].pop(),
           // });
-          that.state.spot = 0;
-          that.state.eventSelected = "select one";
-          that.state.patch1 = gotGameOne[0];
-          that.state.pos1 = gotGameOne[1];
-          that.state.champImg1 = gotGameOne[2];
-          that.state.playerID1 = gotGameOne[3];
-          that.state.allowScroll1 = gotGameOne[4];
-          that.state.result1 = gotGameOne[5];
-          that.state.itemStorage1 = gotGameOne[6];
-          that.state.secondToggle = true;
-          that.state.totalRenders = 1;
-          that.state.clicksForGame.length--;
+          setSpot(0);
+          setEventSelected("select one");
+          setPatch1(gotGameOne[0]);
+          setPos1(gotGameOne[1]);
+          setChampImg1(gotGameOne[2]);
+          setPlayerID1(gotGameOne[3]);
+          setAllowScroll1(gotGameOne[4]);
+          setResult1(gotGameOne[5]);
+          setItemStorage1(gotGameOne[6]);
+          setSecondToggle(true);
+          setTotalRenders(1);
+          setClicksForGame(clicksForGame.length--);
           if (gamesToSee === 1) {
             $(".loading").css("display", "none");
 
@@ -170,7 +172,7 @@ export default function HeadApp() {
         })
         .then(() => {
           if (that.state.clicksForGame.length === 1) {
-            that.postForGame(clicksForGame[0]).done(gotGameOne => {
+            that.postForGame(clicksForGame[0]).done((gotGameOne) => {
               $(".loading").css("display", "none");
 
               // HAD TO DO THIS FOR NOW SINCE SETSTATE TRIGGERS TO SOON
@@ -200,7 +202,7 @@ export default function HeadApp() {
     // RIOT'S SETUP FOR FULL SIZE OF SR MAP
     const domain = {
         min: { x: -120, y: -120 },
-        max: { x: 14870, y: 14980 }
+        max: { x: 14870, y: 14980 },
       },
       // NEWEST VERSION OF SUMMONER'S RIFT
       nSR = "https://s3-us-west-1.amazonaws.com/riot-developer-portal/docs/map11.png";
@@ -298,10 +300,10 @@ export default function HeadApp() {
               champImg1[checking] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image");
@@ -352,10 +354,10 @@ export default function HeadApp() {
               champImg1[checking1] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image")
@@ -401,10 +403,10 @@ export default function HeadApp() {
               champImg2[checking2] +
               ".png"
           )
-          .attr("x", d => {
+          .attr("x", (d) => {
             return xScale(d[0]);
           })
-          .attr("y", d => {
+          .attr("y", (d) => {
             return yScale(d[1]);
           })
           .attr("class", "image")
@@ -418,7 +420,7 @@ export default function HeadApp() {
   }, []);
 
   // SCROLL BAR CHANGE
-  const onChange = React.useCallback(e => {
+  const onChange = React.useCallback((e) => {
     e.preventDefault();
     setSpot(e.target.value);
   }, []);
@@ -679,15 +681,15 @@ export default function HeadApp() {
   }, []);
 
   // USER SELECTION ON DROPDOWN MENU
-  const whichEventPick = React.useCallback(eventPicked => {
+  const whichEventPick = React.useCallback((eventPicked) => {
     eventPicked.preventDefault();
     const eventsForGames = [];
 
     // NUMBER OF GAMES WANTED
     for (let t = 1; t <= gamesToSee; t++) {
-      const searchEvents = this.state["allowScroll" + t.toString()];
+      const searchEvents = `allowScroll${t}`;
       const eventSpecific = [];
-      for (let i = 0; i < this.state["playerID" + t.toString()].length; i++) {
+      for (let i = 0; i < `playerID${t}`.length; i++) {
         let statCount = 0;
         if (
           eventPicked.target.value === "WARD_PLACED" ||
@@ -699,10 +701,8 @@ export default function HeadApp() {
                 if (
                   searchEvents[j][0].events[k].type === eventPicked.target.value &&
                   searchEvents[j][0].events[k].wardType !== "UNDEFINED" &&
-                  (searchEvents[j][0].events[k].creatorId ===
-                    this.state["playerID" + t.toString()][i][0] ||
-                    searchEvents[j][0].events[k].killerId ===
-                      this.state["playerID" + t.toString()][i][0])
+                  (searchEvents[j][0].events[k].creatorId === `playerID${t}`[i][0] ||
+                    searchEvents[j][0].events[k].killerId === `playerID${t}`[i][0])
                 ) {
                   statCount++;
                 }
@@ -779,18 +779,18 @@ export default function HeadApp() {
     }
   }, []);
 
-  const numGamesSee = React.useCallback(e => {
+  const numGamesSee = React.useCallback((e) => {
     e.preventDefault();
-    gamesToSee = parseInt(e.target.value, 10);
+    setGamesToSee(parseInt(e.target.value, 10));
     gameSummary = [];
   }, []);
 
-  const updateRegion = React.useCallback(el => {
+  const updateRegion = React.useCallback((el) => {
     el.preventDefault();
     setRegion(el.target.value);
   }, []);
 
-  const updateUsername = React.useCallback(name => {
+  const updateUsername = React.useCallback((name) => {
     setName(name);
   }, []);
 
@@ -805,7 +805,7 @@ export default function HeadApp() {
             backgroundImage:
               "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
               backgroundImg +
-              ".jpg)"
+              ".jpg)",
           }}
         />
         <ul className="linkToPages">
@@ -821,10 +821,10 @@ export default function HeadApp() {
         </p>
 
         <UserInformationForm
-          submitUserForm={this.handleSubmit.bind(this)}
+          submitUserForm={handleSubmit}
           region={region}
-          updateUserRegion={this.updateRegion.bind(this)}
-          handleNameChange={this.handleChange.bind(this)}
+          updateUserRegion={updateRegion}
+          handleNameChange={handleChange}
         />
 
         <br />
@@ -858,18 +858,18 @@ export default function HeadApp() {
         </div>
 
         <UserInformationForm
-          userFormSubmit={this.handleSubmit.bind(this)}
+          userFormSubmit={handleSubmit}
           region={region}
-          updateRegion={this.updateRegion.bind(this)}
+          updateRegion={updateRegion}
           gamesToSee={gamesToSee}
-          handleNameChange={this.handleChange.bind(this)}
+          handleNameChange={handleChange}
         />
         <WhosGames summonersName={whosGames} />
         <GamesOnSR
           gamesToSee={gamesToSee}
           res={res}
-          onClick={this.handleClick.bind(this)}
-          numGamesSee={this.numGamesSee.bind(this)}
+          onClick={handleClick}
+          numGamesSee={numGamesSee}
           region={region}
         />
         <GameDescription gameSumm={gameSummary} gamesToSee={gamesToSee} />
@@ -884,8 +884,8 @@ export default function HeadApp() {
         <DropDownMenu
           gamesToSee={gamesToSee}
           spot={spot}
-          whichEventPick={this.whichEventPick.bind(this)}
-          onChange={this.onChange.bind(this)}
+          whichEventPick={whichEventPick}
+          onChange={onChange}
           timeline1={allowScroll1}
           timeline2={allowScroll2}
           eventSelected={eventSelected}
@@ -976,18 +976,18 @@ export default function HeadApp() {
         </div>
 
         <UserInformationForm
-          userInfoSubmit={this.handleSubmit.bind(this)}
+          userInfoSubmit={handleSubmit}
           region={region}
-          updateRegion={this.updateRegion.bind(this)}
+          updateRegion={updateRegion}
           gamesToSee={gamesToSee}
-          handleNameChange={this.handleChange.bind(this)}
+          handleNameChange={handleChange}
         />
         <WhosGames summonersName={whosGames} />
         <GamesOnSR
           gamesToSee={gamesToSee}
           res={res}
-          onClick={this.handleClick.bind(this)}
-          numGamesSee={this.numGamesSee.bind(this)}
+          onClick={handleClick}
+          numGamesSee={numGamesSee}
         />
       </div>
     );
