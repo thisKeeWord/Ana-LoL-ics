@@ -32,34 +32,42 @@ const backgroundImg = [
 export default function HeadApp() {
   const [name, setName] = React.useState("");
   const [playerID1, setPlayerID1] = React.useState([]);
+  const [playerID2, setPlayerID2] = React.useState([]);
   const [pos1, setPos1] = React.useState([]);
+  const [pos2, setPos2] = React.useState([]);
   const [champImg1, setChampImg1] = React.useState({});
+  const [champImg2, setChampImg2] = React.useState({});
   const [allowScroll1, setAllowScroll1] = React.useState([]);
-  const [result1, setResult1] = React.useState({});
+  const [allowScroll2, setAllowScroll2] = React.useState([]);
+  // const [result1, setResult1] = React.useState({});
+  // const [result2, setResult2] = React.useState({});
   const [png1, setPng1] = React.useState([]);
+  const [png2, setPng2] = React.useState([]);
   const [selData1, setSelData1] = React.useState("");
-  const [eventSelected, setEventSelected] = React.useState("");
+  const [selData2, setSelData2] = React.useState("");
   const [addItems1, setAddItems1] = React.useState("");
-  const [toggle, setToggle] = React.useState(false);
+  const [addItems2, setAddItems2] = React.useState("");
   const [patch1, setPatch1] = React.useState(0);
-  const [secondToggle, setSecondToggle] = React.useState(false);
+  const [patch2, setPatch2] = React.useState(0);
   const [maxForStat1, setMaxForStat1] = React.useState(0);
+  const [maxForStat2, setMaxForStat2] = React.useState(0);
+  const [whichRole1, setWhichRole1] = React.useState(null);
+  const [whichRole2, setWhichRole2] = React.useState(null);
+  const [itemStorage1, setItemStorage1] = React.useState(null);
+  const [itemStorage2, setItemStorage2] = React.useState(null);
+  const [eventDisplay1, setEventDisplay1] = React.useState({});
+  const [eventDisplay2, setEventDisplay2] = React.useState({});
+  const [secondToggle, setSecondToggle] = React.useState(false);
+  const [eventSelected, setEventSelected] = React.useState("");
+  const [toggle, setToggle] = React.useState(false);
   const [gamesToSee, setGamesToSee] = React.useState(1);
   const [clicksForGame, setClicksForGame] = React.useState([]);
-  const [playerID2, setPlayerID2] = React.useState([]);
-  const [pos2, setPos2] = React.useState([]);
-  const [champImg2, setChampImg2] = React.useState({});
-  const [allowScroll2, setAllowScroll2] = React.useState([]);
-  const [result2, setResult2] = React.useState({});
-  const [png2, setPng2] = React.useState([]);
-  const [selData2, setSelData2] = React.useState("");
-  const [addItems2, setAddItems2] = React.useState("");
-  const [patch2, setPatch2] = React.useState(0);
-  const [maxForStat2, setMaxForStat2] = React.useState(0);
+  // const [totalRenders, setTotalRenders] = React.useState(0);
   const [region, setRegion] = React.useState("");
   const [spot, setSpot] = React.useState(null);
   const [res, setRes] = React.useState({});
   const [whosGames, setWhosGames] = React.useState("");
+
   let gameSummary = [];
 
   // POST REQUEST TO SERVER WITH USERNAME TO RETRIEVE ID
@@ -85,7 +93,7 @@ export default function HeadApp() {
     });
   }, []);
 
-  const handleChange = React.useCallback(function(val) {
+  const handleNameChange = React.useCallback(function(val) {
     setName(val.toLowerCase().replace(/ /g, ""));
   }, []);
 
@@ -155,10 +163,10 @@ export default function HeadApp() {
           setChampImg1(gotGameOne[2]);
           setPlayerID1(gotGameOne[3]);
           setAllowScroll1(gotGameOne[4]);
-          setResult1(gotGameOne[5]);
+          // setResult1(gotGameOne[5]);
           setItemStorage1(gotGameOne[6]);
           setSecondToggle(true);
-          setTotalRenders(1);
+          // setTotalRenders(1);
           setClicksForGame(clicksForGame.length--);
           if (gamesToSee === 1) {
             $(".loading").css("display", "none");
@@ -181,9 +189,9 @@ export default function HeadApp() {
               setChampImg2(gotGameOne[2]);
               setPlayerID2(gotGameOne[3]);
               setAllowScroll2(gotGameOne[4]);
-              setResult2(gotGameOne[5]);
+              // setResult2(gotGameOne[5]);
               setItemStorage2(gotGameOne[6]);
-              setTotalRenders(2);
+              // setTotalRenders(2);
               setClicksForGame.length--;
 
               // WHATEVER IS CALLED FIRST IS NOT BEING RENDERED
@@ -725,7 +733,7 @@ export default function HeadApp() {
                   ) {
                     if (
                       searchEvents[j][0].events[k][eventPicked.target.value] ===
-                      this.state["playerID" + t.toString()][i][0]
+                      `playerID${t}`[i][0]
                     ) {
                       statCount++;
                     }
@@ -741,7 +749,7 @@ export default function HeadApp() {
                     ) {
                       if (
                         searchEvents[j][0].events[k][eventPicked.target.value][assists] ===
-                        this.state["playerID" + t.toString()][i][0]
+                        `playerID${t}`[i][0]
                       ) {
                         statCount++;
                       }
@@ -790,10 +798,6 @@ export default function HeadApp() {
     setRegion(el.target.value);
   }, []);
 
-  const updateUsername = React.useCallback((name) => {
-    setName(name);
-  }, []);
-
   // IGN SEARCH BAR
   if (toggle === false) {
     return (
@@ -824,7 +828,7 @@ export default function HeadApp() {
           submitUserForm={handleSubmit}
           region={region}
           updateUserRegion={updateRegion}
-          handleNameChange={handleChange}
+          handleNameChange={handleNameChange}
         />
 
         <br />
@@ -862,7 +866,7 @@ export default function HeadApp() {
           region={region}
           updateRegion={updateRegion}
           gamesToSee={gamesToSee}
-          handleNameChange={handleChange}
+          handleNameChange={handleNameChange}
         />
         <WhosGames summonersName={whosGames} />
         <GamesOnSR
@@ -980,7 +984,7 @@ export default function HeadApp() {
           region={region}
           updateRegion={updateRegion}
           gamesToSee={gamesToSee}
-          handleNameChange={handleChange}
+          handleNameChange={handleNameChange}
         />
         <WhosGames summonersName={whosGames} />
         <GamesOnSR
