@@ -208,7 +208,7 @@ function getMatchList(date, req, res) {
         "https://" + country + matchHistoryList + req.summonerId + "?" + process.env.stuff1,
         (error, response) => {
           if (error) {
-            throw (new error(), "here");
+            throw new Error(error);
           }
           if (response.statusCode === 200) {
             const gamesList = JSON.parse(response.body).matches.slice(0, 20);
