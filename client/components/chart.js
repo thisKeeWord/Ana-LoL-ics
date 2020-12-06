@@ -406,4 +406,4 @@ class Chart extends React.Component {
   }
 }
 
-module.exports = Chart;
+export default Chart;

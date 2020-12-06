@@ -129,4 +129,4 @@ function getStats(req, champDatum, infos, res) {
   );
 }
 
-module.exports = History;
+export default History;

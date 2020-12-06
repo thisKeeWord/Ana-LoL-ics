@@ -816,4 +816,4 @@ class ChampBuild extends React.Component {
   }
 }
 
-module.exports = ChampBuild;
+export default ChampBuild;

@@ -55,4 +55,4 @@ class GameDescription extends React.Component {
   }
 }
 
-module.exports = GameDescription;
+export default GameDescription;

@@ -2,16 +2,16 @@ import React from "react";
 import $ from "jquery";
 import * as d3 from "d3";
 import { Link } from "react-router-dom";
-import TimeStamp from "./timeStamp";
-import EventDisplay from "./eventDisplay";
-import Chart from "./chart";
-import ChampBuild from "./champBuild";
-import ChampImage from "./champImage";
-import GamesOnSR from "./summRift";
-import DropDownMenu from "./menu";
-import GameMap from "./gameMap";
-import WhosGames from "./whosGames";
-import GameDescription from "./gameDescription";
+// import TimeStamp from "./timeStamp";
+// import EventDisplay from "./eventDisplay";
+// import Chart from "./chart";
+// import ChampBuild from "./champBuild";
+// import ChampImage from "./champImage";
+// import GamesOnSR from "./summRift";
+// import DropDownMenu from "./menu";
+// import GameMap from "./gameMap";
+// import WhosGames from "./whosGames";
+// import GameDescription from "./gameDescription";
 import UserInformationForm from "./userInfoForm";
 
 const backgroundImg = [
@@ -799,201 +799,203 @@ export default function HeadApp() {
   }, []);
 
   // IGN SEARCH BAR
-  if (toggle === false) {
-    return (
-      <div id="landingPage">
-        <div className="loading"></div>
-        <div
-          id="championBackground"
-          style={{
-            backgroundImage:
-              "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
-              backgroundImg +
-              ".jpg)",
-          }}
-        />
-        <ul className="linkToPages">
-          <li className="goAbout">
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
+  // if (!toggle) {
+  console.log("what");
 
-        <p id="quickSumm">
-          Your one stop shop to finding more than a summary but less than a replay of a game!
-          <br />
-          To get started, enter an ign (in game name) in the search bar.
-        </p>
+  return (
+    <div id="landingPage">
+      <div className="loading"></div>
+      <div
+        id="championBackground"
+        style={{
+          backgroundImage:
+            "url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
+            backgroundImg +
+            ".jpg)",
+        }}
+      />
+      <ul className="linkToPages">
+        <li className="goAbout">
+          <Link to="/about">About</Link>
+        </li>
+      </ul>
 
-        <UserInformationForm
-          submitUserForm={handleSubmit}
-          region={region}
-          updateUserRegion={updateRegion}
-          handleNameChange={handleNameChange}
-        />
+      <p id="quickSumm">
+        Your one stop shop to finding more than a summary but less than a replay of a game!
+        <br />
+        To get started, enter an ign (in game name) in the search bar.
+      </p>
 
-        <br />
-        <br />
-        <br />
-        <br />
+      <UserInformationForm
+        submitUserForm={handleSubmit}
+        region={region}
+        updateUserRegion={updateRegion}
+        handleNameChange={handleNameChange}
+      />
 
-        <p id="legalStuff">
-          (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views or
-          opinions of Riot Games or anyone officially involved in producing or managing League of
-          Legends.League of Legends and Riot Games are trademarks or registered trademarks of Riot
-          Games, Inc. League of Legends © Riot Games, Inc.)
-        </p>
-      </div>
-    );
-  }
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <p id="legalStuff">
+        (Legal Stuff: Ana-LoL-ics isn’t endorsed by Riot Games and doesn’t reflect the views or
+        opinions of Riot Games or anyone officially involved in producing or managing League of
+        Legends.League of Legends and Riot Games are trademarks or registered trademarks of Riot
+        Games, Inc. League of Legends © Riot Games, Inc.)
+      </p>
+    </div>
+  );
+  // }
 
   // MATCH LIST BUTTONS AND MATCH DATA
-  if (secondToggle === true && toggle === true) {
-    $("body").css("background", "#292929");
+  // if (secondToggle && toggle) {
+  //   $("body").css("background", "#292929");
 
-    return (
-      <div className="resultingInfo">
-        <div className="loading"></div>
-        <div id="backHome">
-          <ul className="linkToPages">
-            <li className="goAbout">
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </div>
+  //   return (
+  //     <div className="resultingInfo">
+  //       <div className="loading"></div>
+  //       <div id="backHome">
+  //         <ul className="linkToPages">
+  //           <li className="goAbout">
+  //             <Link to="/about">About</Link>
+  //           </li>
+  //         </ul>
+  //       </div>
 
-        <UserInformationForm
-          userFormSubmit={handleSubmit}
-          region={region}
-          updateRegion={updateRegion}
-          gamesToSee={gamesToSee}
-          handleNameChange={handleNameChange}
-        />
-        <WhosGames summonersName={whosGames} />
-        <GamesOnSR
-          gamesToSee={gamesToSee}
-          res={res}
-          onClick={handleClick}
-          numGamesSee={numGamesSee}
-          region={region}
-        />
-        <GameDescription gameSumm={gameSummary} gamesToSee={gamesToSee} />
-        <GameMap gamesToSee={gamesToSee} region={region} />
-        <TimeStamp
-          gamesToSee={gamesToSee}
-          timeline1={allowScroll1}
-          conversion={spot}
-          timeline2={allowScroll2}
-          region={region}
-        />
-        <DropDownMenu
-          gamesToSee={gamesToSee}
-          spot={spot}
-          whichEventPick={whichEventPick}
-          onChange={onChange}
-          timeline1={allowScroll1}
-          timeline2={allowScroll2}
-          eventSelected={eventSelected}
-          region={region}
-        />
-        <EventDisplay
-          gamesToSee={gamesToSee}
-          timeline1={allowScroll1}
-          spot={spot}
-          eventDisplay1={eventDisplay1}
-          eventDisplay2={eventDisplay2}
-          playerInfo1={playerID1}
-          champImg1={champImg1}
-          patch1={patch1}
-          timeline2={allowScroll2}
-          playerInfo2={playerID2}
-          champImg2={champImg2}
-          patch2={patch2}
-          region={region}
-        />
-        <Chart
-          gamesToSee={gamesToSee}
-          timeline1={allowScroll1}
-          spot={spot}
-          selData1={selData1}
-          playerInfo1={playerID1}
-          champName1={champImg1}
-          maxForStat1={maxForStat1}
-          timeline2={allowScroll2}
-          selData2={selData2}
-          playerInfo2={playerID2}
-          eventSelected={eventSelected}
-          champName2={champImg2}
-          maxForStat2={maxForStat2}
-          region={region}
-        />
-        <ChampBuild
-          gamesToSee={gamesToSee}
-          timeline1={allowScroll1}
-          spot={spot}
-          playerInfo1={playerID1}
-          champName1={champImg1}
-          itemStorage1={itemStorage1}
-          addItems1={addItems1}
-          patch1={patch1}
-          timeline2={allowScroll2}
-          playerInfo2={playerID2}
-          champName2={champImg2}
-          itemStorage2={itemStorage2}
-          addItems2={addItems2}
-          patch2={patch2}
-          whichRole1={whichRole1}
-          whichRole2={whichRole2}
-          region={region}
-        />
-        <ChampImage
-          gamesToSee={gamesToSee}
-          timeline1={allowScroll1}
-          playerInfo1={playerID1}
-          png1={png1}
-          champImg1={champImg1}
-          spot={spot}
-          patch1={patch1}
-          timeline2={allowScroll2}
-          playerInfo2={playerID2}
-          png2={png2}
-          champImg2={champImg2}
-          patch2={patch2}
-          region={region}
-        />
-      </div>
-    );
-  }
+  //       <UserInformationForm
+  //         userFormSubmit={handleSubmit}
+  //         region={region}
+  //         updateRegion={updateRegion}
+  //         gamesToSee={gamesToSee}
+  //         handleNameChange={handleNameChange}
+  //       />
+  //       <WhosGames summonersName={whosGames} />
+  //       <GamesOnSR
+  //         gamesToSee={gamesToSee}
+  //         res={res}
+  //         onClick={handleClick}
+  //         numGamesSee={numGamesSee}
+  //         region={region}
+  //       />
+  //       <GameDescription gameSumm={gameSummary} gamesToSee={gamesToSee} />
+  //       <GameMap gamesToSee={gamesToSee} region={region} />
+  //       <TimeStamp
+  //         gamesToSee={gamesToSee}
+  //         timeline1={allowScroll1}
+  //         conversion={spot}
+  //         timeline2={allowScroll2}
+  //         region={region}
+  //       />
+  //       <DropDownMenu
+  //         gamesToSee={gamesToSee}
+  //         spot={spot}
+  //         whichEventPick={whichEventPick}
+  //         onChange={onChange}
+  //         timeline1={allowScroll1}
+  //         timeline2={allowScroll2}
+  //         eventSelected={eventSelected}
+  //         region={region}
+  //       />
+  //       <EventDisplay
+  //         gamesToSee={gamesToSee}
+  //         timeline1={allowScroll1}
+  //         spot={spot}
+  //         eventDisplay1={eventDisplay1}
+  //         eventDisplay2={eventDisplay2}
+  //         playerInfo1={playerID1}
+  //         champImg1={champImg1}
+  //         patch1={patch1}
+  //         timeline2={allowScroll2}
+  //         playerInfo2={playerID2}
+  //         champImg2={champImg2}
+  //         patch2={patch2}
+  //         region={region}
+  //       />
+  //       <Chart
+  //         gamesToSee={gamesToSee}
+  //         timeline1={allowScroll1}
+  //         spot={spot}
+  //         selData1={selData1}
+  //         playerInfo1={playerID1}
+  //         champName1={champImg1}
+  //         maxForStat1={maxForStat1}
+  //         timeline2={allowScroll2}
+  //         selData2={selData2}
+  //         playerInfo2={playerID2}
+  //         eventSelected={eventSelected}
+  //         champName2={champImg2}
+  //         maxForStat2={maxForStat2}
+  //         region={region}
+  //       />
+  //       <ChampBuild
+  //         gamesToSee={gamesToSee}
+  //         timeline1={allowScroll1}
+  //         spot={spot}
+  //         playerInfo1={playerID1}
+  //         champName1={champImg1}
+  //         itemStorage1={itemStorage1}
+  //         addItems1={addItems1}
+  //         patch1={patch1}
+  //         timeline2={allowScroll2}
+  //         playerInfo2={playerID2}
+  //         champName2={champImg2}
+  //         itemStorage2={itemStorage2}
+  //         addItems2={addItems2}
+  //         patch2={patch2}
+  //         whichRole1={whichRole1}
+  //         whichRole2={whichRole2}
+  //         region={region}
+  //       />
+  //       <ChampImage
+  //         gamesToSee={gamesToSee}
+  //         timeline1={allowScroll1}
+  //         playerInfo1={playerID1}
+  //         png1={png1}
+  //         champImg1={champImg1}
+  //         spot={spot}
+  //         patch1={patch1}
+  //         timeline2={allowScroll2}
+  //         playerInfo2={playerID2}
+  //         png2={png2}
+  //         champImg2={champImg2}
+  //         patch2={patch2}
+  //         region={region}
+  //       />
+  //     </div>
+  //   );
+  // }
 
-  // MATCH LIST BUTTONS
-  if (toggle === true) {
-    $("body").css("background", "#292929");
+  // // MATCH LIST BUTTONS
+  // if (toggle) {
+  //   $("body").css("background", "#292929");
 
-    return (
-      <div id="second">
-        <div className="loading"></div>
-        <div id="backHome">
-          <ul className="linkToPages">
-            <li className="goAbout">
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </div>
+  //   return (
+  //     <div id="second">
+  //       <div className="loading"></div>
+  //       <div id="backHome">
+  //         <ul className="linkToPages">
+  //           <li className="goAbout">
+  //             <Link to="/about">About</Link>
+  //           </li>
+  //         </ul>
+  //       </div>
 
-        <UserInformationForm
-          userInfoSubmit={handleSubmit}
-          region={region}
-          updateRegion={updateRegion}
-          gamesToSee={gamesToSee}
-          handleNameChange={handleNameChange}
-        />
-        <WhosGames summonersName={whosGames} />
-        <GamesOnSR
-          gamesToSee={gamesToSee}
-          res={res}
-          onClick={handleClick}
-          numGamesSee={numGamesSee}
-        />
-      </div>
-    );
-  }
+  //       <UserInformationForm
+  //         userInfoSubmit={handleSubmit}
+  //         region={region}
+  //         updateRegion={updateRegion}
+  //         gamesToSee={gamesToSee}
+  //         handleNameChange={handleNameChange}
+  //       />
+  //       <WhosGames summonersName={whosGames} />
+  //       <GamesOnSR
+  //         gamesToSee={gamesToSee}
+  //         res={res}
+  //         onClick={handleClick}
+  //         numGamesSee={numGamesSee}
+  //       />
+  //     </div>
+  //   );
+  // }
 }

@@ -351,4 +351,4 @@ class ChampImage extends React.Component {
   }
 }
 
-module.exports = ChampImage;
+export default ChampImage;

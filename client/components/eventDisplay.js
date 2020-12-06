@@ -253,4 +253,4 @@ class EventDisplay extends React.Component {
   }
 }
 
-module.exports = EventDisplay;
+export default EventDisplay;

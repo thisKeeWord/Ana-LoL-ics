@@ -40,5 +40,3 @@ export default function TimeStamp(props) {
     </div>
   );
 }
-
-module.exports = TimeStamp;

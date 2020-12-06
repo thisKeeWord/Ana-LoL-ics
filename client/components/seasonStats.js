@@ -309,4 +309,4 @@ class ResToDisp extends React.Component {
   }
 }
 
-module.exports = SeasonStats;
+export default SeasonStats;

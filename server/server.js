@@ -11,16 +11,16 @@ const mongoURI =
   "mongodb://lkee:" + process.env.stuff4 + "@ds011439.mlab.com:11439/heroku_wk47xfd5";
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
-app.set("port", process.env.PORT || 6000);
+app.set("port", process.env.PORT || 8001);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // eslint-disable-next-line no-undef
-app.use(express.static(path.join(__dirname, "./../client/")));
+app.use(express.static(path.join(__dirname, "./../")));
 // eslint-disable-next-line no-undef
-app.use("/bower_components", express.static(path.join(__dirname + "./../bower_components")));
+app.use("/bower_components", express.static(path.join(__dirname)));
 // eslint-disable-next-line no-undef
-app.use(fallback("index.html", { root: __dirname + "./../client/" }));
+app.use(fallback("index.html", { root: __dirname }));
 
 app.get("/", function(req, res) {
   res.sendFile("index.html");
